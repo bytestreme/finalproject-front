@@ -2,8 +2,9 @@ import Vue from 'vue'
 import App from './App.vue'
 
 import VueRouter from 'vue-router'
-import Hello from './components/HelloWorld.vue'
-import Signup from './components/Signup.vue'
+import DashboardPage from "./components/dashboard/DashboardPage";
+import RegisterPage from "./components/register/RegisterPage";
+import LoginPage from "./components/login/LoginPage";
 
 Vue.config.productionTip = false;
 
@@ -12,13 +13,18 @@ Vue.use(VueRouter);
 const routes = [
   {
     path:'/',
-    component: Hello,
-    name: 'hello'
+    component: DashboardPage,
+    name: 'home'
   },
   {
-    path:'/sign-up',
-    component: Signup,
-    name: 'sign-up'
+    path:'/login',
+    component: RegisterPage,
+    name: 'login'
+  },
+  {
+    path:'/register',
+    component: LoginPage,
+    name: 'register'
   }
 ];
 
