@@ -30,7 +30,7 @@
             </form>
         </div>
         <div class="templatemo-content-widget templatemo-login-widget templatemo-register-widget white-bg">
-            <p>Already registered? <strong><a href="#" class="blue-text">Log in now!</a></strong></p>
+            <p>Already registered? <strong><a href="#" class="blue-text"><router-link to="/login">Log in now!</router-link></a></strong></p>
         </div>
     </div>
 

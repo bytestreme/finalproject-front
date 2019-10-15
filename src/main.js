@@ -1,40 +1,76 @@
 import Vue from 'vue'
 import App from './App.vue'
+import Vuex from 'vuex';
 
 import VueRouter from 'vue-router'
 import DashboardPage from "./components/dashboard/DashboardPage";
-import RegisterPage from "./components/register/RegisterPage";
 import LoginPage from "./components/login/LoginPage";
+import RegisterPage from "./components/register/RegisterPage";
 
 Vue.config.productionTip = false;
 
 Vue.use(VueRouter);
 
-const routes = [
-  {
-    path:'/',
-    component: DashboardPage,
-    name: 'home'
-  },
-  {
-    path:'/login',
-    component: RegisterPage,
-    name: 'login'
-  },
-  {
-    path:'/register',
-    component: LoginPage,
-    name: 'register'
-  }
-];
+Vue.use(Vuex);
 
-const router = new VueRouter({
-  routes,
-  mode: 'history'
+const store = new Vuex.Store({
+    state: {
+        isAuthorized: false,
+    },
+    getters: {
+        isAuth: state => {
+            return state.isAuthorized;
+        }
+    },
+    mutations: {
+        auth(state) {
+            state.isAuthorized = true;
+        },
+        deAuth(state) {
+            state.isAuthorized = false;
+        },
+        doReg(state) {
+            state.register = true;
+        },
+        doLog(state) {
+            state.register = false;
+        }
+    }
 });
 
 
+const routes = [
+    {
+        path: '/',
+        component: DashboardPage,
+        name: 'home',
+        meta: {requiresLogin: true}
+    },
+    {
+        path: '/login',
+        component: LoginPage,
+        name: 'login'
+    },
+    {
+        path: '/register',
+        component: RegisterPage,
+        name: 'register',
+    }
+];
+
+
+const router = new VueRouter({
+    routes,
+    mode: 'history'
+});
+
 new Vue({
-  render: h => h(App),
-  router
+    render: h => h(App),
+    router,
+    store,
+    computed: {
+        isAuthReturn() {
+            return this.$store.getters.isAuth;
+        }
+    }
 }).$mount('#app');
