@@ -24,7 +24,7 @@
         </form>
     </div>
     <div class="templatemo-content-widget templatemo-login-widget templatemo-register-widget white-bg">
-        <p>Not a registered user yet? <strong><a href="#" class="blue-text">Register now!</a></strong></p>
+        <p>Not a registered user yet? <strong><a href="#" class="blue-text"><router-link to="/register">Register now!</router-link></a></strong></p>
     </div>
     </div>
 
