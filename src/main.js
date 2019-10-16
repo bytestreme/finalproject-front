@@ -5,6 +5,8 @@ import VueRouter from 'vue-router'
 import DashboardPage from "./components/dashboard/DashboardPage";
 import LoginPage from "./components/login/LoginPage";
 import RegisterPage from "./components/register/RegisterPage";
+import MainPage from "./components/main/Main.vue";
+import PassengerPage from "./components/passenger/ProfilePage.vue";
 
 Vue.config.productionTip = false;
 
@@ -12,7 +14,7 @@ Vue.use(VueRouter);
 
 const routes = [
     {
-        path: '/',
+        path: '/dashboard',
         component: DashboardPage,
         name: 'home',
         meta: {requiresLogin: true}
@@ -28,6 +30,17 @@ const routes = [
         component: RegisterPage,
         name: 'register',
         meta: {notAuth: true}
+    },
+    {
+        path: '/',
+        component: MainPage,
+        name: 'main',
+    },
+    {
+        path: '/passenger-profile',
+        component: PassengerPage,
+        name: 'passenger-profile',
+        meta: {requiresLogin: true}
     }
 ];
 
@@ -39,7 +52,7 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
     if (to.matched.some(record => record.meta.requiresLogin)) {
-        if (!store.getters.isAuth) {
+        if (!store.getters.isAuth && !localStorage.getItem('token')) {
             next({ path: '/login'})
         } else {
             next()
@@ -49,8 +62,8 @@ router.beforeEach((to, from, next) => {
     }
 
     if (to.matched.some(record => record.meta.notAuth)) {
-        if (store.getters.isAuth) {
-            next({ path: '/'})
+        if (store.getters.isAuth && localStorage.getItem('token')) {
+            next({ path: '/dashboard'})
         } else {
             next()
         }

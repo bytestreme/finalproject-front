@@ -29,8 +29,6 @@
             </a></strong></p>
         </div>
     </div>
-
-
 </template>
 
 <script>
@@ -53,14 +51,18 @@
                     }
                 ).then(res => {
                     if (res.status === 200) {
+                        // eslint-disable-next-line no-console
                         console.log("OK: " + res.data);
+                        localStorage.setItem('token', JSON.stringify(res.data));
                         this.$store.dispatch('auth').then(() => {
                             this.$router.push({name: 'home'})
                         });
                     } else {
+                        // eslint-disable-next-line no-console
                         console.log("BAD: " + res.status);
                     }
                 }).catch(e => {
+                    // eslint-disable-next-line no-console
                     console.log(e)
                 });
             }

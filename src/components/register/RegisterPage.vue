@@ -9,23 +9,23 @@
                 <div class="form-group">
                     <div class="input-group">
                         <div class="input-group-addon"><i class="fa fa-user fa-fw"></i></div>
-                        <input type="text" class="form-control" placeholder="username">
+                        <input  v-model="username" type="text" class="form-control" placeholder="username">
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="input-group">
                         <div class="input-group-addon"><i class="fa fa-key fa-fw"></i></div>
-                        <input type="password" class="form-control" placeholder="******">
+                        <input v-model="password" type="password" class="form-control" placeholder="******">
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="input-group">
                         <div class="input-group-addon"><i class="fa fa-key fa-fw"></i></div>
-                        <input type="password" class="form-control" placeholder="******">
+                        <input v-model="password2" type="password" class="form-control" placeholder="******">
                     </div>
                 </div>
                 <div class="form-group">
-                    <button @click="register" class="templatemo-blue-button width-100">Register</button>
+                    <button @click.prevent="submit" class="templatemo-blue-button width-100">Register</button>
                 </div>
             </form>
         </div>
@@ -38,14 +38,46 @@
 </template>
 
 <script>
+    import axiosInstance from "../../auth-service";
     export default {
         name: 'register',
+        data() {
+            return {
+                username: '',
+                password: '',
+                password2: ''
+            }
+        },
         methods:{
-            register(){
-                this.$store.dispatch('auth').then(()=>{
-                    this.$router.push({ name: 'home'})
+            submit(){
+              if(this.password === this.password2 && this.password && this.password2)
+                  this.register();
+              else alert("Passwords do not match");
+            },
+            register() {
+                axiosInstance.post(
+                    '/register', {
+                        username: this.username,
+                        password: this.password
+                    }
+                ).then(res => {
+                    if (res.status === 200) {
+                        // eslint-disable-next-line no-console
+                        console.log("OK: " + res.data);
+                        localStorage.setItem('token', JSON.stringify(res.data));
+                        this.$store.dispatch('auth').then(() => {
+                            this.$router.push({name: 'home'})
+                        });
+                    } else {
+                        // eslint-disable-next-line no-console
+                        console.log("BAD: " + res.status);
+                    }
+                }).catch(e => {
+                    // eslint-disable-next-line no-console
+                    console.log(e)
                 });
             }
+
         }
     }
 </script>
