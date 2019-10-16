@@ -25,12 +25,12 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <button type="submit" class="templatemo-blue-button width-100">Register</button>
+                    <button @click="register" class="templatemo-blue-button width-100">Register</button>
                 </div>
             </form>
         </div>
         <div class="templatemo-content-widget templatemo-login-widget templatemo-register-widget white-bg">
-            <p>Already registered? <strong><a href="#" class="blue-text"><router-link to="/login">Log in now!</router-link></a></strong></p>
+            <p>Already registered? <strong><a class="blue-text"><router-link to="/login">Log in now!</router-link></a></strong></p>
         </div>
     </div>
 
@@ -40,6 +40,12 @@
 <script>
     export default {
         name: 'register',
-        props:[],
+        methods:{
+            register(){
+                this.$store.dispatch('auth').then(()=>{
+                    this.$router.push({ name: 'home'})
+                });
+            }
+        }
     }
 </script>

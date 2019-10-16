@@ -42,6 +42,7 @@
                             <li><a href="">Dashboard</a></li>
                             <li><a href="">Overview</a></li>
                             <li><a href="login.html">Sign in form</a></li>
+                            <li><a @click="signout">Sign out</a></li>
                         </ul>
                     </nav>
                 </div>
@@ -187,6 +188,16 @@
 <script>
     export default {
         name: 'dashboard',
-        props:[],
+        methods:{
+            signout(){
+                this.$store.dispatch('deAuth').then(()=>{
+                    this.$router.push({ name: 'login'})
+                });
+            }
+        },
+        created() {
+            // eslint-disable-next-line no-console
+            console.log(this.$store.getters.isAuth);
+        }
     }
 </script>

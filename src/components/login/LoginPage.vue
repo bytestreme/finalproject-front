@@ -19,12 +19,12 @@
                 </div>
             </div>
             <div class="form-group">
-                <button type="submit" class="templatemo-blue-button width-100">Login</button>
+                <button @click="login" class="templatemo-blue-button width-100">Login</button>
             </div>
         </form>
     </div>
     <div class="templatemo-content-widget templatemo-login-widget templatemo-register-widget white-bg">
-        <p>Not a registered user yet? <strong><a href="#" class="blue-text"><router-link to="/register">Register now!</router-link></a></strong></p>
+        <p>Not a registered user yet? <strong><a class="blue-text"><router-link to="/register">Register now!</router-link></a></strong></p>
     </div>
     </div>
 
@@ -32,8 +32,19 @@
 </template>
 
 <script>
+    /*eslint no-console: "error"*/
     export default {
         name: 'login',
-        props:[],
+        methods:{
+            login(){
+                this.$store.dispatch('auth').then(()=>{
+                    this.$router.push({ name: 'home'})
+                });
+            }
+        },
+        created() {
+            // eslint-disable-next-line no-console
+            console.log(this.$store.getters.isAuth);
+        }
     }
 </script>

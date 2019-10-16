@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import App from './App.vue'
 import Vuex from 'vuex';
+import VuexPersist from 'vuex-persist';
 
 import VueRouter from 'vue-router'
 import DashboardPage from "./components/dashboard/DashboardPage";
@@ -13,7 +14,17 @@ Vue.use(VueRouter);
 
 Vue.use(Vuex);
 
+const vuexLocalStorage = new VuexPersist({
+    key: 'vuex', // The key to store the state on in the storage provider.
+    storage: window.localStorage, // or window.sessionStorage or localForage
+    // Function that passes the state and returns the state with only the objects you want to store.
+    // reducer: state => state,
+    // Function that passes a mutation and lets you decide if it should update the state in localStorage.
+    // filter: mutation => (true)
+});
+
 const store = new Vuex.Store({
+    plugins: [vuexLocalStorage.plugin],
     state: {
         isAuthorized: false,
     },
@@ -35,6 +46,20 @@ const store = new Vuex.Store({
         doLog(state) {
             state.register = false;
         }
+    },
+    actions: {
+        auth(context) {
+            context.commit('auth')
+        },
+        deAuth(context) {
+            context.commit('deAuth')
+        },
+        doReg(context) {
+            context.commit('doReg')
+        },
+        doLog(context) {
+            context.commit('doLog')
+        }
     }
 });
 
@@ -49,12 +74,14 @@ const routes = [
     {
         path: '/login',
         component: LoginPage,
-        name: 'login'
+        name: 'login',
+        meta: {notAuth: true}
     },
     {
         path: '/register',
         component: RegisterPage,
         name: 'register',
+        meta: {notAuth: true}
     }
 ];
 
@@ -64,13 +91,30 @@ const router = new VueRouter({
     mode: 'history'
 });
 
+router.beforeEach((to, from, next) => {
+    if (to.matched.some(record => record.meta.requiresLogin)) {
+        if (!store.getters.isAuth) {
+            next({ path: '/login'})
+        } else {
+            next()
+        }
+    } else {
+        next() // make sure to always call next()!
+    }
+
+    if (to.matched.some(record => record.meta.notAuth)) {
+        if (store.getters.isAuth) {
+            next({ path: '/'})
+        } else {
+            next()
+        }
+    } else {
+        next() // make sure to always call next()!
+    }
+});
+
 new Vue({
     render: h => h(App),
     router,
-    store,
-    computed: {
-        isAuthReturn() {
-            return this.$store.getters.isAuth;
-        }
-    }
+    store
 }).$mount('#app');
