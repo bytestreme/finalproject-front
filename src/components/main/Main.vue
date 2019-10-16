@@ -10,25 +10,27 @@
                     <p>Choose your destination:</p>
 
 
-
                     <div class="row form-group">
                         <div class="col-lg-6 col-md-6 form-group">
                             <label for="inputDep">Departure City</label>
                             <select class="form-control" id="inputDep" v-model="selectedDep">
                                 <option value="">Select from</option>
-                                <option v-if="selectedArr !== station.id" :key="station.id" v-for="station in stations" :value="station.id">{{station.name}}</option>
+                                <option v-model="selectedDep" v-if="selectedArr !== station.id" :key="station.id"
+                                        v-for="station in stations" :value="station.id">{{station.name}}
+                                </option>
                             </select>
                         </div>
                         <div class="col-lg-6 col-md-6 form-group">
                             <label for="inputArriv">Arrival City</label>
                             <select class="form-control" id="inputArriv" v-model="selectedArr">
                                 <option value="">Select to</option>
-                                <option v-if="selectedDep !== station.id" :key="station.id" v-for="station in stations" :value="station.id">{{station.name}}</option>
+                                <option v-model="selectedArr" v-if="selectedDep !== station.id" :key="station.id"
+                                        v-for="station in stations" :value="station.id">{{station.name}}
+                                </option>
                             </select>
                         </div>
                     </div>
                     <div class="row form-group">
-
 
 
                     </div>
@@ -92,32 +94,29 @@
                         <table class="table table-striped table-bordered templatemo-user-table">
                             <thead>
                             <tr>
-                                <td><a href="" class="white-text templatemo-sort-by">Train Number<span class="caret"></span></a></td>
-                                <td><a href="" class="white-text templatemo-sort-by">Departure City<span class="caret"></span></a></td>
-                                <td><a href="" class="white-text templatemo-sort-by">Date <span class="caret"></span></a></td>
-                                <td><a href="" class="white-text templatemo-sort-by">Time<span class="caret"></span></a></td>
-                                <td><a href="" class="white-text templatemo-sort-by">Arival City <span class="caret"></span></a></td>
-<!--                                <td><a href="" class="white-text templatemo-sort-by">Date<span class="caret"></span></a></td>-->
-<!--                                <td><a href="" class="white-text templatemo-sort-by">Time<span class="caret"></span></a></td>-->
-                                <td><a href="" class="white-text templatemo-sort-by">Choose<span class="caret"></span></a></td>
+                                <td><a href="" class="white-text templatemo-sort-by">Train Number<span
+                                        class="caret"></span></a></td>
+                                <td><a href="" class="white-text templatemo-sort-by">Train Title<span
+                                        class="caret"></span></a></td>
+                                <td><a href="" class="white-text templatemo-sort-by">Date<span
+                                        class="caret"></span></a></td>
+                                <td><a href="" class="white-text templatemo-sort-by">Departure<span class="caret"></span></a>
+                                </td>
+                                <td><a href="" class="white-text templatemo-sort-by">Arival<span
+                                        class="caret"></span></a></td>
+                                <!--                                <td><a href="" class="white-text templatemo-sort-by">Date<span class="caret"></span></a></td>-->
+                                <!--                                <td><a href="" class="white-text templatemo-sort-by">Time<span class="caret"></span></a></td>-->
+                                <td><a href="" class="white-text templatemo-sort-by">Choose<span
+                                        class="caret"></span></a></td>
                             </tr>
                             </thead>
                             <tbody>
-                            <tr>
-                                <td>1.</td>
-                                <td>John</td>
-                                <td>Smith</td>
-                                <td>@jS</td>
-                                <td>js@company.com</td>
-<!--                                <td><a href="" class="templatemo-edit-btn">Edit</a></td>-->
-<!--                                <td><a href="" class="templatemo-link">Action</a></td>-->
-                                <td><a href="" class="templatemo-edit-btn">Choose</a></td>
-                            </tr>
+
                             <tr :key="route.id" v-for="route in routes">
-                                <td>{{route.number}}</td>
-                                <td>{{route.from}}</td>
-                                <td>{{route.date}}</td>
-                                <td>{{route.time}}</td>
+                                <td>{{route.id}}</td>
+                                <td>{{route.name}}</td>
+                                <td>{{route.timeForward}}</td>
+                                <td>{{route.timeBackward}}</td>
                                 <td>{{route.to}}</td>
                                 <td><a href="" class="templatemo-edit-btn">Choose</a></td>
                             </tr>
@@ -140,27 +139,28 @@
     import axiosInstance from "../../auth-service";
     import sidebar from '../common/Sidebar.vue'
     import headbar from '../common/Headbar.vue'
-    export default{
-        name:"main",
-        components:{
+
+    export default {
+        name: "main",
+        components: {
             sidebar,
             headbar
         },
-        data(){
+        data() {
             return {
                 selectedDep: "",
                 selectedArr: "",
-                stations:[
-                    {name:"Astana", id: 1},
-                    {name:"Almaty", id: 2}
+                stations: [
+                    {name: "Astana", id: 1},
+                    {name: "Almaty", id: 2}
                 ],
                 routes: ""
             }
         },
-        methods:{
+        methods: {
             getStations() {
                 axiosInstance.get(
-                    '/get-stations', {}
+                    '/api/getStationList', {}
                 ).then(res => {
                     if (res.status === 200) {
                         // eslint-disable-next-line no-console
@@ -177,11 +177,10 @@
             },
             getRoutes() {
                 axiosInstance.get(
-                    '/get-routes', {
-                        from: this.selectedDep,
-                        to: this.selectedArr
-                    }
+                    '/api/findRoute?from=' + this.selectedDep + '&to=' + this.selectedArr
                 ).then(res => {
+                    console.log(this.selectedDep);
+                    console.log(this.selectedArr);
                     if (res.status === 200) {
                         // eslint-disable-next-line no-console
                         console.log("OK: " + res.data);
@@ -191,6 +190,7 @@
                         console.log("BAD: " + res.status);
                     }
                 }).catch(e => {
+                    console.log("CAUGHT!")
                     // eslint-disable-next-line no-console
                     console.log(e)
                 });
