@@ -152,13 +152,6 @@
             sidebar,
             headbar
         },
-        methods:{
-            signout(){
-                this.$store.dispatch('deAuth').then(()=>{
-                    this.$router.push({ name: 'login'})
-                });
-            }
-        },
         created() {
             // eslint-disable-next-line no-console
             console.log(this.$store.getters.isAuth);

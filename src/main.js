@@ -6,7 +6,9 @@ import DashboardPage from "./components/dashboard/DashboardPage";
 import LoginPage from "./components/login/LoginPage";
 import RegisterPage from "./components/register/RegisterPage";
 import MainPage from "./components/main/Main.vue";
-import PassengerPage from "./components/passenger/ProfilePage.vue";
+import PassengerPage from "./components/roles/passenger/ProfilePage.vue";
+import ManagerPage from "./components/roles/manager/ProfilePage.vue";
+import AgentPage from "./components/roles/agent/ProfilePage.vue";
 
 Vue.config.productionTip = false;
 
@@ -41,7 +43,19 @@ const routes = [
         component: PassengerPage,
         name: 'passenger-profile',
         meta: {requiresLogin: true}
-    }
+    },
+    {
+        path: '/manager-profile',
+        component: ManagerPage,
+        name: 'manager-profile',
+        meta: {requiresLogin: true}
+    },
+    {
+        path: '/agent-profile',
+        component: AgentPage,
+        name: 'agent-profile',
+        meta: {requiresLogin: true}
+    },
 ];
 
 

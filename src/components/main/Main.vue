@@ -15,7 +15,7 @@
                             <label for="inputDep">Departure City</label>
                             <select class="form-control" id="inputDep" v-model="selectedDep">
                                 <option value="">Select from</option>
-                                <option v-model="selectedDep" v-if="selectedArr !== station.id" :key="station.id"
+                                <option v-if="selectedArr !== station.id" :key="station.id"
                                         v-for="station in stations" :value="station.id">{{station.name}}
                                 </option>
                             </select>
@@ -24,16 +24,13 @@
                             <label for="inputArriv">Arrival City</label>
                             <select class="form-control" id="inputArriv" v-model="selectedArr">
                                 <option value="">Select to</option>
-                                <option v-model="selectedArr" v-if="selectedDep !== station.id" :key="station.id"
+                                <option v-if="selectedDep !== station.id" :key="station.id"
                                         v-for="station in stations" :value="station.id">{{station.name}}
                                 </option>
                             </select>
                         </div>
                     </div>
-                    <div class="row form-group">
 
-
-                    </div>
                     <div class="row form-group">
                         <div class="col-lg-6 col-md-6 form-group">
                             <input type="date" name="Departure" class="form-control">
@@ -43,66 +40,66 @@
                         </div>
                     </div>
 
+<!--                    <div class="row form-group">-->
+<!--                        <div class="col-lg-12 form-group">-->
+<!--                            <div class="margin-right-15 templatemo-inline-block">-->
+<!--                                <input type="checkbox" name="server" id="c3" value="" checked>-->
+<!--                                <label for="c3" class="font-weight-400"><span></span>LUX</label>-->
+<!--                            </div>-->
+<!--                            <div class="margin-right-15 templatemo-inline-block">-->
+<!--                                <input type="checkbox" name="member" id="c4" value="">-->
+<!--                                <label for="c4" class="font-weight-400"><span></span>PLATSCARD</label>-->
+<!--                            </div>-->
+<!--                            <div class="margin-right-15 templatemo-inline-block">-->
+<!--                                <input type="checkbox" name="expired" id="c5" value="">-->
+<!--                                <label for="c5" class="font-weight-400"><span></span>COUPLE</label>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
                     <div class="row form-group">
-                        <div class="col-lg-12 form-group">
-                            <div class="margin-right-15 templatemo-inline-block">
-                                <input type="checkbox" name="server" id="c3" value="" checked>
-                                <label for="c3" class="font-weight-400"><span></span>LUX</label>
-                            </div>
-                            <div class="margin-right-15 templatemo-inline-block">
-                                <input type="checkbox" name="member" id="c4" value="">
-                                <label for="c4" class="font-weight-400"><span></span>PLATSCARD</label>
-                            </div>
-                            <div class="margin-right-15 templatemo-inline-block">
-                                <input type="checkbox" name="expired" id="c5" value="">
-                                <label for="c5" class="font-weight-400"><span></span>COUPLE</label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row form-group">
-                        <div class="col-lg-6 form-group">
-                            <div class="margin-right-15 templatemo-inline-block">
-                                <input type="radio" name="radio" id="r4" value="">
-                                <label for="r4" class="font-weight-400"><span></span>Morning</label>
-                            </div>
-                            <div class="margin-right-15 templatemo-inline-block">
-                                <input type="radio" name="radio" id="r5" value="" checked>
-                                <label for="r5" class="font-weight-400"><span></span>Noon</label>
-                            </div>
-                            <div class="margin-right-15 templatemo-inline-block">
-                                <input type="radio" name="radio" id="r6" value="">
-                                <label for="r6" class="font-weight-400"><span></span>Evening</label>
-                            </div>
-                            <div class="margin-right-15 templatemo-inline-block">
-                                <input type="radio" name="radio" id="r7" value="">
-                                <label for="r7" class="font-weight-400"><span></span>Night</label>
-                            </div>
-                            <div class="margin-right-15 templatemo-inline-block">
-                                <input type="radio" name="radio" id="r8" value="">
-                                <label for="r8" class="font-weight-400"><span></span>Any time</label>
-                            </div>
-                        </div>
-                        <div class="col-lg-6 form-group">
+<!--                        <div class="col-lg-6 form-group">-->
+<!--                            <div class="margin-right-15 templatemo-inline-block">-->
+<!--                                <input type="radio" name="radio" id="r4" value="">-->
+<!--                                <label for="r4" class="font-weight-400"><span></span>Morning</label>-->
+<!--                            </div>-->
+<!--                            <div class="margin-right-15 templatemo-inline-block">-->
+<!--                                <input type="radio" name="radio" id="r5" value="" checked>-->
+<!--                                <label for="r5" class="font-weight-400"><span></span>Noon</label>-->
+<!--                            </div>-->
+<!--                            <div class="margin-right-15 templatemo-inline-block">-->
+<!--                                <input type="radio" name="radio" id="r6" value="">-->
+<!--                                <label for="r6" class="font-weight-400"><span></span>Evening</label>-->
+<!--                            </div>-->
+<!--                            <div class="margin-right-15 templatemo-inline-block">-->
+<!--                                <input type="radio" name="radio" id="r7" value="">-->
+<!--                                <label for="r7" class="font-weight-400"><span></span>Night</label>-->
+<!--                            </div>-->
+<!--                            <div class="margin-right-15 templatemo-inline-block">-->
+<!--                                <input type="radio" name="radio" id="r8" value="">-->
+<!--                                <label for="r8" class="font-weight-400"><span></span>Any time</label>-->
+<!--                            </div>-->
+<!--                        </div>-->
+                        <div class="col-lg-6 form-group" style="width: 100%;">
                             <div class="form-group text-right">
-                                <button @click="getRoutes" class="templatemo-blue-button">Update</button>
+                                <button @click="getRoutes" class="templatemo-blue-button">Search</button>
                             </div>
                         </div>
                     </div>
                 </div><!--CHOOSE TRAVEL ENDS-->
-                <div class="templatemo-content-widget green-bg no-padding">
+                <div v-if="routes" class="templatemo-content-widget green-bg no-padding">
                     <div class="panel panel-default table-responsive">
                         <table class="table table-striped table-bordered templatemo-user-table">
                             <thead>
                             <tr>
-                                <td><a href="" class="white-text templatemo-sort-by">Train Number<span
+                                <td><a class="white-text templatemo-sort-by">Train Number<span
                                         class="caret"></span></a></td>
-                                <td><a href="" class="white-text templatemo-sort-by">Train Title<span
+                                <td><a class="white-text templatemo-sort-by">Train Title<span
                                         class="caret"></span></a></td>
-                                <td><a href="" class="white-text templatemo-sort-by">Date<span
+                                <td><a class="white-text templatemo-sort-by">Date<span
                                         class="caret"></span></a></td>
-                                <td><a href="" class="white-text templatemo-sort-by">Departure<span class="caret"></span></a>
+                                <td><a class="white-text templatemo-sort-by">Departure<span class="caret"></span></a>
                                 </td>
-                                <td><a href="" class="white-text templatemo-sort-by">Arival<span
+                                <td><a class="white-text templatemo-sort-by">Arrival<span
                                         class="caret"></span></a></td>
                                 <!--                                <td><a href="" class="white-text templatemo-sort-by">Date<span class="caret"></span></a></td>-->
                                 <!--                                <td><a href="" class="white-text templatemo-sort-by">Time<span class="caret"></span></a></td>-->
@@ -122,14 +119,14 @@
                             </tr>
                             </tbody>
                         </table>
+
                     </div>
+
+                </div>
+                <div v-if="loading" style="height: 250px" class="col-lg-12">
+                    <div style="justify-content: center" class="loader">Loading...</div>
                 </div>
             </div>
-
-            <footer class="text-right">
-                <p>Copyright &copy; 2084 Company Name
-                    | Design: Template Mo</p>
-            </footer>
         </div>
 
     </div>
@@ -154,7 +151,8 @@
                     {name: "Astana", id: 1},
                     {name: "Almaty", id: 2}
                 ],
-                routes: ""
+                routes: "",
+                loading: false
             }
         },
         methods: {
@@ -176,6 +174,8 @@
                 });
             },
             getRoutes() {
+                this.routes = "";
+                this.loading = true;
                 axiosInstance.get(
                     '/api/findRoute?from=' + this.selectedDep + '&to=' + this.selectedArr
                 ).then(res => {
@@ -189,10 +189,11 @@
                         // eslint-disable-next-line no-console
                         console.log("BAD: " + res.status);
                     }
+                    this.loading = false;
                 }).catch(e => {
-                    console.log("CAUGHT!")
                     // eslint-disable-next-line no-console
-                    console.log(e)
+                    console.log(e);
+                    this.loading = false;
                 });
             }
         },
