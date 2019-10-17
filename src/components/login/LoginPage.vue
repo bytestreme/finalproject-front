@@ -9,7 +9,7 @@
                 <div class="form-group">
                     <div class="input-group">
                         <div class="input-group-addon"><i class="fa fa-user fa-fw"></i></div>
-                        <input type="text" v-model="username" class="form-control" placeholder="username">
+                        <input type="text" v-model="username" class="form-control" placeholder="Username">
                     </div>
                 </div>
                 <div class="form-group">
@@ -53,7 +53,7 @@
                     if (res.status === 200) {
                         // eslint-disable-next-line no-console
                         console.log("OK: " + res.data);
-                        localStorage.setItem('token', JSON.stringify(res.data));
+                        localStorage.setItem('token', res.data);
                         this.$store.dispatch('auth').then(() => {
                             this.$router.push({name: 'home'})
                         });

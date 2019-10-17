@@ -5,3 +5,5 @@
 4. Never accept merge request
 5. To suggest your changes to the working area create pull request
 *****
+npm run serve
+npm install

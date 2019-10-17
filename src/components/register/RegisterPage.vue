@@ -9,7 +9,25 @@
                 <div class="form-group">
                     <div class="input-group">
                         <div class="input-group-addon"><i class="fa fa-user fa-fw"></i></div>
-                        <input  v-model="username" type="text" class="form-control" placeholder="username">
+                        <input  v-model="username" type="text" class="form-control" placeholder="Username">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="input-group">
+                        <div class="input-group-addon"><i class="fa fa-user fa-fw"></i></div>
+                        <input  v-model="firstname" type="text" class="form-control" placeholder="First name">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="input-group">
+                        <div class="input-group-addon"><i class="fa fa-user fa-fw"></i></div>
+                        <input  v-model="lastname" type="text" class="form-control" placeholder="Last name">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="input-group">
+                        <div class="input-group-addon"><i class="fa fa-user fa-fw"></i></div>
+                        <input  v-model="phone" type="number" class="form-control" placeholder="Phone">
                     </div>
                 </div>
                 <div class="form-group">
@@ -45,7 +63,10 @@
             return {
                 username: '',
                 password: '',
-                password2: ''
+                password2: '',
+                firstname: "",
+                lastname: "",
+                phone: ""
             }
         },
         methods:{
@@ -56,18 +77,18 @@
             },
             register() {
                 axiosInstance.post(
-                    '/register', {
+                    '/api/register', {
                         username: this.username,
-                        password: this.password
+                        password: this.password,
+                        firstName: this.firstname,
+                        lastName: this.lastname,
+                        phone: this.phone
                     }
                 ).then(res => {
                     if (res.status === 200) {
                         // eslint-disable-next-line no-console
                         console.log("OK: " + res.data);
-                        localStorage.setItem('token', JSON.stringify(res.data));
-                        this.$store.dispatch('auth').then(() => {
-                            this.$router.push({name: 'home'})
-                        });
+                        this.$router.push({name: 'login'});
                     } else {
                         // eslint-disable-next-line no-console
                         console.log("BAD: " + res.status);

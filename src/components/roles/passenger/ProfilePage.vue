@@ -156,10 +156,6 @@
 
                     </div>
 
-                    <footer class="text-right">
-                        <p>Copyright &copy; 2084 Company Name
-                            | Design: Template Mo</p>
-                    </footer>
                 </div>
             </div>
         </div>
@@ -167,8 +163,8 @@
 </template>
 
 <script>
-    import headbar from '../common/Headbar.vue'
-    import sidebar from '../common/Sidebar.vue'
+    import headbar from '../../common/Headbar.vue'
+    import sidebar from '../../common/Sidebar.vue'
     export default {
         components:{
             headbar,
