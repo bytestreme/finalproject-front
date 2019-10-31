@@ -11,14 +11,22 @@
                         <table class="table table-striped table-bordered templatemo-user-table">
                             <thead>
                             <tr>
-                                <td><a href="" class="white-text templatemo-sort-by">Train Number<span class="caret"></span></a></td>
-                                <td><a href="" class="white-text templatemo-sort-by">Departure City<span class="caret"></span></a></td>
-                                <td><a href="" class="white-text templatemo-sort-by">Date <span class="caret"></span></a></td>
-                                <td><a href="" class="white-text templatemo-sort-by">Time<span class="caret"></span></a></td>
-                                <td><a href="" class="white-text templatemo-sort-by">Arrival City <span class="caret"></span></a></td>
-                                <td><a href="" class="white-text templatemo-sort-by">Date<span class="caret"></span></a></td>
-                                <td><a href="" class="white-text templatemo-sort-by">Time<span class="caret"></span></a></td>
-                                <td><a href="" class="white-text templatemo-sort-by">Choose<span class="caret"></span></a></td>
+                                <td><a href="" class="white-text templatemo-sort-by">Train Number<span
+                                        class="caret"></span></a></td>
+                                <td><a href="" class="white-text templatemo-sort-by">Departure City<span
+                                        class="caret"></span></a></td>
+                                <td><a href="" class="white-text templatemo-sort-by">Date <span
+                                        class="caret"></span></a></td>
+                                <td><a href="" class="white-text templatemo-sort-by">Time<span class="caret"></span></a>
+                                </td>
+                                <td><a href="" class="white-text templatemo-sort-by">Arrival City <span
+                                        class="caret"></span></a></td>
+                                <td><a href="" class="white-text templatemo-sort-by">Date<span class="caret"></span></a>
+                                </td>
+                                <td><a href="" class="white-text templatemo-sort-by">Time<span class="caret"></span></a>
+                                </td>
+                                <td><a href="" class="white-text templatemo-sort-by">Choose<span
+                                        class="caret"></span></a></td>
                             </tr>
                             </thead>
                             <tbody>
@@ -40,19 +48,30 @@
                     <h2 class="margin-bottom-10">Create routes</h2>
                     <div class="row form-group">
                         <div class="col-lg-12 col-md-6 form-group">
+                            <label for="train">Route title</label>
+                            <input v-model="routeTitle" type="text" class="form-control" placeholder="Route Title">
+                        </div>
+                        <div class="col-lg-6 col-md-6 form-group">
+
                             <label for="train">Choose Train</label>
-                            <select :disabled="selectedStations.length>0" class="form-control" id="train" v-model="selectedTrain">
+                            <select :disabled="routeTitle === ''" class="form-control" id="train"
+                                    v-model="selectedTrain">
                                 <option value="">Select</option>
                                 <option :key="train.id"
                                         v-for="train in trains"
                                         :value="train.id">
-                                    {{train.name}}
+                                    {{train.title}}
                                 </option>
                             </select>
                         </div>
+                        <div class="col-lg-6 col-md-6 form-group">
+                            <label for="train">Departure time</label>
+                            <input :disabled="routeTitle === ''" v-model="depTime" type="text" class="form-control"
+                                   placeholder="Departure time (e.g. 8:40:00, 22:50:00)">
+                        </div>
                     </div>
                     <div class="row form-group">
-                        <div class="col-lg-12 col-md-6 form-group">
+                        <div class="col-lg-6 col-md-6 form-group">
                             <label for="train">Choose Station</label>
                             <select :disabled="selectedTrain === ''"
                                     class="form-control"
@@ -63,32 +82,48 @@
                                         v-for="station in stations"
                                         :value="station.id"
                                         v-if="!selectedStations.includes(station.id)">
-                                    {{station.name}}
+                                    {{station.title}}
                                 </option>
                             </select>
                         </div>
-                    </div>
-                    <div class="row form-group">
-                        <div class="col-lg-6 form-group" style="width: 100%;">
-                            <div class="form-group text-right">
-                                <button :disabled="selectedStation === ''" @click="addStation" class="templatemo-blue-button">Add Station</button>
-                            </div>
+                        <div class="col-lg-6 col-md-6 form-group">
+                            <button :disabled="selectedStation === ''" @click="addStation"
+                                    class="templatemo-blue-button">
+                                Add Station
+                            </button>
                         </div>
+
                     </div>
-                    <div class="row form-group">
+                    <!--                    <div class="row form-group">-->
+                    <!--                        <div class="col-lg-6 form-group">-->
+                    <!--                            <div class="form-group text-right">-->
+                    <!--                                <button :disabled="selectedStation === ''" @click="addStation"-->
+                    <!--                                        class="templatemo-blue-button">Add Station-->
+                    <!--                                </button>-->
+                    <!--                            </div>-->
+                    <!--                        </div>-->
+                    <!--                    </div>-->
+                    <div v-if="selectedStations.length!==0" class="row form-group">
                         <div class="templatemo-content-widget green-bg no-padding">
                             <div class="panel panel-default table-responsive">
                                 <table class="table table-striped table-bordered templatemo-user-table">
                                     <thead>
                                     <tr>
-                                        <td><a class="white-text templatemo-sort-by">Stations</a></td>
-                                        <td><a class="white-text templatemo-sort-by">Action</a></td>
+                                        <td style="width:5%"><a class="white-text templatemo-sort-by">No</a></td>
+                                        <td style="width:50%"><a class="white-text templatemo-sort-by">Station</a></td>
+                                        <td style="width:50%"><a class="white-text templatemo-sort-by">Path duration (minutes)</a>
+                                        </td>
+                                        <td style="width:10%"><a class="white-text templatemo-sort-by">Action</a></td>
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr v-for="station in selectedStations" :key="station.id">
-                                        <td>{{station.name}}</td>
-                                        <td><a href="" @click.prevent="removeStation(station.id)" class="templatemo-edit-btn">Remove</a></td>
+                                    <tr v-for="(station, station_index) in selectedStations" :key="station.id">
+                                        <td>{{station_index + 1}}</td>
+                                        <td>{{station.title}}</td>
+                                        <td><input v-model="station.duration" type="number" class="form-control">
+                                        </td>
+                                        <td><a href="" @click.prevent="removeStation(station.id)"
+                                               class="templatemo-del-btn">Remove</a></td>
                                     </tr>
                                     </tbody>
                                 </table>
@@ -96,9 +131,26 @@
                         </div>
                     </div>
                     <div class="row form-group">
+                        <div class="col-lg-12 col-md-6 form-group">
+                            <label for="train" class="control-label templatemo-block">Choose the week days</label>
+
+                            <ul class="list-inline">
+                                <li v-for="day in dayList">
+                                    <div class="margin-right-15 templatemo-inline-block">
+                                        <input type="checkbox" name="member" :id="day.id" :value="day.id"
+                                               v-model="checkedDays">
+                                        <label :for="day.id" class="font-weight-400"><span></span>{{day.title}}</label>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="row form-group">
                         <div class="col-lg-6 form-group" style="width: 100%;">
                             <div class="form-group text-right">
-                                <button @click.prevent="submit" :disabled="selectedStations.length<2" class="templatemo-blue-button">Save</button>
+                                <button @click.prevent="submit" :disabled="selectedStations.length<2"
+                                        class="templatemo-blue-button">Save
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -112,31 +164,40 @@
     import axiosInstance from "../../../auth-service";
     import headbar from '../../common/Headbar.vue'
     import sidebar from '../../common/Sidebar.vue'
+
     export default {
-        components:{
+        components: {
             headbar,
             sidebar
         },
-        data(){
+        data() {
             return {
                 stations: "",
                 selectedStation: "",
                 selectedStations: [],
                 selectedTrain: "",
-                trains: ""
+                trains: "",
+                routeTitle: "",
+                depTime: "",
+                checkedDays: [],
+                dayList: "",
             }
         },
-        methods:{
-            removeStation(id){
-                this.selectedStations.splice(this.selectedStations.findIndex(x=>x.id === id),1);
+        methods: {
+            removeStation(id) {
+                this.selectedStations.splice(this.selectedStations.findIndex(x => x.id === id), 1);
             },
-            addStation(){
-                this.selectedStations.push(this.stations.find(x=>x.id === this.selectedStation));
+            addStation() {
+                this.selectedStations.push({
+                    id: this.selectedStation,
+                    title: this.stations.find(x => x.id === this.selectedStation).title,
+                    duration: 0
+                });
                 this.selectedStation = "";
             },
             getStations() {
                 axiosInstance.get(
-                    '/api/getStationList', {}
+                    '/api/public/station', {}
                 ).then(res => {
                     if (res.status === 200) {
                         // eslint-disable-next-line no-console
@@ -153,7 +214,7 @@
             },
             getTrains() {
                 axiosInstance.get(
-                    '/api/getTrainList', {}
+                    '/api/public/train', {}
                 ).then(res => {
                     if (res.status === 200) {
                         // eslint-disable-next-line no-console
@@ -168,16 +229,25 @@
                     console.log(e)
                 });
             },
-            submit(){
+            submit() {
                 let s = [];
-                this.selectedStations.forEach(x=>s.push(x.id));
+                this.selectedStations.forEach(x => {
+                    s.push({
+                        stationId: x.id,
+                        stopOrder: this.selectedStations.indexOf(x) + 1,
+                        stopDuration: x.duration
+                    });
+                });
                 axiosInstance.post(
-                    'api/management/addRoute', {
+                    'api/manager/route', {
                         trainId: this.selectedTrain,
-                        stations: s
-                    },{
+                        routeName: this.routeTitle,
+                        weekDayIds: this.checkedDays,
+                        stops: s,
+                        departureTime: this.depTime
+                    }, {
                         headers: {
-                            'Authorization': "Bearer "+localStorage.getItem("token")
+                            'Authorization': "Bearer " + localStorage.getItem("token")
                         }
                     }
                 ).then(res => {
@@ -194,9 +264,29 @@
                     // eslint-disable-next-line no-console
                     console.log(e)
                 });
-            }
+            },
+            getWeekDays() {
+                axiosInstance.get(
+                    '/api/public/weekday', {}
+                ).then(res => {
+                    if (res.status === 200) {
+                        // eslint-disable-next-line no-console
+                        console.log("OK: " + res.data);
+                        console.log(res.data);
+                        this.dayList = res.data; //stations is array
+                    } else {
+                        // eslint-disable-next-line no-console
+                        console.log("BAD: " + res.status);
+                    }
+                }).catch(e => {
+                    // eslint-disable-next-line no-console
+                    console.log(e)
+                });
+            },
+
         },
         created() {
+            this.getWeekDays();
             this.getStations();
             this.getTrains();
         }

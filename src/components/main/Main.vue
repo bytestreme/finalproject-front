@@ -16,7 +16,7 @@
                             <select class="form-control" id="inputDep" v-model="selectedDep">
                                 <option value="">Select from</option>
                                 <option v-if="selectedArr !== station.id" :key="station.id"
-                                        v-for="station in stations" :value="station.id">{{station.name}}
+                                        v-for="station in stations" :value="station.id">{{station.title}}
                                 </option>
                             </select>
                         </div>
@@ -25,7 +25,7 @@
                             <select class="form-control" id="inputArriv" v-model="selectedArr">
                                 <option value="">Select to</option>
                                 <option v-if="selectedDep !== station.id" :key="station.id"
-                                        v-for="station in stations" :value="station.id">{{station.name}}
+                                        v-for="station in stations" :value="station.id">{{station.title}}
                                 </option>
                             </select>
                         </div>
@@ -148,8 +148,8 @@
                 selectedDep: "",
                 selectedArr: "",
                 stations: [
-                    {name: "Astana", id: 1},
-                    {name: "Almaty", id: 2}
+                    {title: "Astana", id: 1},
+                    {title: "Almaty", id: 2}
                 ],
                 routes: "",
                 loading: false
@@ -158,11 +158,12 @@
         methods: {
             getStations() {
                 axiosInstance.get(
-                    '/api/getStationList', {}
+                    '/api/public/station', {}
                 ).then(res => {
                     if (res.status === 200) {
                         // eslint-disable-next-line no-console
                         console.log("OK: " + res.data);
+                        console.log(res.data);
                         this.stations = res.data; //stations is array
                     } else {
                         // eslint-disable-next-line no-console
@@ -179,7 +180,9 @@
                 axiosInstance.get(
                     '/api/findRoute?from=' + this.selectedDep + '&to=' + this.selectedArr
                 ).then(res => {
+                    // eslint-disable-next-line no-console
                     console.log(this.selectedDep);
+                    // eslint-disable-next-line no-console
                     console.log(this.selectedArr);
                     if (res.status === 200) {
                         // eslint-disable-next-line no-console

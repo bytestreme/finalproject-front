@@ -77,7 +77,7 @@
             },
             register() {
                 axiosInstance.post(
-                    '/api/register', {
+                    '/register', {
                         username: this.username,
                         password: this.password,
                         firstName: this.firstname,
