@@ -9,9 +9,12 @@ import MainPage from "./components/main/Main.vue";
 import PassengerPage from "./components/roles/passenger/ProfilePage.vue";
 import ManagerPage from "./components/roles/manager/ProfilePage.vue";
 import AgentPage from "./components/roles/agent/ProfilePage.vue";
+import Notifications from 'vue-notification'
+import velocity from 'velocity-animate'
 
 Vue.config.productionTip = false;
 
+Vue.use(Notifications, {velocity})
 Vue.use(VueRouter);
 
 const routes = [
@@ -67,7 +70,7 @@ const router = new VueRouter({
 router.beforeEach((to, from, next) => {
     if (to.matched.some(record => record.meta.requiresLogin)) {
         if (!store.getters.isAuth && !localStorage.getItem('token')) {
-            next({ path: '/login'})
+            next({path: '/login'})
         } else {
             next()
         }
@@ -77,7 +80,7 @@ router.beforeEach((to, from, next) => {
 
     if (to.matched.some(record => record.meta.notAuth)) {
         if (store.getters.isAuth && localStorage.getItem('token')) {
-            next({ path: '/dashboard'})
+            next({path: '/dashboard'})
         } else {
             next()
         }
