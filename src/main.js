@@ -2,14 +2,18 @@ import Vue from 'vue'
 import App from './App.vue'
 import store from "./store";
 import VueRouter from 'vue-router'
+import Text from 'bootstrap-vue'
+
 import DashboardPage from "./components/dashboard/DashboardPage";
 import LoginPage from "./components/login/LoginPage";
 import RegisterPage from "./components/register/RegisterPage";
 import MainPage from "./components/main/Main.vue";
 import PassengerPage from "./components/roles/passenger/ProfilePage.vue";
 import ManagerPage from "./components/roles/manager/ProfilePage.vue";
+import ManagerTrain from "./components/roles/manager/CreateTrain.vue";
+import ManagerNews from "./components/roles/manager/Advisories.vue";
+import ManagerAllRoutes from "./components/roles/manager/AllRoutes.vue";
 import AgentPage from "./components/roles/agent/ProfilePage.vue";
-import TrainPage from "./components/main/TrainPage.vue"
 import Notifications from 'vue-notification'
 import velocity from 'velocity-animate'
 
@@ -17,6 +21,7 @@ Vue.config.productionTip = false;
 
 Vue.use(Notifications, {velocity})
 Vue.use(VueRouter);
+Vue.use(Text);
 
 const routes = [
     {
@@ -55,15 +60,27 @@ const routes = [
         meta: {requiresLogin: true}
     },
     {
-        path: '/agent-profile',
-        component: AgentPage,
-        name: 'agent-profile',
+        path: '/manager-all-routes',
+        component: ManagerAllRoutes,
+        name: 'manager-all-routes',
         meta: {requiresLogin: true}
     },
     {
-        path: '/route/:id',
-        component: TrainPage,
-        name: 'train-page',
+        path: '/manager-train',
+        component: ManagerTrain,
+        name: 'manager-train',
+        meta: {requiresLogin: true}
+    },
+    {
+        path: '/manager-news',
+        component: ManagerNews,
+        name: 'manager-news',
+        meta: {requiresLogin: true}
+    },
+    {
+        path: '/agent-profile',
+        component: AgentPage,
+        name: 'agent-profile',
         meta: {requiresLogin: true}
     },
 ];
