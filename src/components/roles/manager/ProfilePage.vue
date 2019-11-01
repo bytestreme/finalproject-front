@@ -83,7 +83,7 @@
                                 <option :key="station.id"
                                         v-for="station in stations"
                                         :value="station.id"
-                                        v-if="!selectedStations.includes(station.id)">
+                                        v-if="selectedStations.findIndex(x=> x.id === station.id)===-1">
                                     {{station.title}}
                                 </option>
                             </select>

@@ -9,6 +9,7 @@ import MainPage from "./components/main/Main.vue";
 import PassengerPage from "./components/roles/passenger/ProfilePage.vue";
 import ManagerPage from "./components/roles/manager/ProfilePage.vue";
 import AgentPage from "./components/roles/agent/ProfilePage.vue";
+import TrainPage from "./components/main/TrainPage.vue"
 import Notifications from 'vue-notification'
 import velocity from 'velocity-animate'
 
@@ -57,6 +58,12 @@ const routes = [
         path: '/agent-profile',
         component: AgentPage,
         name: 'agent-profile',
+        meta: {requiresLogin: true}
+    },
+    {
+        path: '/route/:id',
+        component: TrainPage,
+        name: 'train-page',
         meta: {requiresLogin: true}
     },
 ];
