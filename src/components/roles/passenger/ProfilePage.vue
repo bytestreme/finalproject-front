@@ -67,8 +67,9 @@
                                 <table class="table table-striped table-bordered templatemo-user-table">
                                     <thead>
                                     <tr>
-                                        <td>#</td>
-                                        <td>Ticket Number</td>
+                                        <td>Route title</td>
+                                        <td>Train title</td>
+                                        <td>Wagon number</td>
                                         <td>Passenger Name</td>
                                         <td>Departure Date</td>
                                         <td>Departure Station</td>
@@ -77,85 +78,56 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr>
-                                        <td>1.</td>
-                                        <td>00000000</td>
-                                        <td>Smith</td>
-                                        <td>--/--/--</td>
-                                        <td>Astana</td>
-                                        <td>--/--/--</td>
-                                        <td>Almaty</td>
-                                    </tr>
-                                    <tr>
-                                        <td>2.</td>
-                                        <td>00000000</td>
-                                        <td>Jones</td>
-                                        <td>--/--/--</td>
-                                        <td>Astana</td>
-                                        <td>--/--/--</td>
-                                        <td>Almaty</td>
-                                    </tr>
-                                    <tr>
-                                        <td>3.</td>
-                                        <td>00000000</td>
-                                        <td>James</td>
-                                        <td>--/--/--</td>
-                                        <td>Astana</td>
-                                        <td>--/--/--</td>
-                                        <td>Almaty</td>
-                                    </tr>
-                                    <tr>
-                                        <td>4.</td>
-                                        <td>00000000</td>
-                                        <td>Bride</td>
-                                        <td>--/--/--</td>
-                                        <td>Astana</td>
-                                        <td>--/--/--</td>
-                                        <td>Almaty</td>
-                                    </tr>
-                                    <tr>
-                                        <td>5.</td>
-                                        <td>00000000</td>
-                                        <td>Richard</td>
-                                        <td>--/--/--</td>
-                                        <td>Astana</td>
-                                        <td>--/--/--</td>
-                                        <td>Almaty</td>
-                                    </tr>
-                                    <tr>
-                                        <td>6.</td>
-                                        <td>00000000</td>
-                                        <td>Brad</td>
-                                        <td>--/--/--</td>
-                                        <td>Astana</td>
-                                        <td>--/--/--</td>
-                                        <td>Almaty</td>
-                                    </tr>
-                                    <tr>
-                                        <td>7.</td>
-                                        <td>00000000</td>
-                                        <td>Eric</td>
-                                        <td>--/--/--</td>
-                                        <td>Astana</td>
-                                        <td>--/--/--</td>
-                                        <td>Almaty</td>
-                                    </tr>
-                                    <tr>
-                                        <td>8.</td>
-                                        <td>00000000</td>
-                                        <td>Susan</td>
-                                        <td>--/--/--</td>
-                                        <td>Astana</td>
-                                        <td>--/--/--</td>
-                                        <td>Almaty</td>
+                                    <tr :key="ticket.id" v-for="ticket in upcoming">
+                                        <td>{{ticket.route.title}}</td>
+                                        <td>{{ticket.route.train.title}}</td>
+                                        <td>{{ticket.wagon.id}}</td>
+                                        <td>{{ticket.lname + " " + ticket.fname}}</td>
+                                        <td>{{ticket.depDate}}</td>
+                                        <td>{{ticket.depStation.title}}</td>
+                                        <td>{{ticket.arrDate}}</td>
+                                        <td>{{ticket.arrStation.title}}</td>
                                     </tr>
                                     </tbody>
                                 </table>
                             </div>
                         </div>
-
                     </div>
-
+                </div>
+                <div class="templatemo-content-widget  white-bg">
+                    <h2 class="margin-bottom-10">History</h2>
+                    <div class="templatemo-content-container">
+                        <div class="templatemo-content-widget no-padding">
+                            <div class="panel panel-default table-responsive">
+                                <table class="table table-striped table-bordered templatemo-user-table">
+                                    <thead>
+                                    <tr>
+                                        <td>Route title</td>
+                                        <td>Train title</td>
+                                        <td>Wagon number</td>
+                                        <td>Passenger Name</td>
+                                        <td>Departure Date</td>
+                                        <td>Departure Station</td>
+                                        <td>Arrival Date</td>
+                                        <td>Arrival Station</td>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr :key="ticket.id" v-for="ticket in history">
+                                        <td>{{ticket.route.title}}</td>
+                                        <td>{{ticket.route.train.title}}</td>
+                                        <td>{{ticket.wagon.id}}</td>
+                                        <td>{{ticket.lname + " " + ticket.fname}}</td>
+                                        <td>{{ticket.depDate}}</td>
+                                        <td>{{ticket.depStation.title}}</td>
+                                        <td>{{ticket.arrDate}}</td>
+                                        <td>{{ticket.arrStation.title}}</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -165,7 +137,7 @@
 <script>
     import headbar from '../../common/Headbar.vue'
     import sidebar from '../../common/Sidebar.vue'
-    // import axiosInstance from "../../auth-service";
+    import axiosInstance from "../../../auth-service";
     export default {
         components:{
             headbar,
@@ -174,27 +146,46 @@
         data() {
             return {
                 upcomingTrips:"",
-                history:""
+                tickets:[]
+            }
+        },
+        computed:{
+            upcoming(){
+                let d = new Date().getTime();
+                return this.tickets.filter(x=>new Date(x.depDate).getTime() >= d);
+            },
+            history(){
+                let d = new Date().getTime();
+                return this.tickets.filter(x=>new Date(x.depDate).getTime() < d);
             }
         },
         methods:{
-            // getHistory() {
-            //     axiosInstance.get(
-            //         '/api/history', {}
-            //     ).then(res => {
-            //         if (res.status === 200) {
-            //             // eslint-disable-next-line no-console
-            //             console.log("OK: " + res.data);
-            //             console.log(res.data);
-            //         } else {
-            //             // eslint-disable-next-line no-console
-            //             console.log("BAD: " + res.status);
-            //         }
-            //     }).catch(e => {
-            //         // eslint-disable-next-line no-console
-            //         console.log(e)
-            //     });
-            // },
+            getTickets() {
+                axiosInstance.get(
+                    '/api/user/myTickets',
+                    {
+                        headers: {
+                            'Authorization': "Bearer " + localStorage.getItem("token")
+                        }
+                    }
+                ).then(res => {
+                    if (res.status === 200) {
+                        // eslint-disable-next-line no-console
+                        console.log("OK: " + res.data);
+                        console.log(res.data);
+                        this.tickets = res.data;
+                    } else {
+                        // eslint-disable-next-line no-console
+                        console.log("BAD: " + res.status);
+                    }
+                }).catch(e => {
+                    // eslint-disable-next-line no-console
+                    console.log(e)
+                });
+            },
+        },
+        created() {
+            this.getTickets();
         }
     }
 </script>
