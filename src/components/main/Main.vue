@@ -160,10 +160,11 @@
         methods: {
             chooseTrain(route){
               this.$router.push({ path:`/route/${route.route.id}`, query:{
-                      arrStaion: route.arr.id,
+                      arrStation: route.arr.id,
                       depStation: route.dep.id,
                       arrDate: route.arr.date,
-                      depDate: route.dep.date
+                      depDate: route.dep.date,
+                      train: route.route.train.id
                   } })
             },
             getStations() {

@@ -18,10 +18,11 @@
                         </thead>
                         <tbody>
 
-                        <tr :key="wagon.number" v-for="wagon in wagons">
-                            <td>{{wagon.number}}</td>
-                            <td>{{parseInt(wagon.seats) - parseInt(wagon.filledSeats)}}</td>
-                            <td><a href="" @click.prevent="chosenWagon = wagon.number; chosenSeat = ''" class="templatemo-edit-btn">Choose</a></td>
+                        <tr :key="wagon.number" v-for="wagon in wagons.wagonList">
+                            <td>{{wagon.id}}</td>
+                            <td>{{parseInt(wagon.wagonClass.maxSeats)}}</td>
+                            <td><a href="" @click.prevent="chosenWagon = wagon.id; chosenSeat = ''"
+                                   class="templatemo-edit-btn">Choose</a></td>
                         </tr>
                         </tbody>
                     </table>
@@ -34,40 +35,41 @@
                             <thead>
                             <tr>
                                 <td><a href="" class="white-text templatemo-sort-by">Wagon number<span></span></a></td>
-                                <td v-for="i in wagons.find(x=>x.number === chosenWagon).seats/4" :key="i"><a href="" class="white-text templatemo-sort-by">Coupe #{{i}}<span></span></a></td>
+                                <td v-for="i in wagons.wagonList.find(x=>x.id === chosenWagon).wagonClass.maxSeats/4"
+                                    :key="i"><a href=""
+                                                class="white-text templatemo-sort-by">Coupe
+                                    #{{i}}<span></span></a></td>
                             </tr>
                             </thead>
                             <tbody>
                             <tr>
                                 <td align="center">{{chosenWagon}}</td>
-                                <td v-for="i in wagons.find(x=>x.number === chosenWagon).seats/4" :key="i">
+                                <td v-for="i in wagons.wagonList.find(x=>x.id === chosenWagon).wagonClass.maxSeats/4"
+                                    :key="i">
                                     <table class="table table-striped table-bordered templatemo-user-table">
                                         <tr>
                                             <td>
                                                 <input
-                                                        :disabled="wagons.find(x=>x.number === chosenWagon).filledSeats
-                                                        .findIndex(x=>x === 1+(i-1)*4)>-1"
                                                         v-model="chosenSeat"
                                                         type="radio"
                                                         name="radio"
                                                         :id="1+(i-1)*4"
                                                         :value="1+(i-1)*4">
-                                                <label style="padding-top: 2px" :for="1+(i-1)*4" class="font-weight-400"><span></span>{{1+(i-1)*4}}</label>
-                                                <input v-model="chosenSeat" type="radio" name="radio" :id="2+(i-1)*4" :value="2+(i-1)*4"
-                                                       :disabled="wagons.find(x=>x.number === chosenWagon).filledSeats
-                                                        .findIndex(x=>x === 2+(i-1)*4)>-1">
+                                                <label style="padding-top: 2px" :for="1+(i-1)*4"
+                                                       class="font-weight-400"><span></span>{{1+(i-1)*4}}</label>
+                                                <input v-model="chosenSeat" type="radio" name="radio" :id="2+(i-1)*4"
+                                                       :value="2+(i-1)*4">
                                                 <label :for="2+(i-1)*4" class="font-weight-400"><span></span>{{2+(i-1)*4}}</label>
                                             </td>
                                         </tr>
                                         <tr>
                                             <td>
-                                                <input v-model="chosenSeat" type="radio" name="radio" :id="3+(i-1)*4" :value="3+(i-1)*4"
-                                                       :disabled="wagons.find(x=>x.number === chosenWagon).filledSeats
-                                                        .findIndex(x=>x === 3+(i-1)*4)>-1">
-                                                <label style="padding-top: 2px" :for="3+(i-1)*4" class="font-weight-400"><span></span>{{3+(i-1)*4}}</label>
-                                                <input v-model="chosenSeat" type="radio" name="radio" :id="4+(i-1)*4" :value="4+(i-1)*4"
-                                                       :disabled="wagons.find(x=>x.number === chosenWagon).filledSeats
-                                                        .findIndex(x=>x === 4+(i-1)*4)>-1">
+                                                <input v-model="chosenSeat" type="radio" name="radio" :id="3+(i-1)*4"
+                                                       :value="3+(i-1)*4">
+                                                <label style="padding-top: 2px" :for="3+(i-1)*4"
+                                                       class="font-weight-400"><span></span>{{3+(i-1)*4}}</label>
+                                                <input v-model="chosenSeat" type="radio" name="radio" :id="4+(i-1)*4"
+                                                       :value="4+(i-1)*4">
                                                 <label :for="4+(i-1)*4" class="font-weight-400"><span></span>{{4+(i-1)*4}}</label>
                                             </td>
                                         </tr>
@@ -81,7 +83,9 @@
                     </div>
                     <div v-if="!next" class="row form-group">
                         <div class="form-group text-right">
-                            <button :disabled="!chosenSeat" @click.prevent="next = true" class="templatemo-blue-button">Next</button>
+                            <button :disabled="!chosenSeat" @click.prevent="next = true" class="templatemo-blue-button">
+                                Next
+                            </button>
                         </div>
                     </div>
                     <div v-if="next" class="templatemo-content-widget white-bg">
@@ -90,11 +94,13 @@
                         <div class="row form-group">
                             <div class="col-lg-6 col-md-6 form-group">
                                 <label for="inputFName">First Name</label>
-                                <input v-model="fname" type="name" class="form-control" id="inputFName" placeholder="Mark">
+                                <input v-model="fname" type="name" class="form-control" id="inputFName"
+                                       placeholder="Mark">
                             </div>
                             <div class="col-lg-6 col-md-6 form-group">
                                 <label for="inputLName">Last Name</label>
-                                <input type="name" v-model="lname" class="form-control" id="inputLName" placeholder="Sterling">
+                                <input type="name" v-model="lname" class="form-control" id="inputLName"
+                                       placeholder="Sterling">
                             </div>
                         </div>
 
@@ -102,11 +108,13 @@
                         <div class="row form-group">
                             <div class="col-lg-6 col-md-6 form-group">
                                 <label for="inputEmail">Email</label>
-                                <input v-model="email" type="email" class="form-control" id="inputEmail" placeholder="admin@railways.kz">
+                                <input v-model="email" type="email" class="form-control" id="inputEmail"
+                                       placeholder="admin@railways.kz">
                             </div>
                             <div class="col-lg-6 col-md-6 form-group">
                                 <label for="inputNatID">National ID</label>
-                                <input v-model="natID" type="NatID" class="form-control" id="inputNatID" placeholder="00000001">
+                                <input v-model="natID" type="NatID" class="form-control" id="inputNatID"
+                                       placeholder="00000001">
                             </div>
                         </div>
 
@@ -128,6 +136,7 @@
     import axiosInstance from "../../auth-service";
     import sidebar from '../common/Sidebar.vue'
     import headbar from '../common/Headbar.vue'
+
     export default {
         components: {
             sidebar,
@@ -135,60 +144,75 @@
         },
         data() {
             return {
-                fname:"",
-                lname:"",
-                email:"",
-                natID:"",
+                fname: "",
+                lname: "",
+                email: "",
+                natID: "",
                 next: false,
-                chosenSeat:"",
-                chosenWagon:"",
-                wagons:[
-                    {
-                    number:1,
-                    seats: 24,
-                    filledSeats:[12, 14, 2, 5, 3]
-                    },
-                    {
-                    number:2,
-                    seats: 20,
-                    filledSeats:[12, 14, 2, 5]
-                    },
-                    {
-                    number:3,
-                    seats: 20,
-                    filledSeats:[12, 14, 2, 5, 3, 7, 8]
-                    }
-                    ]
+                chosenSeat: "",
+                chosenWagon: "",
+                wagons: ""
             }
         },
-        methods:{
-            buy(){
-                if(!this.chosenSeat || !this.fname || !this.lname || !this.email || !this.natID){
+        methods: {
+            buy() {
+                if (!this.chosenSeat || !this.fname || !this.lname || !this.email || !this.natID) {
                     alert("Please fill all the info");
                     return;
                 }
-                axiosInstance.post('/api/buy',
+                let arrD = {
+                    year: parseInt(this.$route.query.arrDate.substr(0, 4)),
+                    month: parseInt(this.$route.query.arrDate.substr(5, 2)),
+                    day: parseInt(this.$route.query.arrDate.substr(8, 2)),
+                    hour: parseInt(this.$route.query.arrDate.substr(11, 2)),
+                    minute: parseInt(this.$route.query.arrDate.substr(14, 2))
+                };
+                let depD = {
+                    year: parseInt(this.$route.query.depDate.substr(0, 4)),
+                    month: parseInt(this.$route.query.depDate.substr(5, 2)),
+                    day: parseInt(this.$route.query.depDate.substr(8, 2)),
+                    hour: parseInt(this.$route.query.depDate.substr(11, 2)),
+                    minute: parseInt(this.$route.query.depDate.substr(14, 2))
+                };
+                axiosInstance.post('/api/user/order',
                     {
-                        route: this.$route.params.id,
-                        wagon: this.chosenWagon,
+                        routeId: parseInt(this.$route.params.id),
+                        wagonId: this.chosenWagon,
                         seat: this.chosenSeat,
-                        firstName: this.fname,
-                        lastName: this.lname,
+                        fName: this.fname,
+                        lName: this.lname,
                         email: this.email,
-                        natID: this.natID,
-                        arrStation: this.$route.arrStation,
-                        depStation: this.$route.depStation,
-                        arrDate: this.$route.arrDate,
-                        depDate: this.$route.depDate
+                        natId: this.natID,
+                        arrStation: parseInt(this.$route.query.arrStation),
+                        depStation: parseInt(this.$route.query.depStation),
+                        arrDate: arrD,
+                        depDate: depD
                     },
-                    {}).then()
-                    .catch(error => {
-                    console.log(error.data);
-                })
-            },
-            getWagons(){
+                    {
+                        headers: {
+                            'Authorization': "Bearer " + localStorage.getItem("token")
+                        }
+                    }).then(res => {
+                    console.log(res.data);
 
-            }
+                })
+                    .catch(error => {
+                        console.log(error.data);
+                    })
+            },
+            getWagons() {
+                axiosInstance.get('/api/public/train/' + this.$route.query.train)
+                    .then(res => {
+                        this.wagons = res.data;
+                        console.log(res.data)
+                    })
+                    .catch(error => {
+                        console.log(error.data)
+                    })
+            },
+        },
+        created() {
+            this.getWagons();
         }
     }
 </script>
