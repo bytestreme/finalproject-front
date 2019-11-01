@@ -194,7 +194,7 @@
                         }
                     }).then(res => {
                     console.log(res.data);
-
+                    this.$router.push({path:'/passenger-profile'});
                 })
                     .catch(error => {
                         console.log(error.data);
