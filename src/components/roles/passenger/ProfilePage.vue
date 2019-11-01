@@ -165,10 +165,36 @@
 <script>
     import headbar from '../../common/Headbar.vue'
     import sidebar from '../../common/Sidebar.vue'
+    // import axiosInstance from "../../auth-service";
     export default {
         components:{
             headbar,
             sidebar
+        },
+        data() {
+            return {
+                upcomingTrips:"",
+                history:""
+            }
+        },
+        methods:{
+            // getHistory() {
+            //     axiosInstance.get(
+            //         '/api/history', {}
+            //     ).then(res => {
+            //         if (res.status === 200) {
+            //             // eslint-disable-next-line no-console
+            //             console.log("OK: " + res.data);
+            //             console.log(res.data);
+            //         } else {
+            //             // eslint-disable-next-line no-console
+            //             console.log("BAD: " + res.status);
+            //         }
+            //     }).catch(e => {
+            //         // eslint-disable-next-line no-console
+            //         console.log(e)
+            //     });
+            // },
         }
     }
 </script>

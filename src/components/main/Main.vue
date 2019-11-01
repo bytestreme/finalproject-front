@@ -116,7 +116,7 @@
                                 <td>{{route.dep.date}}</td>
                                 <td>{{route.arr.title}}</td>
                                 <td>{{route.arr.date}}</td>
-                                <td><a href="" class="templatemo-edit-btn">Choose</a></td>
+                                <td><a @click.prevent="chooseTrain(route)" href="" class="templatemo-edit-btn">Choose</a></td>
                             </tr>
                             </tbody>
                         </table>
@@ -158,6 +158,14 @@
             }
         },
         methods: {
+            chooseTrain(route){
+              this.$router.push({ path:`/route/${route.route.id}`, query:{
+                      arrStaion: route.arr.id,
+                      depStation: route.dep.id,
+                      arrDate: route.arr.date,
+                      depDate: route.dep.date
+                  } })
+            },
             getStations() {
                 axiosInstance.get(
                     '/api/public/station', {}
@@ -178,10 +186,6 @@
             },
             findRoute() {
                 this.loading = true;
-                console.log(this.departureDate);
-                console.log(this.departureDate);
-                console.log(this.departureDate);
-                console.log(this.departureDate);
                 //2019-11-04
                 axiosInstance.post('/api/public/findTicket',
                     {
