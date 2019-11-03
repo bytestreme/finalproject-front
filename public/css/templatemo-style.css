@@ -1036,3 +1036,38 @@ input[type="radio"]:checked + label span {
     border-left: 8px solid #13895F !important;
 	font-family: 'Open Sans', sans-serif !important;
 }
+
+.ntf-reg-bad {
+    padding: 10px !important;
+    margin: 0px 0px 5px!important;
+    font-size: 12px !important;
+    color: #e9e9ea;
+    background-color: #1f2124 !important;
+    border-top: 8px solid #B43757 !important;
+    font-family: 'Open Sans', sans-serif !important;
+}
+
+.ntf-reg-ok {
+    padding: 10px !important;
+    margin: 0px 0px 5px!important;
+    font-size: 12px !important;
+    color: #e9e9ea;
+    background-color: #1f2124 !important;
+    border-top: 8px solid #39ADB4 !important;
+    font-family: 'Open Sans', sans-serif !important;
+}
+
+.fade-enter {
+    opacity: 0;
+}
+
+.fade-enter-active {
+    transition: opacity 0.320s ease;
+}
+
+.fade-leave {}
+
+.fade-leave-active {
+    transition: opacity 0.320s ease;
+    opacity: 0;
+}

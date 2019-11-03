@@ -1,33 +1,35 @@
 <template>
     <div id="register" class="light-gray-bg2">
+        <notifications classes="ntf-reg-bad" position="bottom center" animation-type="velocity" group="bad"/>
+        <notifications classes="ntf-reg-ok" position="bottom center" animation-type="velocity" group="ok"/>
 
         <div class="templatemo-content-widget templatemo-login-widget white-bg">
             <header class="text-center">
-                <h1>POVIDLO INC.</h1>
+                <h1>Register</h1>
             </header>
             <form action="index.html" class="templatemo-login-form">
                 <div class="form-group">
                     <div class="input-group">
                         <div class="input-group-addon"><i class="fa fa-user fa-fw"></i></div>
-                        <input  v-model="username" type="text" class="form-control" placeholder="Username">
+                        <input v-model="username" type="text" class="form-control" placeholder="Username">
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="input-group">
                         <div class="input-group-addon"><i class="fa fa-user fa-fw"></i></div>
-                        <input  v-model="firstname" type="text" class="form-control" placeholder="First name">
+                        <input v-model="firstname" type="text" class="form-control" placeholder="First name">
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="input-group">
                         <div class="input-group-addon"><i class="fa fa-user fa-fw"></i></div>
-                        <input  v-model="lastname" type="text" class="form-control" placeholder="Last name">
+                        <input v-model="lastname" type="text" class="form-control" placeholder="Last name">
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="input-group">
                         <div class="input-group-addon"><i class="fa fa-user fa-fw"></i></div>
-                        <input  v-model="phone" type="number" class="form-control" placeholder="Phone">
+                        <input v-model="phone" type="number" class="form-control" placeholder="Phone">
                     </div>
                 </div>
                 <div class="form-group">
@@ -48,7 +50,9 @@
             </form>
         </div>
         <div class="templatemo-content-widget templatemo-login-widget templatemo-register-widget white-bg">
-            <p>Already registered? <strong><a class="blue-text"><router-link to="/login">Log in now!</router-link></a></strong></p>
+            <p>Already registered? <strong><a class="blue-text">
+                <router-link to="/login">Log in now!</router-link>
+            </a></strong></p>
         </div>
     </div>
 
@@ -56,7 +60,8 @@
 </template>
 
 <script>
-    import axiosInstance from "../../auth-service";
+    import axiosInstance from "../../axiosInstance";
+
     export default {
         name: 'register',
         data() {
@@ -69,11 +74,30 @@
                 phone: ""
             }
         },
-        methods:{
-            submit(){
-              if(this.password === this.password2 && this.password && this.password2)
-                  this.register();
-              else alert("Passwords do not match");
+        methods: {
+            toggleNotify(title, text, gr) {
+                this.$notify({
+                    group: gr,
+                    title: title,
+                    text: text,
+                });
+            },
+            delay(ms) {
+                return new Promise(res => setTimeout(res, ms))
+            },
+            submit() {
+                if (this.username.length === 0 ||
+                    this.password.length === 0 ||
+                    this.password2.length === 0 ||
+                    this.firstname.length === 0 ||
+                    this.lastname.length === 0 ||
+                    this.phone.length === 0) {
+                    this.toggleNotify("Error!", "Fields cannot be empty!", 'bad');
+                } else {
+                    if (this.password === this.password2 && this.password && this.password2)
+                        this.register();
+                    else this.toggleNotify("Error!", "Passwords do not match!", 'bad');
+                }
             },
             register() {
                 axiosInstance.post(
@@ -85,20 +109,15 @@
                         phone: this.phone
                     }
                 ).then(res => {
-                    if (res.status === 200) {
-                        // eslint-disable-next-line no-console
-                        console.log("OK: " + res.data);
+                    this.toggleNotify("Success!", "Registration successful!", 'ok');
+                    this.delay(2000).then(r => {
                         this.$router.push({name: 'login'});
-                    } else {
-                        // eslint-disable-next-line no-console
-                        console.log("BAD: " + res.status);
-                    }
-                }).catch(e => {
-                    // eslint-disable-next-line no-console
-                    console.log(e)
+                    });
+                }).catch(error => {
+                    this.toggleNotify("Error!", error.response.data.message, 'bad');
                 });
             }
 
-        }
+        },
     }
 </script>

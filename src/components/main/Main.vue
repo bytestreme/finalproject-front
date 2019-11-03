@@ -134,7 +134,7 @@
 </template>
 
 <script>
-    import axiosInstance from "../../auth-service";
+    import axiosInstance from "../../axiosInstance";
     import sidebar from '../common/Sidebar.vue'
     import headbar from '../common/Headbar.vue'
 

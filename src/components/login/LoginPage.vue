@@ -1,9 +1,12 @@
 <template>
+
     <div id="login" class="light-gray-bg2">
+        <notifications classes="ntf-reg-bad" position="bottom center" animation-type="velocity" group="bad"/>
+        <notifications classes="ntf-reg-ok" position="bottom center" animation-type="velocity" group="ok"/>
 
         <div class="templatemo-content-widget templatemo-login-widget white-bg">
             <header class="text-center">
-                <h1>POVIDLO INC.</h1>
+                <h1>Login</h1>
             </header>
             <form action="index.html" class="templatemo-login-form">
                 <div class="form-group">
@@ -32,7 +35,7 @@
 </template>
 
 <script>
-    import axiosInstance from "../../auth-service";
+    import axiosInstance from "../../axiosInstance";
     /*eslint no-console: "error"*/
     export default {
         name: 'login',
@@ -43,33 +46,34 @@
             }
         },
         methods: {
+            toggleNotify(title, text, gr) {
+                this.$notify({
+                    group: gr,
+                    title: title,
+                    text: text,
+                });
+            },
             login() {
-                axiosInstance.post(
-                    '/login', {
-                        username: this.username,
-                        password: this.password
-                    }
-                ).then(res => {
-                    if (res.status === 200) {
-                        // eslint-disable-next-line no-console
+                if (this.username.length === 0 || this.password.length === 0) {
+                    this.toggleNotify("Error!", "Fields cannot be empty!", 'bad');
+                } else {
+                    axiosInstance.post(
+                        '/login', {
+                            username: this.username,
+                            password: this.password
+                        }
+                    ).then(res => {
                         console.log("OK: " + res.data);
                         localStorage.setItem('token', res.data);
                         this.$store.dispatch('auth').then(() => {
                             this.$router.push({name: 'home'})
                         });
-                    } else {
-                        // eslint-disable-next-line no-console
-                        console.log("BAD: " + res.status);
-                    }
-                }).catch(e => {
-                    // eslint-disable-next-line no-console
-                    console.log(e)
-                });
+                    }).catch(error => {
+                        this.toggleNotify("Error!", "Login failed!", 'bad');
+                        console.log(error)
+                    });
+                }
             }
-        },
-        created() {
-            // eslint-disable-next-line no-console
-            console.log(this.$store.getters.isAuth);
         }
     }
 </script>
