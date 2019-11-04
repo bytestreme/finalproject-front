@@ -2,7 +2,8 @@
     <!-- Left column -->
     <div class="templatemo-flex-row">
         <sidebar></sidebar>
-        <notifications classes="ntf-success" animation-type="velocity" group="foo"/>
+        <notifications classes="ntf-success" animation-type="velocity" group="ok"/>
+        <notifications classes="ntf-reg-bad"  animation-type="velocity" group="bad"/>
 
         <!-- Main content -->
         <div class="templatemo-content col-1 light-gray-bg">
@@ -228,6 +229,22 @@
                 });
             },
             submit() {
+                if (this.checkedDays.length === 0) {
+                    this.toggleNotify('Error!', 'Weekdays not selected!', 'bad');
+                    return;
+                }
+                if (this.routeTitle.length === 0) {
+                    this.toggleNotify('Error!', 'Route title cannot be empty!', 'bad');
+                    return;
+                }
+                if (this.selectedStations.length === 0) {
+                    this.toggleNotify('Error!', 'Stations not selected!', 'bad');
+                    return;
+                }
+                if (this.depTime.length === 0) {
+                    this.toggleNotify('Error!', 'Route start time cannot be empty!', 'bad');
+                    return;
+                }
                 let s = [];
                 this.selectedStations.forEach(x => {
                     s.push({
@@ -256,11 +273,15 @@
                         console.log("OK: " + res.data);
                         this.selectedStations = [];
                         this.selectedTrain = "";
-                        this.toggleNotify('Success!', 'New route successfully added!');
+                        this.toggleNotify('Success!', 'New route successfully added!', 'ok');
                     } else {
-                        this.toggleNotify('Error!', +res.data.message);
+                        this.toggleNotify('Error!', +res.data.message, 'bad');
                         console.log("BAD: " + res.status);
                     }
+                    window.scrollTo({
+                        top: 0,
+                        behavior: 'smooth',
+                    });
                     this.selectedStation = "";
                     this.selectedStations = [];
                     this.selectedTrain = "";
@@ -270,12 +291,12 @@
                     // eslint-disable-next-line no-console
                 }).catch(error => {
                     console.log(error.response.data.message);
-                    this.toggleNotify('Error!', error.response.data.message);
+                    this.toggleNotify('Error!', error.response.data.message, 'bad');
                 });
             },
-            toggleNotify(title, text) {
+            toggleNotify(title, text, gr) {
                 this.$notify({
-                    group: 'foo',
+                    group: gr,
                     title: title,
                     text: text
                 });
@@ -298,7 +319,6 @@
                     console.log(e)
                 });
             },
-
         },
         created() {
             this.getWeekDays();

@@ -5,27 +5,32 @@
             <headbar></headbar>
             <div class="templatemo-content-container">
                 <div class="templatemo-content-widget white-bg">
-                    <table class="table table-striped table-bordered templatemo-user-table">
-                        <thead>
-                        <tr>
-                            <td><a class="white-text templatemo-sort-by">Wagon number<span
-                                    class="caret"></span></a></td>
-                            <td><a class="white-text templatemo-sort-by">Available Seats<span
-                                    class="caret"></span></a></td>
-                            <td><a href="" class="white-text templatemo-sort-by"><span>
+                    <div class="panel panel-default table-responsive">
+                        <table class="table table-striped table-bordered templatemo-user-table">
+                            <thead>
+                            <tr>
+                                <td style="width: 5%"><a class="white-text templatemo-sort-by">Wagon number<span
+                                        class="caret"></span></a></td>
+                                <td style="width: 25%"><a class="white-text templatemo-sort-by">Available Seats<span
+                                        class="caret"></span></a></td>
+                                <td style="width: 25%"><a class="white-text templatemo-sort-by">Type<span class="caret">
                             </span></a></td>
-                        </tr>
-                        </thead>
-                        <tbody>
+                                <td style="width: 25%"><a class="white-text templatemo-sort-by">Actions<span class="caret">
+                            </span></a></td>
+                            </tr>
+                            </thead>
+                            <tbody>
 
-                        <tr :key="wagon.number" v-for="wagon in wagons.wagonList">
-                            <td>{{wagon.id}}</td>
-                            <td>{{parseInt(wagon.wagonClass.maxSeats)}}</td>
-                            <td><a href="" @click.prevent="chosenWagon = wagon.id; chosenSeat = ''"
-                                   class="templatemo-edit-btn">Choose</a></td>
-                        </tr>
-                        </tbody>
-                    </table>
+                            <tr :key="wagon.number" v-for="wagon in wagons.wagonList">
+                                <td>{{wagon.id}}</td>
+                                <td>{{parseInt(wagon.wagonClass.maxSeats)}}</td>
+                                <td>{{wagon.wagonClass.title}}</td>
+                                <td><a href="" @click.prevent="chosenWagon = wagon.id; chosenSeat = ''"
+                                       class="templatemo-edit-btn">Choose</a></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
                 <div v-if="chosenWagon" class="templatemo-content-widget white-bg">
                     <h2 class="margin-bottom-10">Choose seat</h2>
@@ -95,12 +100,12 @@
                             <div class="col-lg-6 col-md-6 form-group">
                                 <label for="inputFName">First Name</label>
                                 <input v-model="fname" type="name" class="form-control" id="inputFName"
-                                       placeholder="Mark">
+                                       placeholder="John">
                             </div>
                             <div class="col-lg-6 col-md-6 form-group">
                                 <label for="inputLName">Last Name</label>
                                 <input type="name" v-model="lname" class="form-control" id="inputLName"
-                                       placeholder="Sterling">
+                                       placeholder="Doe">
                             </div>
                         </div>
 
@@ -194,7 +199,7 @@
                         }
                     }).then(res => {
                     console.log(res.data);
-                    this.$router.push({path:'/passenger-profile'});
+                    this.$router.push({path: '/passenger-profile'});
                 })
                     .catch(error => {
                         console.log(error.data);

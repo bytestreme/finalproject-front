@@ -22,6 +22,9 @@ TABLE OF CONTENT
     font-family: 'Open Sans', sans-serif;
 }
 
+html {
+    scroll-behavior: smooth !important;
+}
 body {
     font-size: 13px;
 }

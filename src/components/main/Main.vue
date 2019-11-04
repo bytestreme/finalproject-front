@@ -187,18 +187,17 @@
             },
             findRoute() {
                 this.loading = true;
-                //2019-11-04
+                //2019-11-11
                 axiosInstance.post('/api/public/findTicket',
                     {
                         depStationId: this.selectedDep,
                         arrStationId: this.selectedArr,
-                        day: parseInt(this.departureDate.substr(9, 2)),
+                        day: parseInt(this.departureDate.substr(8, 2)),
                         month: parseInt(this.departureDate.substr(5, 2)),
                         year: parseInt(this.departureDate.substr(0, 4)),
                         hour: 0,
                         minute: 0
-                    },
-                    {}).then(res => {
+                    }).then(res => {
                     this.routes = res.data;
                     this.loading = false;
                     console.log(res.data);

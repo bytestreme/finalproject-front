@@ -22,7 +22,7 @@
                         </div>
                         <div class="row form-group">
                             <div class="col-lg-6 col-md-6 form-group">
-                                <label for="inpurId">National ID/Passport</label>
+                                <label for="inputId">National ID/Passport</label>
                                 <input type="text" class="form-control" id="inputId">
                             </div>
                             <div class="col-lg-6 col-md-6 form-group">
