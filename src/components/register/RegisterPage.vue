@@ -29,7 +29,8 @@
                 <div class="form-group">
                     <div class="input-group">
                         <div class="input-group-addon"><i class="fa fa-user fa-fw"></i></div>
-                        <input v-model="phone" type="number" class="form-control" placeholder="Phone">
+                        <input v-model="phone" v-mask="'#(###)-###-##-##'" type="text" class="form-control"
+                               placeholder="8(777)-777-77-77">
                     </div>
                 </div>
                 <div class="form-group">

@@ -1,11 +1,5 @@
 <template>
-
-    <div id="dashboard" class="templatemo-flex-row">
-        <sidebar></sidebar>
-        <!-- Main content -->
-        <div class="templatemo-content col-1 light-gray-bg">
-            <headbar></headbar>
-            <div class="templatemo-content-container">
+    <div class="templatemo-content-container">
                 <div class="templatemo-flex-row flex-content-row">
                     <div class="templatemo-content-widget white-bg col-2">
                         <i class="fa fa-times"></i>
@@ -139,19 +133,11 @@
                         | Design: Template Mo</p>
                 </footer>
             </div>
-        </div>
-    </div>
 </template>
 
 <script>
-    import sidebar from '../common/Sidebar.vue'
-    import headbar from '../common/Headbar.vue'
     export default {
         name: 'dashboard',
-        components:{
-            sidebar,
-            headbar
-        },
         created() {
             // eslint-disable-next-line no-console
             console.log(this.$store.getters.isAuth);

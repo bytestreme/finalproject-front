@@ -1,14 +1,7 @@
 <template>
-    <!-- Left column -->
-    <div class="templatemo-flex-row">
-        <sidebar></sidebar>
-        <notifications classes="ntf-success" animation-type="velocity" group="ok"/>
-        <notifications classes="ntf-reg-bad"  animation-type="velocity" group="bad"/>
-
-        <!-- Main content -->
-        <div class="templatemo-content col-1 light-gray-bg">
-            <headbar></headbar>
-            <div class="templatemo-content-container">
+    <div class="templatemo-content-container">
+                <notifications classes="ntf-success" animation-type="velocity" group="ok"/>
+                <notifications classes="ntf-reg-bad"  animation-type="velocity" group="bad"/>
                 <!--                <div class="templatemo-content-widget green-bg no-padding">-->
                 <!--                    <div class="panel panel-default table-responsive">-->
                 <!--                        <table class="table table-striped table-bordered templatemo-user-table">-->
@@ -153,22 +146,12 @@
                     </div>
                 </div>
             </div>
-        </div>
-
-    </div>
 </template>
 
 
 <script>
     import axiosInstance from "../../../axiosInstance";
-    import headbar from '../../common/Headbar.vue'
-    import sidebar from '../../common/Sidebar.vue'
-
     export default {
-        components: {
-            headbar,
-            sidebar
-        },
         data() {
             return {
                 stations: "",

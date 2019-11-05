@@ -1,10 +1,5 @@
 <template>
-    <div class="templatemo-flex-row">
-        <sidebar></sidebar>
-        <!-- Main content -->
-        <div class="templatemo-content col-1 light-gray-bg">
-            <headbar></headbar>
-            <div class="templatemo-content-container">
+    <div class="templatemo-content-container">
                 <div class="templatemo-content-widget white-bg">
                     <h2 class="margin-bottom-10">Profile Information</h2>
 
@@ -130,19 +125,11 @@
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
 </template>
 
 <script>
-    import headbar from '../../common/Headbar.vue'
-    import sidebar from '../../common/Sidebar.vue'
     import axiosInstance from "../../../axiosInstance";
     export default {
-        components:{
-            headbar,
-            sidebar
-        },
         data() {
             return {
                 upcomingTrips:"",

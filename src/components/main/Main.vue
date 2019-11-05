@@ -1,10 +1,5 @@
 <template>
-    <div class="templatemo-flex-row">
-        <sidebar v-if="$store.getters.isAuth"></sidebar>
-        <!-- Main content -->
-        <div class="templatemo-content col-1 light-gray-bg">
-            <headbar></headbar>
-            <div class="templatemo-content-container"><!--CHOOSE TRAVEL-->
+    <div class="templatemo-content-container"><!--CHOOSE TRAVEL-->
                 <div class="templatemo-content-widget white-bg">
                     <h2 class="margin-bottom-10">Preferences</h2>
                     <p>Choose your destination:</p>
@@ -128,22 +123,13 @@
                     <div style="justify-content: center" class="loader">Loading...</div>
                 </div>
             </div>
-        </div>
-
-    </div>
 </template>
 
 <script>
     import axiosInstance from "../../axiosInstance";
-    import sidebar from '../common/Sidebar.vue'
-    import headbar from '../common/Headbar.vue'
 
     export default {
         name: "main",
-        components: {
-            sidebar,
-            headbar
-        },
         data() {
             return {
                 departureDate: "",

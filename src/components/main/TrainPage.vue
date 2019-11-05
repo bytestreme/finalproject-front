@@ -1,9 +1,5 @@
 <template>
-    <div class="templatemo-flex-row">
-        <sidebar v-if="$store.getters.isAuth"></sidebar>
-        <div class="templatemo-content col-1 light-gray-bg">
-            <headbar></headbar>
-            <div class="templatemo-content-container">
+    <div class="templatemo-content-container">
                 <div class="templatemo-content-widget white-bg">
                     <div class="panel panel-default table-responsive">
                         <table class="table table-striped table-bordered templatemo-user-table">
@@ -114,7 +110,7 @@
                             <div class="col-lg-6 col-md-6 form-group">
                                 <label for="inputEmail">Email</label>
                                 <input v-model="email" type="email" class="form-control" id="inputEmail"
-                                       placeholder="admin@railways.kz">
+                                       placeholder="example@example.com">
                             </div>
                             <div class="col-lg-6 col-md-6 form-group">
                                 <label for="inputNatID">National ID</label>
@@ -131,22 +127,12 @@
                     </div>
                 </div>
             </div>
-
-        </div>
-
-    </div>
 </template>
 
 <script>
     import axiosInstance from "../../axiosInstance";
-    import sidebar from '../common/Sidebar.vue'
-    import headbar from '../common/Headbar.vue'
 
     export default {
-        components: {
-            sidebar,
-            headbar
-        },
         data() {
             return {
                 fname: "",
