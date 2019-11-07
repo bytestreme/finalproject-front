@@ -17,7 +17,7 @@
                     <i class="fa fa-home fa-fw"></i>Dashboard</router-link></li>
 <!--                <li><router-link to="/"><i class="fa fa-bar-chart fa-fw"></i>Charts</router-link></li>-->
 <!--                <li><a href="data-visualization.html"><i class="fa fa-database fa-fw"></i>Data Visualization</a></li>-->
-                <li><router-link to="/" :class="{'active': $route.path === '/' || $route.path.includes('route')}">
+                <li><router-link to="/" :class="{'active': $route.path === '/'}">
                     <i class="fa fa-map-marker fa-fw"></i>Search tickets</router-link></li>
                 <li><router-link to="/manager-profile" :class="{'active': $route.path.includes('manager-profile')}">
                     <i class="fa fa-user fa-fw"></i>Manager Page</router-link></li>
@@ -25,6 +25,8 @@
                     <i class="fa fa-user fa-fw"></i>Manage All Routes</router-link></li>
                 <li><router-link to="/manager-train" :class="{'active': $route.path.includes('manager-train')}">
                     <i class="fa fa-user fa-fw"></i>Create train</router-link></li>
+                <li><router-link to="/manager-all-trains" :class="{'active': $route.path.includes('manager-all-trains')}">
+                    <i class="fa fa-user fa-fw"></i>Manage All Trains</router-link></li>
                 <li><router-link to="/manager-news" :class="{'active': $route.path.includes('manager-news')}">
                     <i class="fa fa-user fa-fw"></i>Send news</router-link></li>
                 <li><router-link to="/agent-profile" :class="{'active': $route.path.includes('agent-profile')}">

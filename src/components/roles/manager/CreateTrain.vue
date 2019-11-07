@@ -66,6 +66,8 @@
                                         </td>
                                         <td style="width:10%"><a class="white-text templatemo-sort-by">No of seats</a>
                                         </td>
+                                        <td style="width:10%"><a class="white-text templatemo-sort-by">Remove</a>
+                                        </td>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -101,15 +103,8 @@
 
 <script>
     import axiosInstance from "../../../axiosInstance";
-    import headbar from '../../common/Headbar.vue'
-    import sidebar from '../../common/Sidebar.vue'
-import { compileFunction } from 'vm';
 
     export default {
-        components: {
-            headbar,
-            sidebar
-        },
         data() {
             return {
                 selectedTrain: "",
@@ -154,17 +149,14 @@ import { compileFunction } from 'vm';
                 let w = [];
                 this.selectedWagons.forEach(x => {
                     w.push({
-                        train: x.train,
                         wagonId: x.id,
                         wagonClassId: x.classId,
                         seatnum: x.seatnum
                     });
                 });
                 let data = {
-                    train: this.selectedWagons[0],
-                    wagonId: w.id,
-                    wagonClassId: this.selectedWagons[1],
-                    seatnum: this.selectedWagons[2]
+                    title: this.selectedWagons[0].train,
+                    wagons: w.id
                 };
                 axiosInstance.post(
                     'api/manager/train', data, {
@@ -178,7 +170,7 @@ import { compileFunction } from 'vm';
                         // eslint-disable-next-line no-console
                         console.log("OK: " + res.data);
                         this.selectedWagons = [];
-                        this.toggleNotify('Success!', 'New route successfully added!');
+                        this.toggleNotify('Success!', 'New train successfully added!');
                     } else {
                         this.toggleNotify('Error!', +res.data.message);
                         console.log("BAD: " + res.status);

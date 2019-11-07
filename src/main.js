@@ -12,8 +12,11 @@ import MainPage from "./components/main/Main.vue";
 import PassengerPage from "./components/roles/passenger/ProfilePage.vue";
 import ManagerPage from "./components/roles/manager/ProfilePage.vue";
 import ManagerTrain from "./components/roles/manager/CreateTrain.vue";
+import ManagerAllTrains from "./components/roles/manager/Trains.vue";
 import ManagerNews from "./components/roles/manager/Advisories.vue";
 import ManagerAllRoutes from "./components/roles/manager/AllRoutes.vue";
+//import ManagerEmployers from "./components/roles/manager/Employers.vue";
+//import ManagerEmployer from "./components/roles/manager/Employer.vue";
 import AgentPage from "./components/roles/agent/ProfilePage.vue";
 import TrainPage from "./components/main/TrainPage.vue"
 import Notifications from 'vue-notification'
@@ -75,11 +78,29 @@ const routes = [
         meta: {requiresLogin: true}
     },
     {
+        path: '/manager-all-trains',
+        component: ManagerAllTrains,
+        name: 'manager-all-trains',
+        meta: {requiresLogin: true}
+    },
+    {
         path: '/manager-news',
         component: ManagerNews,
         name: 'manager-news',
         meta: {requiresLogin: true}
+    }/*,
+    {
+        path: '/manager-employers',
+        component: ManagerEmployers,
+        name: 'manager-employers',
+        meta: {requiresLogin: true}
     },
+    {
+        path: '/manager-employer',
+        component: ManagerEmployer,
+        name: 'manager-employer',
+        meta: {requiresLogin: true}
+    }*/,
     {
         path: '/agent-profile',
         component: AgentPage,
