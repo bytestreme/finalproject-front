@@ -100,7 +100,7 @@
 
 
 <script>
-    import axiosInstance from "../../../auth-service";
+    import axiosInstance from "../../../axiosInstance";
     import headbar from '../../common/Headbar.vue'
     import sidebar from '../../common/Sidebar.vue'
 import { compileFunction } from 'vm';
