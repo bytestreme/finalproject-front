@@ -21,10 +21,18 @@
                     <i class="fa fa-map-marker fa-fw"></i>Search tickets</router-link></li>
                 <li><router-link to="/manager-profile" :class="{'active': $route.path.includes('manager-profile')}">
                     <i class="fa fa-user fa-fw"></i>Manager Page</router-link></li>
+                <li><router-link to="/manager-all-routes" :class="{'active': $route.path.includes('manager-all-routes')}">
+                    <i class="fa fa-user fa-fw"></i>Manage All Routes</router-link></li>
+                <li><router-link to="/manager-train" :class="{'active': $route.path.includes('manager-train')}">
+                    <i class="fa fa-user fa-fw"></i>Create train</router-link></li>
+                <li><router-link to="/manager-news" :class="{'active': $route.path.includes('manager-news')}">
+                    <i class="fa fa-user fa-fw"></i>Send news</router-link></li>
                 <li><router-link to="/agent-profile" :class="{'active': $route.path.includes('agent-profile')}">
                     <i class="fa fa-user fa-fw"></i>Agent Page</router-link></li>
                 <li><router-link to="/passenger-profile" :class="{'active': $route.path.includes('passenger-profile')}">
                     <i class="fa fa-user fa-fw"></i>Passenger Page</router-link></li>
+<!--                <li><a href="preferences.html"><i class="fa fa-sliders fa-fw"></i>Preferences</a></li>-->
+<!--                <li><a href="login.html"><i class="fa fa-eject fa-fw"></i>Sign Out</a></li>-->
             </ul>
         </nav>
     </div>
