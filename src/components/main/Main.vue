@@ -127,7 +127,6 @@
 
 <script>
     import axiosInstance from "../../axiosInstance";
-
     export default {
         name: "main",
         data() {
@@ -190,7 +189,6 @@
                 }).catch(error => {
                     console.log(error.data);
                     this.loading = false;
-
                 })
             }
         },
