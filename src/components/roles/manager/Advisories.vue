@@ -1,10 +1,10 @@
 <template>
     <!-- Left column -->
     <div class="templatemo-flex-row">
-        <sidebar></sidebar>
+        <notifications classes="ntf-success" animation-type="velocity" group="ok"/>
+        <notifications classes="ntf-reg-bad"  animation-type="velocity" group="bad"/>
         <!-- Main content -->
         <div class="templatemo-content col-1 light-gray-bg">
-            <headbar></headbar>
             <div class="templatemo-content-container">
                 <div class="templatemo-content-widget white-bg">
                     <h2 class="margin-bottom-10">Advisories</h2>
@@ -48,20 +48,33 @@
 </template>
 
 <script>
-    import headbar from '../../common/Headbar.vue'
-    import sidebar from '../../common/Sidebar.vue'
+    import axiosInstance from "../../../axiosInstance";
     export default {
-        components:{
-            headbar,
-            sidebar
-        },
         data() {
             return {
                 text: '',
-                title: ''
+                title: '',
+                trains: ""
             }
         },
         methods: {
+            getTrains() {
+                axiosInstance.get(
+                    'api/public/train', {}
+                ).then(res => {
+                    if (res.status === 200) {
+                        // eslint-disable-next-line no-console
+                        console.log("OK: " + res.data);
+                        this.trains = res.data; //stations is array
+                    } else {
+                        // eslint-disable-next-line no-console
+                        console.log("BAD: " + res.status);
+                        this.toggleNotify("Error!", res.status, 'bad');
+                    }
+                }).catch(error => {
+                    this.toggleNotify(error.name, error.message, 'bad');
+                });
+            },
             submit() {
                 let data = {
                     title: this.title,
@@ -78,22 +91,21 @@
                     if (res.status === 200) {
                         // eslint-disable-next-line no-console
                         console.log("OK: " + res.data);
-                        this.toggleNotify('Success!', 'New route successfully added!');
+                        this.toggleNotify('Success!', 'New notification successfully added!', 'ok');
                     } else {
-                        this.toggleNotify('Error!', +res.data.message);
+                        this.toggleNotify("Error!", res.status, 'bad');
                         console.log("BAD: " + res.status);
                     }
                     this.title = '';
                     this.text = '';
-                    // eslint-disable-next-line no-console
                 }).catch(error => {
-                    console.log(error.response.data.message);
-                    this.toggleNotify('Error!', error.response.data.message);
+                    this.toggleNotify(error.name, error.message, 'bad');
+                    
                 });
             },
-            toggleNotify(title, text) {
+            toggleNotify(title, text, group) {
                 this.$notify({
-                    group: 'foo',
+                    group: group,
                     title: title,
                     text: text
                 });
@@ -101,6 +113,9 @@
             reset() {
                 this.text = '';
             }
+        },
+        created() {
+            this.getTrains();
         }
     }
 </script>

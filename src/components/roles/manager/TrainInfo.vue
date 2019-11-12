@@ -1,13 +1,14 @@
 <template>
     <!-- Left column -->
     <div class="templatemo-flex-row">
-        <notifications classes="ntf-success" animation-type="velocity" group="foo"/>
+        <notifications classes="ntf-success" animation-type="velocity" group="ok"/>
+        <notifications classes="ntf-reg-bad"  animation-type="velocity" group="bad"/>
 
         <!-- Main content -->
         <div class="templatemo-content col-1 light-gray-bg">
             <div class="templatemo-content-container">
                 <div class="templatemo-content-widget white-bg">
-                    <div class="col-lg-12 col-md-6 form-group">
+                    <div v-if="train" class="col-lg-12 col-md-6 form-group">
                         <h2 class="margin-bottom-10">Train: {{train.title}}</h2>
                     </div>
                     <!--
@@ -79,7 +80,7 @@
                     <div class="row form-group">
                         <div class="col-lg-6 form-group" style="width: 100%;">
                             <div class="form-group text-right">
-                                <router-link :to="{ name: 'manager-all-trains'}"
+                                <router-link to="/manager-all-trains"
                                             class="templatemo-blue-button">Back</router-link>
                             </div>
                         </div>
@@ -108,15 +109,15 @@
                     .then(res => {
                         this.train = res.data;
                         this.wagons = this.train.wagonList;
-                        console.log(res.data)
                     })
                     .catch(error => {
-                        console.log(error.data)
+                        console.log(error);
+                        this.toggleNotify(error.name, error.message, 'bad');
                     })
             },
-            toggleNotify(title, text) {
+            toggleNotify(title, text, group) {
                 this.$notify({
-                    group: 'foo',
+                    group: group,
                     title: title,
                     text: text
                 });

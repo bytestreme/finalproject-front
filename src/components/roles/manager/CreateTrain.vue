@@ -1,7 +1,8 @@
 <template>
     <!-- Left column -->
     <div class="templatemo-flex-row">
-        <notifications classes="ntf-success" animation-type="velocity" group="foo"/>
+        <notifications classes="ntf-success" animation-type="velocity" group="ok"/>
+        <notifications classes="ntf-reg-bad"  animation-type="velocity" group="bad"/>
 
         <!-- Main content -->
         <div class="templatemo-content col-1 light-gray-bg">
@@ -129,10 +130,12 @@
                     } else {
                         // eslint-disable-next-line no-console
                         console.log("BAD: " + res.status);
+                        this.toggleNotify("Error!", res.status, 'bad')
                     }
-                }).catch(e => {
+                }).catch(error => {
                     // eslint-disable-next-line no-console
-                    console.log(e)
+                    console.log(error);
+                    this.toggleNotify(error.name, error.message, 'bad');
                 });
             },
             addWagon() {
@@ -168,9 +171,9 @@
                         // eslint-disable-next-line no-console
                         console.log("OK: " + res.data);
                         this.selectedWagons = [];
-                        this.toggleNotify('Success!', 'New train successfully added!');
+                        this.toggleNotify('Success!', 'New train successfully added!', 'ok');
                     } else {
-                        this.toggleNotify('Error!', +res.data.message);
+                        this.toggleNotify('Error!', res.data.message, 'bad');
                         console.log("BAD: " + res.status);
                     }
                     this.selectedTrain = "";
@@ -178,13 +181,12 @@
                     this.selectedSeatnum = "";
                     // eslint-disable-next-line no-console
                 }).catch(error => {
-                    console.log(error.response.data.message);
-                    this.toggleNotify('Error!', error.response.data.message);
+                    this.toggleNotify(error.name, error.message, 'bad');
                 });
             },
-            toggleNotify(title, text) {
+            toggleNotify(title, text, group) {
                 this.$notify({
-                    group: 'foo',
+                    group: group,
                     title: title,
                     text: text
                 });
