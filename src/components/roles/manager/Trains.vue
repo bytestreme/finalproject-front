@@ -13,19 +13,30 @@
                                 <thead>
                                 <tr>
                                     <td style="width:10%"><a class="white-text templatemo-sort-by">No</a></td>
-                                    <td style="width:35%"><a class="white-text templatemo-sort-by">Train</a></td>
-                                    <td style="width:35%"><a class="white-text templatemo-sort-by">Remove</a></td>
+                                    <td style="width:30%"><a class="white-text templatemo-sort-by">Train</a></td>
+                                    <td style="width:30%"><a class="white-text templatemo-sort-by">Info</a></td>
+                                    <td style="width:30%"><a class="white-text templatemo-sort-by">Remove</a></td>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 <tr v-for="(train, train_index) in trains" :key="train.id">
                                     <td>{{train_index + 1}}</td>
                                     <td>{{train.title}}</td>
+                                    <td><router-link :to="{ name: 'train-info', params: { id: train.id } }"
+                                            class="templatemo-del-btn">Info</router-link></td>
                                     <td><a href="" @click.prevent="removeTrain(train.id)"
                                             class="templatemo-del-btn">Remove</a></td>
                                 </tr>
                                 </tbody>
                             </table>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-lg-6 form-group" style="width: 100%;">
+                            <div class="form-group text-right">
+                                <router-link :to="{ name: 'manager-train'}"
+                                            class="templatemo-blue-button">Add</router-link>
+                            </div>
                         </div>
                     </div>
                 </div>

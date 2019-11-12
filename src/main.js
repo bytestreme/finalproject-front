@@ -19,6 +19,7 @@ import ManagerAllRoutes from "./components/roles/manager/AllRoutes.vue";
 //import ManagerEmployer from "./components/roles/manager/Employer.vue";
 import AgentPage from "./components/roles/agent/ProfilePage.vue";
 import TrainPage from "./components/main/TrainPage.vue"
+import TrainInfo from "./components/roles/manager/TrainInfo.vue";
 import Notifications from 'vue-notification'
 import velocity from 'velocity-animate'
 
@@ -111,6 +112,12 @@ const routes = [
         path: '/route/:id',
         component: TrainPage,
         name: 'train-page',
+        meta: {requiresLogin: true}
+    },
+    {
+        path: '/train/:id',
+        component: TrainInfo,
+        name: 'train-info',
         meta: {requiresLogin: true}
     },
 ];

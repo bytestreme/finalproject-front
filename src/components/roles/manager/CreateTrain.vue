@@ -1,12 +1,10 @@
 <template>
     <!-- Left column -->
     <div class="templatemo-flex-row">
-        <sidebar></sidebar>
         <notifications classes="ntf-success" animation-type="velocity" group="foo"/>
 
         <!-- Main content -->
         <div class="templatemo-content col-1 light-gray-bg">
-            <headbar></headbar>
             <div class="templatemo-content-container">
                 <div class="templatemo-content-widget white-bg">
                     <h2 class="margin-bottom-10">Create train</h2>
