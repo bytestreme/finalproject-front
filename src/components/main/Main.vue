@@ -79,6 +79,9 @@
                         </div>
                     </div>
                 </div><!--CHOOSE TRAVEL ENDS-->
+                <div v-if="no_route" class="col-lg-12 has-error form-group">
+                    <label class="control-label">No routes found</label>
+                </div>
                 <div v-if="routes.length!=0" class="templatemo-content-widget green-bg no-padding">
                     <div class="panel panel-default table-responsive">
                         <table class="table table-striped table-bordered templatemo-user-table">
@@ -132,6 +135,7 @@
         name: "main",
         data() {
             return {
+                no_route: false,
                 departureDate: "",
                 selectedDep: "",
                 selectedArr: "",
@@ -172,8 +176,9 @@
                 });
             },
             findRoute() {
+                this.no_route = false;
                 this.loading = true;
-                //2019-11-11
+                this.routes = [];
                 axiosInstance.post('/api/public/findTicket',
                     {
                         depStationId: this.selectedDep,
@@ -190,7 +195,7 @@
                 }).catch(error => {
                     console.log(error.data);
                     this.loading = false;
-
+                    this.no_route = true;
                 })
             }
         },
