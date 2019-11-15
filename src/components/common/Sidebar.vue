@@ -26,7 +26,7 @@
                 <li><router-link to="/manager-all-trains" :class="{'active': $route.path.includes('manager-all-trains')}">
                     <i class="fa fa-user fa-fw"></i>Manage Trains</router-link></li>
                 <li><router-link to="/manager-news" :class="{'active': $route.path.includes('manager-news')}">
-                    <i class="fa fa-user fa-fw"></i>Send news</router-link></li>
+                    <i class="fa fa-envelope fa-fw"></i>Send news</router-link></li>
                 <li><router-link to="/agent-profile" :class="{'active': $route.path.includes('agent-profile')}">
                     <i class="fa fa-user fa-fw"></i>Agent Page</router-link></li>
                 <li><router-link to="/passenger-profile" :class="{'active': $route.path.includes('passenger-profile')}">

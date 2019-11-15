@@ -8,48 +8,9 @@
         <div class="templatemo-content col-1 light-gray-bg">
             <div class="templatemo-content-container">
                 <div class="templatemo-content-widget white-bg">
-                    <div v-if="train" class="col-lg-12 col-md-6 form-group">
+                    <div v-if="train">
                         <h2 class="margin-bottom-10">Train: {{train.title}}</h2>
                     </div>
-                    <!--
-                    <div class="row form-group">
-                        <div class="col-lg-6 col-md-6 form-group">
-                            <label for="selectedWagon" class="col-lg-6 col-md-6 form-group">Choose Wagon Type</label>
-                            <select :disabled="selectedTrain === ''" class="form-control" id="train"
-                                    v-model="selectedWagon">
-                                <option value="">Select</option>
-                                <option :key="cl"
-                                        v-for="cl in wagonClasses"
-                                        :value="wagonClasses.indexOf(cl)">
-                                    {{cl}}
-                                </option>
-                            </select>
-                        </div>
-                        <div class="col-lg-6 col-md-6 form-group">
-                            <label for="train" class="col-lg-6 col-md-6 form-group">Choose SeatNum</label>
-                            <select style="display: inline" :disabled="selectedWagon === ''"
-                                    class="form-control"
-                                    id="stations"
-                                    v-model="selectedSeatnum">
-                                <option value="">Select</option>
-                                <option :key="seatnum"
-                                        v-for="seatnum in seatNums[selectedWagon]"
-                                        :value="seatnum">
-                                    {{seatnum}}
-                                </option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="row form-group">
-                        <div class="col-lg-12 form-group">
-                            <div class="form-group text-right">
-                                <button :disabled="selectedSeatnum === ''" @click="addWagon"
-                                        class="templatemo-blue-button">Add Wagon
-                                </button>
-                            </div>
-                        </div>
-                    </div> -->
-                    <div class="row form-group">
                         <div class="templatemo-content-widget green-bg no-padding">
                             <div class="panel panel-default table-responsive">
                                 <table class="table table-striped table-bordered templatemo-user-table">
@@ -76,7 +37,6 @@
                                 </table>
                             </div>
                         </div>
-                    </div>
                     <div class="row form-group">
                         <div class="col-lg-6 form-group" style="width: 100%;">
                             <div class="form-group text-right">
