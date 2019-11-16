@@ -1,5 +1,5 @@
 <template>
-    <div class="templatemo-content-container"><!--CHOOSE TRAVEL-->
+    <div v-if="!isChosenRoute" class="templatemo-content-container"><!--CHOOSE TRAVEL-->
                 <div class="templatemo-content-widget white-bg">
                     <h2 class="margin-bottom-10">Preferences</h2>
                     <p>Choose your destination:</p>
@@ -35,50 +35,17 @@
                         </div>
                     </div>
 
-                    <!--                    <div class="row form-group">-->
-                    <!--                        <div class="col-lg-12 form-group">-->
-                    <!--                            <div class="margin-right-15 templatemo-inline-block">-->
-                    <!--                                <input type="checkbox" name="server" id="c3" value="" checked>-->
-                    <!--                                <label for="c3" class="font-weight-400"><span></span>LUX</label>-->
-                    <!--                            </div>-->
-                    <!--                            <div class="margin-right-15 templatemo-inline-block">-->
-                    <!--                                <input type="checkbox" name="member" id="c4" value="">-->
-                    <!--                                <label for="c4" class="font-weight-400"><span></span>PLATSCARD</label>-->
-                    <!--                            </div>-->
-                    <!--                            <div class="margin-right-15 templatemo-inline-block">-->
-                    <!--                                <input type="checkbox" name="expired" id="c5" value="">-->
-                    <!--                                <label for="c5" class="font-weight-400"><span></span>COUPLE</label>-->
-                    <!--                            </div>-->
-                    <!--                        </div>-->
-                    <!--                    </div>-->
+
                     <div class="row form-group">
-                        <!--                        <div class="col-lg-6 form-group">-->
-                        <!--                            <div class="margin-right-15 templatemo-inline-block">-->
-                        <!--                                <input type="radio" name="radio" id="r4" value="">-->
-                        <!--                                <label for="r4" class="font-weight-400"><span></span>Morning</label>-->
-                        <!--                            </div>-->
-                        <!--                            <div class="margin-right-15 templatemo-inline-block">-->
-                        <!--                                <input type="radio" name="radio" id="r5" value="" checked>-->
-                        <!--                                <label for="r5" class="font-weight-400"><span></span>Noon</label>-->
-                        <!--                            </div>-->
-                        <!--                            <div class="margin-right-15 templatemo-inline-block">-->
-                        <!--                                <input type="radio" name="radio" id="r6" value="">-->
-                        <!--                                <label for="r6" class="font-weight-400"><span></span>Evening</label>-->
-                        <!--                            </div>-->
-                        <!--                            <div class="margin-right-15 templatemo-inline-block">-->
-                        <!--                                <input type="radio" name="radio" id="r7" value="">-->
-                        <!--                                <label for="r7" class="font-weight-400"><span></span>Night</label>-->
-                        <!--                            </div>-->
-                        <!--                            <div class="margin-right-15 templatemo-inline-block">-->
-                        <!--                                <input type="radio" name="radio" id="r8" value="">-->
-                        <!--                                <label for="r8" class="font-weight-400"><span></span>Any time</label>-->
-                        <!--                            </div>-->
-                        <!--                        </div>-->
+
                         <div class="col-lg-6 form-group" style="width: 100%;">
 
                         </div>
                     </div>
                 </div><!--CHOOSE TRAVEL ENDS-->
+                <div v-if="no_route" class="col-lg-12 has-error form-group">
+                    <label class="control-label">No routes found</label>
+                </div>
                 <div v-if="routes.length!=0" class="templatemo-content-widget green-bg no-padding">
                     <div class="panel panel-default table-responsive">
                         <table class="table table-striped table-bordered templatemo-user-table">
@@ -123,15 +90,28 @@
                     <div style="justify-content: center" class="loader">Loading...</div>
                 </div>
             </div>
+    <TrainPage v-else-if="isChosenRoute"
+               :arrStation="chosenRoute.arrStation"
+               :depStation="chosenRoute.depStation"
+               :arrDate="chosenRoute.arrDate"
+               :depDate="chosenRoute.depDate"
+               :train="chosenRoute.train"
+               :id="chosenRoute.id"
+    ></TrainPage>
 </template>
 
 <script>
+    import TrainPage from "./TrainPage.vue"
     import axiosInstance from "../../axiosInstance";
-
     export default {
+        components: {
+            TrainPage
+        },
         name: "main",
         data() {
             return {
+                isChosenRoute: false,
+                no_route: false,
                 departureDate: "",
                 selectedDep: "",
                 selectedArr: "",
@@ -140,18 +120,20 @@
                     {title: "Almaty", id: 2}
                 ],
                 routes: [],
-                loading: false
+                loading: false,
+                chosenRoute:{
+                }
             }
         },
         methods: {
             chooseTrain(route){
-              this.$router.push({ path:`/route/${route.route.id}`, query:{
-                      arrStation: route.arr.id,
-                      depStation: route.dep.id,
-                      arrDate: route.arr.date,
-                      depDate: route.dep.date,
-                      train: route.route.train.id
-                  } })
+                this.chosenRoute.id = route.route.id;
+                this.chosenRoute.arrStation = route.arr.id;
+                this.chosenRoute.depStation = route.dep.id;
+                this.chosenRoute.arrDate = route.arr.date;
+                this.chosenRoute.depDate = route.dep.date;
+                this.chosenRoute.train = route.route.train.id;
+                this.isChosenRoute = true;
             },
             getStations() {
                 axiosInstance.get(
@@ -172,8 +154,9 @@
                 });
             },
             findRoute() {
+                this.no_route = false;
                 this.loading = true;
-                //2019-11-11
+                this.routes = [];
                 axiosInstance.post('/api/public/findTicket',
                     {
                         depStationId: this.selectedDep,
@@ -185,12 +168,13 @@
                         minute: 0
                     }).then(res => {
                     this.routes = res.data;
+                    this.no_route = res.data.length === 0;
                     this.loading = false;
                     console.log(res.data);
                 }).catch(error => {
                     console.log(error.data);
                     this.loading = false;
-
+                    this.no_route = true;
                 })
             }
         },

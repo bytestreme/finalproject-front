@@ -52,6 +52,7 @@
                                             <td>
                                                 <input
                                                         v-model="chosenSeat"
+                                                        disabled
                                                         type="radio"
                                                         name="radio"
                                                         :id="1+(i-1)*4"
@@ -133,6 +134,7 @@
     import axiosInstance from "../../axiosInstance";
 
     export default {
+        props: ["arrStation", "depStation", "arrDate", "depDate", "train", "id"],
         data() {
             return {
                 fname: "",
@@ -152,30 +154,30 @@
                     return;
                 }
                 let arrD = {
-                    year: parseInt(this.$route.query.arrDate.substr(0, 4)),
-                    month: parseInt(this.$route.query.arrDate.substr(5, 2)),
-                    day: parseInt(this.$route.query.arrDate.substr(8, 2)),
-                    hour: parseInt(this.$route.query.arrDate.substr(11, 2)),
-                    minute: parseInt(this.$route.query.arrDate.substr(14, 2))
+                    year: parseInt(this.arrDate.substr(0, 4)),
+                    month: parseInt(this.arrDate.substr(5, 2)),
+                    day: parseInt(this.arrDate.substr(8, 2)),
+                    hour: parseInt(this.arrDate.substr(11, 2)),
+                    minute: parseInt(this.arrDate.substr(14, 2))
                 };
                 let depD = {
-                    year: parseInt(this.$route.query.depDate.substr(0, 4)),
-                    month: parseInt(this.$route.query.depDate.substr(5, 2)),
-                    day: parseInt(this.$route.query.depDate.substr(8, 2)),
-                    hour: parseInt(this.$route.query.depDate.substr(11, 2)),
-                    minute: parseInt(this.$route.query.depDate.substr(14, 2))
+                    year: parseInt(this.depDate.substr(0, 4)),
+                    month: parseInt(this.depDate.substr(5, 2)),
+                    day: parseInt(this.depDate.substr(8, 2)),
+                    hour: parseInt(this.depDate.substr(11, 2)),
+                    minute: parseInt(this.depDate.substr(14, 2))
                 };
                 axiosInstance.post('/api/user/order',
                     {
-                        routeId: parseInt(this.$route.params.id),
+                        routeId: parseInt(this.id),
                         wagonId: this.chosenWagon,
                         seat: this.chosenSeat,
                         fName: this.fname,
                         lName: this.lname,
                         email: this.email,
                         natId: this.natID,
-                        arrStation: parseInt(this.$route.query.arrStation),
-                        depStation: parseInt(this.$route.query.depStation),
+                        arrStation: parseInt(this.arrStation),
+                        depStation: parseInt(this.depStation),
                         arrDate: arrD,
                         depDate: depD
                     },
@@ -192,7 +194,7 @@
                     })
             },
             getWagons() {
-                axiosInstance.get('/api/public/train/' + this.$route.query.train)
+                axiosInstance.get('/api/public/train/' + this.train)
                     .then(res => {
                         this.wagons = res.data;
                         console.log(res.data)
