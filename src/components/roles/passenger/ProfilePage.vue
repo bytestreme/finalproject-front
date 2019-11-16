@@ -17,11 +17,11 @@
                         <div class="row form-group">
                             <div class="col-lg-6 col-md-6 form-group">
                                 <label for="inputUsername">Username</label>
-                                <input v-model="user.username" type="text" class="form-control" id="inputUsername" placeholder="admin">
+                                <input disabled v-model="user.username" type="text" class="form-control" id="inputUsername" placeholder="admin">
                             </div>
                             <div class="col-lg-6 col-md-6 form-group">
                                 <label for="inputEmail">Email</label>
-                                <input v-model="user.email" type="email" class="form-control" id="inputEmail" placeholder="admin@railways.kz">
+                                <input disabled v-model="user.email" type="email" class="form-control" id="inputEmail" placeholder="admin@railways.kz">
                             </div>
                         </div>
                         <div class="row form-group">
@@ -55,6 +55,7 @@
                                         <td>Route title</td>
                                         <td>Train title</td>
                                         <td>Wagon number</td>
+                                        <td>Seat number</td>
                                         <td>Passenger Name</td>
                                         <td>Departure Date</td>
                                         <td>Departure Station</td>
@@ -67,6 +68,7 @@
                                         <td>{{ticket.route.title}}</td>
                                         <td>{{ticket.route.train.title}}</td>
                                         <td>{{ticket.wagon.id}}</td>
+                                        <td>{{ticket.seatNum}}</td>
                                         <td>{{ticket.lname + " " + ticket.fname}}</td>
                                         <td>{{ticket.depDate}}</td>
                                         <td>{{ticket.depStation.title}}</td>
@@ -90,6 +92,7 @@
                                         <td>Route title</td>
                                         <td>Train title</td>
                                         <td>Wagon number</td>
+                                        <td>Seat number</td>
                                         <td>Passenger Name</td>
                                         <td>Departure Date</td>
                                         <td>Departure Station</td>
@@ -102,6 +105,7 @@
                                         <td>{{ticket.route.title}}</td>
                                         <td>{{ticket.route.train.title}}</td>
                                         <td>{{ticket.wagon.id}}</td>
+                                        <td>{{ticket.seatNum}}</td>
                                         <td>{{ticket.lname + " " + ticket.fname}}</td>
                                         <td>{{ticket.depDate}}</td>
                                         <td>{{ticket.depStation.title}}</td>

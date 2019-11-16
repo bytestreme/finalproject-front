@@ -19,6 +19,7 @@ import ManagerAllRoutes from "./components/roles/manager/AllRoutes.vue";
 import AgentPage from "./components/roles/agent/ProfilePage.vue";
 import TrainPage from "./components/main/TrainPage.vue"
 import TrainInfo from "./components/roles/manager/TrainInfo.vue";
+import Logs from "./components/logs/Logs.vue"
 import Notifications from 'vue-notification'
 import velocity from 'velocity-animate'
 
@@ -116,6 +117,12 @@ const routes = [
         path: '/train/:id',
         component: TrainInfo,
         name: 'train-info',
+        meta: {requiresLogin: true}
+    },
+    {
+        path: '/logs',
+        component: Logs,
+        name: 'Logs',
         meta: {requiresLogin: true}
     },
 ];

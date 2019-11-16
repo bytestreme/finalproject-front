@@ -21,7 +21,7 @@
                                 <td>{{wagon.id}}</td>
                                 <td>{{parseInt(wagon.wagonClass.maxSeats)}}</td>
                                 <td>{{wagon.wagonClass.title}}</td>
-                                <td><a href="" @click.prevent="chosenWagon = wagon.id; chosenSeat = ''"
+                                <td><a href="" @click.prevent="chooseWagon(wagon.id)"
                                        class="templatemo-edit-btn">Choose</a></td>
                             </tr>
                             </tbody>
@@ -52,7 +52,7 @@
                                             <td>
                                                 <input
                                                         v-model="chosenSeat"
-                                                        disabled
+                                                        :disabled="reservedSeats.findIndex(x=>x == 1+(i-1)*4)>-1"
                                                         type="radio"
                                                         name="radio"
                                                         :id="1+(i-1)*4"
@@ -60,6 +60,7 @@
                                                 <label style="padding-top: 2px" :for="1+(i-1)*4"
                                                        class="font-weight-400"><span></span>{{1+(i-1)*4}}</label>
                                                 <input v-model="chosenSeat" type="radio" name="radio" :id="2+(i-1)*4"
+                                                       :disabled="reservedSeats.findIndex(x=>x == 2+(i-1)*4)>-1"
                                                        :value="2+(i-1)*4">
                                                 <label :for="2+(i-1)*4" class="font-weight-400"><span></span>{{2+(i-1)*4}}</label>
                                             </td>
@@ -67,10 +68,12 @@
                                         <tr>
                                             <td>
                                                 <input v-model="chosenSeat" type="radio" name="radio" :id="3+(i-1)*4"
+                                                       :disabled="reservedSeats.findIndex(x=>x == 3+(i-1)*4)>-1"
                                                        :value="3+(i-1)*4">
                                                 <label style="padding-top: 2px" :for="3+(i-1)*4"
                                                        class="font-weight-400"><span></span>{{3+(i-1)*4}}</label>
                                                 <input v-model="chosenSeat" type="radio" name="radio" :id="4+(i-1)*4"
+                                                       :disabled="reservedSeats.findIndex(x=>x == 4+(i-1)*4)>-1"
                                                        :value="4+(i-1)*4">
                                                 <label :for="4+(i-1)*4" class="font-weight-400"><span></span>{{4+(i-1)*4}}</label>
                                             </td>
@@ -120,6 +123,13 @@
                             </div>
                         </div>
 
+                        <div class="row form-group">
+                            <div class="col-lg-6 col-md-6 form-group">
+                                <label for="inputEmail">Phone</label>
+                                <input v-model="phone" v-mask="'#(###)-###-##-##'" type="text" class="form-control"
+                                       placeholder="8(777)-777-77-77">
+                            </div>
+                        </div>
                     </div>
                     <div v-if="next" class="row form-group">
                         <div class="form-group text-right">
@@ -144,12 +154,14 @@
                 next: false,
                 chosenSeat: "",
                 chosenWagon: "",
-                wagons: ""
+                wagons: "",
+                reservedSeats: [],
+                phone:""
             }
         },
         methods: {
             buy() {
-                if (!this.chosenSeat || !this.fname || !this.lname || !this.email || !this.natID) {
+                if (!this.chosenSeat || !this.fname || !this.lname || !this.email || !this.natID || !this.phone) {
                     alert("Please fill all the info");
                     return;
                 }
@@ -179,7 +191,8 @@
                         arrStation: parseInt(this.arrStation),
                         depStation: parseInt(this.depStation),
                         arrDate: arrD,
-                        depDate: depD
+                        depDate: depD,
+                        phone: this.phone
                     },
                     {
                         headers: {
@@ -203,6 +216,48 @@
                         console.log(error.data)
                     })
             },
+            getReservedSeats(){
+                this.reservedSeats = [];
+                let arrD = {
+                    year: parseInt(this.arrDate.substr(0, 4)),
+                    month: parseInt(this.arrDate.substr(5, 2)),
+                    day: parseInt(this.arrDate.substr(8, 2)),
+                    hour: parseInt(this.arrDate.substr(11, 2)),
+                    minute: parseInt(this.arrDate.substr(14, 2))
+                };
+                let depD = {
+                    year: parseInt(this.depDate.substr(0, 4)),
+                    month: parseInt(this.depDate.substr(5, 2)),
+                    day: parseInt(this.depDate.substr(8, 2)),
+                    hour: parseInt(this.depDate.substr(11, 2)),
+                    minute: parseInt(this.depDate.substr(14, 2))
+                };
+                axiosInstance.post('/api/user/getReservedSeats',
+                    {
+                        routeId: parseInt(this.id),
+                        wagonId: this.chosenWagon,
+                        arrId: parseInt(this.arrStation),
+                        depId: parseInt(this.depStation),
+                        arrDate: arrD,
+                        depDate: depD
+                    },
+                    {
+                        headers: {
+                            'Authorization': "Bearer " + localStorage.getItem("token")
+                        }
+                    }).then(res => {
+                    console.log(res.data);
+                    this.reservedSeats = res.data;
+                })
+                    .catch(error => {
+                        console.log(error.data);
+                    })
+            },
+            chooseWagon(id){
+                this.chosenWagon = id;
+                this.chosenSeat = '';
+                this.getReservedSeats();
+            }
         },
         created() {
             this.getWagons();

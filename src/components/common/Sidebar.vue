@@ -2,12 +2,8 @@
     <div class="templatemo-sidebar">
         <header class="templatemo-site-header">
             <div class="square"></div>
-            <h1>User Page</h1>
+            <h1>User Control</h1>
         </header>
-<!--        <div class="profile-photo-container">-->
-<!--            <img src="images/profile-photo.jpg" alt="Profile Photo" class="img-responsive">-->
-<!--            <div class="profile-photo-overlay"></div>-->
-<!--        </div>-->
         <div class="mobile-menu-icon">
             <i class="fa fa-bars"></i>
         </div>
@@ -25,7 +21,7 @@
                     <router-link to="/agent-profile" :class="{'active': $route.path.includes('agent-profile')}">
                     <i class="fa fa-user fa-fw"></i>Agent Page</router-link>
                 </li>
-                <li v-if="$store.getters.role === 'USER'">
+                <li v-if="$store.getters.role === 'ADMIN' || $store.getters.role === 'USER'">
                     <router-link to="/passenger-profile" :class="{'active': $route.path.includes('passenger-profile')}">
                     <i class="fa fa-user fa-fw"></i>Passenger Page</router-link>
                 </li>
@@ -40,6 +36,10 @@
                 <li v-if="$store.getters.role === 'ADMIN' || $store.getters.role === 'MANAGER'">
                     <router-link to="/manager-news" :class="{'active': $route.path.includes('manager-news')}">
                     <i class="fa fa-envelope fa-fw"></i>Send news</router-link>
+                </li>
+                <li v-if="$store.getters.role === 'ADMIN' || $store.getters.role === 'MANAGER'">
+                    <router-link to="/logs" :class="{'active': $route.path.includes('logs')}">
+                    <i class="fa fa-exclamation-circle fa-fw"></i>Logs</router-link>
                 </li>
                 <li>
                     <router-link to="/" :class="{'active': $route.path === '/'}">

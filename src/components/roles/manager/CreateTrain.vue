@@ -53,7 +53,7 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr v-for="(wagon, wagon_index) in selectedWagons" :key="wagon">
+                                    <tr v-for="(wagon, wagon_index) in selectedWagons" :key="wagon_index">
                                         <td>{{wagon_index + 1}}</td>
                                         <td>{{wagonClasses.find(x=>x.id === wagon).title}}</td>
                                         <td>{{wagonClasses.find(x=>x.id === wagon).maxSeats}}</td>
