@@ -14,6 +14,8 @@ import ManagerTrain from "./components/roles/manager/CreateTrain.vue";
 import ManagerAllTrains from "./components/roles/manager/Trains.vue";
 import ManagerNews from "./components/roles/manager/Advisories.vue";
 import ManagerAllRoutes from "./components/roles/manager/AllRoutes.vue";
+import SearchTicket from "./components/roles/agent/SearchTicket";
+
 //import ManagerEmployers from "./components/roles/manager/Employers.vue";
 //import ManagerEmployer from "./components/roles/manager/Employer.vue";
 import AgentPage from "./components/roles/agent/ProfilePage.vue";
@@ -116,6 +118,12 @@ const routes = [
         path: '/train/:id',
         component: TrainInfo,
         name: 'train-info',
+        meta: {requiresLogin: true}
+    },
+    {
+        path: '/search-ticket',
+        component: SearchTicket,
+        name: 'search-ticket',
         meta: {requiresLogin: true}
     },
 ];

@@ -25,6 +25,10 @@
                     <router-link to="/agent-profile" :class="{'active': $route.path.includes('agent-profile')}">
                     <i class="fa fa-user fa-fw"></i>Agent Page</router-link>
                 </li>
+                <li v-if="$store.getters.role === 'AGENT'">
+                    <router-link to="/agent-profile" :class="{'active': $route.path.includes('search-ticket')}">
+                        <i class="fa fa-user fa-fw"></i>Search Tickets</router-link>
+                </li>
                 <li v-if="$store.getters.role === 'USER'">
                     <router-link to="/passenger-profile" :class="{'active': $route.path.includes('passenger-profile')}">
                     <i class="fa fa-user fa-fw"></i>Passenger Page</router-link>
