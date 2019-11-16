@@ -16,7 +16,7 @@
                                     <td style="width:10%"><a class="white-text templatemo-sort-by">No</a></td>
                                     <td style="width:30%"><a class="white-text templatemo-sort-by">Train</a></td>
                                     <td style="width:30%"><a class="white-text templatemo-sort-by">Info</a></td>
-                                    <td style="width:30%"><a class="white-text templatemo-sort-by">Remove</a></td>
+                                    <td style="width:30%"><a class="white-text templatemo-sort-by">Manage</a></td>
                                 </tr>
                                 </thead>
                                 <tbody>

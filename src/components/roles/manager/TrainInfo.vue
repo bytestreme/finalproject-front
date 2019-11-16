@@ -21,7 +21,7 @@
                                         </td>
                                         <td style="width:30%"><a class="white-text templatemo-sort-by">No of seats</a>
                                         </td>
-                                        <td style="width:10%"><a class="white-text templatemo-sort-by">Remove</a>
+                                        <td style="width:10%"><a class="white-text templatemo-sort-by">Manage</a>
                                         </td>
                                     </tr>
                                     </thead>
@@ -29,7 +29,7 @@
                                     <tr v-for="(wagon, wagon_index) in wagons" :key="wagon.id">
                                         <td>{{wagon_index + 1}}</td>
                                         <td>{{wagon.wagonClass.title}}</td>
-                                        <td>{{wagon.numSeats}}</td>
+                                        <td>{{wagon.wagonClass.maxSeats}}</td>
                                         <td><a href="" @click.prevent="removeWagon(wagon.id)"
                                                class="templatemo-del-btn">Remove</a></td>
                                     </tr>
