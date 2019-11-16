@@ -35,28 +35,7 @@
                             </div>
                         </div>
                         <div class="row form-group">
-
-
-
                         </div>
-                        <!-- <div class="row form-group">
-                          <div class="col-lg-12 has-success form-group">
-                              <label class="control-label" for="inputWithSuccess">Input with success</label>
-                              <input type="text" class="form-control" id="inputWithSuccess">
-                          </div>
-                        </div>
-                        <div class="row form-group">
-                          <div class="col-lg-12 has-warning form-group">
-                              <label class="control-label" for="inputWithWarning">Input with warning</label>
-                              <input type="text" class="form-control" id="inputWithWarning">
-                          </div>
-                        </div>
-                        <div class="row form-group">
-                          <div class="col-lg-12 has-error form-group">
-                              <label class="control-label" for="inputWithError">Input with error</label>
-                              <input type="text" class="form-control" id="inputWithError">
-                          </div>
-                        </div> -->
                         <div class="row form-group">
                             <div class="col-lg-6 col-md-6 form-group">
                                 <div>
