@@ -3,7 +3,6 @@ import App from './App.vue'
 import store from "./store";
 import VueRouter from 'vue-router'
 import VueMask from 'v-mask'
-import Text from 'bootstrap-vue'
 
 import DashboardPage from "./components/dashboard/DashboardPage";
 import LoginPage from "./components/login/LoginPage";
@@ -28,7 +27,6 @@ Vue.config.productionTip = false;
 Vue.use(Notifications, {velocity})
 Vue.use(VueRouter);
 Vue.use(VueMask);
-Vue.use(Text);
 
 const routes = [
     {

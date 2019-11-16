@@ -12,33 +12,18 @@
                     <div class="row form-group">
                         <div class="col-lg-12 col-md-6 form-group">
                             <label for="selectedTrain">Train title</label>
-                            <input v-model="selectedTrain" type="text" class="form-control" placeholder="Train title">
+                            <input v-model="trainTitle" id="selectedTrain" type="text" class="form-control" placeholder="Train title">
                         </div>
-                        <div class="col-lg-6 col-md-6 form-group">
+                        <div class="col-lg-12 col-md-6 form-group">
                             <!-- finish loop for choosing wagon-->
-                            <label for="selectedWagon" class="col-lg-6 col-md-6 form-group">Choose Wagon Type</label>
-                            <select :disabled="selectedTrain === ''" class="form-control" id="train"
+                            <label for="selectedWagon" class="form-group">Choose Wagon Type</label>
+                            <select :disabled="trainTitle === ''" class="form-control" id="selectedWagon"
                                     v-model="selectedWagon">
                                 <option value="">Select</option>
-                                <option :key="cl"
+                                <option :key="cl.id"
                                         v-for="cl in wagonClasses"
-                                        :value="wagonClasses.indexOf(cl)">
-                                    {{cl}}
-                                </option>
-                            </select>
-                        </div>
-                        <div class="col-lg-6 col-md-6 form-group">
-                            <!-- finish loop for seatnum -->
-                            <label for="train" class="col-lg-6 col-md-6 form-group">Choose SeatNum</label>
-                            <select style="display: inline" :disabled="selectedWagon === ''"
-                                    class="form-control"
-                                    id="stations"
-                                    v-model="selectedSeatnum">
-                                <option value="">Select</option>
-                                <option :key="seatnum"
-                                        v-for="seatnum in seatNums[selectedWagon]"
-                                        :value="seatnum">
-                                    {{seatnum}}
+                                        :value="cl.id">
+                                    {{cl.title}}
                                 </option>
                             </select>
                         </div>
@@ -46,7 +31,7 @@
                     <div class="row form-group">
                         <div class="col-lg-12 form-group">
                             <div class="form-group text-right">
-                                <button :disabled="selectedSeatnum === ''" @click="addWagon"
+                                <button :disabled="!selectedWagon" @click="addWagon(selectedWagon)"
                                         class="templatemo-blue-button">Add Wagon
                                 </button>
                             </div>
@@ -59,8 +44,6 @@
                                     <thead>
                                     <tr>
                                         <td style="width:5%"><a class="white-text templatemo-sort-by">No</a></td>
-                                        <td style="width:50%"><a class="white-text templatemo-sort-by">Train</a>
-                                        </td>
                                         <td style="width:50%"><a class="white-text templatemo-sort-by">Wagon class</a>
                                         </td>
                                         <td style="width:10%"><a class="white-text templatemo-sort-by">No of seats</a>
@@ -70,12 +53,11 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr v-for="(wagon, wagon_index) in selectedWagons" :key="wagon.id">
+                                    <tr v-for="(wagon, wagon_index) in selectedWagons" :key="wagon">
                                         <td>{{wagon_index + 1}}</td>
-                                        <td>{{wagon.train}}</td>
-                                        <td>{{wagonClasses[wagon.classId]}}</td>
-                                        <td>{{wagon.seatnum}}</td>
-                                        <td><a href="" @click.prevent="removeWagon(wagon.id)"
+                                        <td>{{wagonClasses.find(x=>x.id === wagon).title}}</td>
+                                        <td>{{wagonClasses.find(x=>x.id === wagon).maxSeats}}</td>
+                                        <td><a href="" @click.prevent="selectedWagons.splice(wagon_index, 1)"
                                                class="templatemo-del-btn">Remove</a></td>
                                     </tr>
                                     </tbody>
@@ -83,7 +65,7 @@
                             </div>
                         </div>
                     </div>
-                    <div v-if="this.selectedWagons.length >1" class="row form-group">
+                    <div v-if="selectedWagons.length >1" class="row form-group">
                         <div class="col-lg-6 form-group" style="width: 100%;">
                             <div class="form-group text-right">
                                 <button @click.prevent="submit" :disabled="selectedWagons.length<2"
@@ -95,7 +77,6 @@
                 </div>
             </div>
         </div>
-
     </div>
 </template>
 
@@ -106,17 +87,15 @@
     export default {
         data() {
             return {
-                selectedTrain: "",
+                trainTitle: "",
                 selectedWagon: "",
                 selectedWagons: [],
                 wagonClasses: [],//"Berth","Compartment","Luxe"
-                seatnum: 0,
-                selectedSeatnum: "",
-                seatNums: []//[16, 18, 20], [10, 12, 14], [6, 8]
             }
         },
         methods: {
             getWagons() {
+                this.wagonClasses = [];
                 axiosInstance.get(
                     '/api/public/wagonclass', {}
                 ).then(res => {
@@ -124,8 +103,7 @@
                         // eslint-disable-next-line no-console
                         console.log("OK: " + res.data);
                         for(var i=0; i<res.data.length; i++) {
-                            this.wagonClasses.push(res.data[i].title);
-                            this.seatNums.push([res.data[i].maxSeats-8, res.data[i].maxSeats-4, res.data[i].maxSeats]);
+                            this.wagonClasses = res.data;
                         }
                     } else {
                         // eslint-disable-next-line no-console
@@ -138,26 +116,13 @@
                     this.toggleNotify(error.name, error.message, 'bad');
                 });
             },
-            addWagon() {
-                this.selectedWagons.push({
-                    train: this.selectedTrain,
-                    classId: this.selectedWagon,
-                    seatnum: this.selectedSeatnum
-                })
-                this.selectedWagon = "";
+            addWagon(id) {
+                this.selectedWagons.push(id);
             },
             submit() {
-                let w = [];
-                this.selectedWagons.forEach(x => {
-                    w.push({
-                        wagonId: x.id,
-                        wagonClassId: x.classId,
-                        seatnum: x.seatnum
-                    });
-                });
                 let data = {
-                    title: this.selectedWagons[0].train,
-                    wagons: w.id
+                    title: this.trainTitle,
+                    wagonClassIds: this.selectedWagons
                 };
                 axiosInstance.post(
                     'api/manager/train', data, {
@@ -176,9 +141,8 @@
                         this.toggleNotify('Error!', res.data.message, 'bad');
                         console.log("BAD: " + res.status);
                     }
-                    this.selectedTrain = "";
+                    this.trainTitle = "";
                     this.selectedWagon = "";
-                    this.selectedSeatnum = "";
                     // eslint-disable-next-line no-console
                 }).catch(error => {
                     this.toggleNotify(error.name, error.message, 'bad');
