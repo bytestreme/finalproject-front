@@ -673,6 +673,10 @@ input[type="radio"] + label span {
     cursor: pointer;
 }
 
+input[type="radio"]:disabled + label span {
+    background: url(../images/disabled.png) -78px top no-repeat;
+}
+
 input[type="radio"]:checked + label span {
     background: url(../images/checkbox-radio-sheet.png) -78px top no-repeat;
 }

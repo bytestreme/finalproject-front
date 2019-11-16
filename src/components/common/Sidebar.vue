@@ -15,17 +15,16 @@
             <ul>
                 <li><router-link to="/dashboard" :class="{'active': $route.path.includes('dashboard')}">
                     <i class="fa fa-home fa-fw"></i>Dashboard</router-link></li>
-<!--                <li><router-link to="/"><i class="fa fa-bar-chart fa-fw"></i>Charts</router-link></li>-->
-<!--                <li><a href="data-visualization.html"><i class="fa fa-database fa-fw"></i>Data Visualization</a></li>-->
                 <li><router-link to="/" :class="{'active': $route.path === '/' || $route.path.includes('route')}">
                     <i class="fa fa-map-marker fa-fw"></i>Search tickets</router-link></li>
-                <li><router-link to="/manager-profile" :class="{'active': $route.path.includes('manager-profile')}">
+                <li v-if="$store.getters.role === 'ADMIN' || $store.getters.role === 'MANAGER'"><router-link to="/manager-profile" :class="{'active': $route.path.includes('manager-profile')}">
                     <i class="fa fa-user fa-fw"></i>Manager Page</router-link></li>
-                <li><router-link to="/agent-profile" :class="{'active': $route.path.includes('agent-profile')}">
+                <li v-if="$store.getters.role === 'ADMIN' || $store.getters.role === 'AGENT'"><router-link to="/agent-profile" :class="{'active': $route.path.includes('agent-profile')}">
                     <i class="fa fa-user fa-fw"></i>Agent Page</router-link></li>
-                <li><router-link to="/passenger-profile" :class="{'active': $route.path.includes('passenger-profile')}">
+                <li v-if="$store.getters.role === 'ADMIN' || $store.getters.role === 'USER'"><router-link to="/passenger-profile" :class="{'active': $route.path.includes('passenger-profile')}">
                     <i class="fa fa-user fa-fw"></i>Passenger Page</router-link></li>
             </ul>
         </nav>
     </div>
 </template>
+
