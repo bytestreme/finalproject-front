@@ -7,45 +7,35 @@
                         <div class="row form-group">
                             <div class="col-lg-6 col-md-6 form-group">
                                 <label for="inputFirstName">First Name</label>
-                                <input type="text" class="form-control" id="inputFirstName" placeholder="Mark">
+                                <input v-model="user.firstName" type="text" class="form-control" id="inputFirstName" placeholder="Mark">
                             </div>
                             <div class="col-lg-6 col-md-6 form-group">
                                 <label for="inputLastName">Last Name</label>
-                                <input type="text" class="form-control" id="inputLastName" placeholder="Sterling">
+                                <input v-model="user.lastName" type="text" class="form-control" id="inputLastName" placeholder="Sterling">
                             </div>
                         </div>
                         <div class="row form-group">
                             <div class="col-lg-6 col-md-6 form-group">
                                 <label for="inputUsername">Username</label>
-                                <input type="text" class="form-control" id="inputUsername" placeholder="admin">
+                                <input v-model="user.username" type="text" class="form-control" id="inputUsername" placeholder="admin">
                             </div>
                             <div class="col-lg-6 col-md-6 form-group">
                                 <label for="inputEmail">Email</label>
-                                <input type="email" class="form-control" id="inputEmail" placeholder="admin@railways.kz">
-                            </div>
-                        </div>
-
-                        <div class="form-group text-left">
-                            <button type="submit" class="templatemo-blue-button">Update</button>
-                            <button type="reset" class="templatemo-white-button">Reset</button>
-                        </div>
-
-                        <div class="row form-group">
-                            <div class="col-lg-6 col-md-6 form-group">
-                                <label for="inputCurrentPassword">Current Password</label>
-                                <input type="password" class="form-control highlight" id="inputCurrentPassword" placeholder="******************">
+                                <input v-model="user.email" type="email" class="form-control" id="inputEmail" placeholder="admin@railways.kz">
                             </div>
                         </div>
                         <div class="row form-group">
                             <div class="col-lg-6 col-md-6 form-group">
-                                <label for="inputNewPassword">New Password</label>
-                                <input type="password" class="form-control" id="inputNewPassword">
+                                <label for="inputPhone">Phone</label>
+                                <input v-model="user.phone" id="inputPhone" v-mask="'#(###)-###-##-##'" type="text" class="form-control"
+                                       placeholder="8(777)-777-77-77">
                             </div>
                             <div class="col-lg-6 col-md-6 form-group">
-                                <label for="inputConfirmNewPassword">Confirm New Password</label>
-                                <input type="password" class="form-control" id="inputConfirmNewPassword">
+                                <label for="inputNatId">National ID</label>
+                                <input v-model="user.natId" type="text" class="form-control" id="inputNatId" placeholder="010000">
                             </div>
                         </div>
+
                         <div class="form-group text-left">
                             <button type="submit" class="templatemo-blue-button">Update</button>
                             <button type="reset" class="templatemo-white-button">Reset</button>
@@ -133,7 +123,8 @@
         data() {
             return {
                 upcomingTrips:"",
-                tickets:[]
+                tickets:[],
+                user: ""
             }
         },
         computed:{
@@ -170,9 +161,33 @@
                     console.log(e)
                 });
             },
+            getUser(){
+                axiosInstance.get(
+                    '/api/user/myProfile',
+                    {
+                        headers: {
+                            'Authorization': "Bearer " + localStorage.getItem("token")
+                        }
+                    }
+                ).then(res => {
+                    if (res.status === 200) {
+                        // eslint-disable-next-line no-console
+                        console.log("OK: " + res.data);
+                        console.log(res.data);
+                        this.user = res.data;
+                    } else {
+                        // eslint-disable-next-line no-console
+                        console.log("BAD: " + res.status);
+                    }
+                }).catch(e => {
+                    // eslint-disable-next-line no-console
+                    console.log(e)
+                });
+            }
         },
         created() {
             this.getTickets();
+            this.getUser();
         }
     }
 </script>

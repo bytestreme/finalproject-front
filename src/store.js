@@ -13,15 +13,22 @@ const store = new Vuex.Store({
     plugins: [vuexLocalStorage.plugin],
     state: {
         isAuthorized: false,
+        role: "",
     },
     getters: {
         isAuth: state => {
             return state.isAuthorized;
+        },
+        role: state => {
+            return state.role;
         }
     },
     mutations: {
         auth(state) {
             state.isAuthorized = true;
+        },
+        role(state, r) {
+            state.role = r;
         },
         deAuth(state) {
             state.isAuthorized = false;
@@ -33,6 +40,9 @@ const store = new Vuex.Store({
         },
         deAuth(context) {
             context.commit('deAuth')
+        },
+        role(context, r) {
+            context.commit('role', r)
         }
     }
 });

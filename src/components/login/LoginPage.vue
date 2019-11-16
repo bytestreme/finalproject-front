@@ -63,13 +63,16 @@
                             password: this.password
                         }
                     ).then(res => {
+                        // eslint-disable-next-line no-console
                         console.log("OK: " + res.data);
-                        localStorage.setItem('token', res.data);
+                        localStorage.setItem('token', res.data.token);
+                        this.$store.dispatch('role', res.data.role).then();
                         this.$store.dispatch('auth').then(() => {
                             this.$router.push({name: 'home'})
                         });
                     }).catch(error => {
                         this.toggleNotify("Error!", "Login failed!", 'bad');
+                        // eslint-disable-next-line no-console
                         console.log(error)
                     });
                 }
