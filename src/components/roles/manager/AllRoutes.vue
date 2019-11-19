@@ -16,28 +16,21 @@
                                     <td style="width:5%"><a class="white-text templatemo-sort-by">No</a></td>
                                     <td style="width:15%"><a class="white-text templatemo-sort-by">Name</a>
                                     </td>
-                                    <td style="width:15%"><a class="white-text templatemo-sort-by">Train</a>
-                                    </td>
                                     <td style="width:25%"><a class="white-text templatemo-sort-by">Start Station</a>
                                     </td>
                                     <td style="width:25%"><a class="white-text templatemo-sort-by">End Station</a>
                                     </td>
-                                    <td style="width:5%"><a class="white-text templatemo-sort-by">Info</a>
-                                    </td>
-                                    <td style="width:10%"><a class="white-text templatemo-sort-by">Remove</a>
+                                    <td style="width:10%"><a class="white-text templatemo-sort-by">Action</a>
                                     </td>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr v-for="(route, route_index) in routes" :key="route.routeName">
+                                <tr v-for="(route, route_index) in routes" :key="route.routeId">
                                     <td>{{route_index + 1}}</td>
-                                    <td>{{route.routeName}}</td>
-                                    <td>{{route.trainId}}</td>
-                                    <td>{{route.stops[0].stationId}}</td>
-                                    <td>{{route.stops[1].stationId}}</td>
-                                    <td><router-link :to="{ name: 'train', params: { id: route.trainId } }"
-                                            class="templatemo-del-btn">Info</router-link></td>
-                                    <td><a href="" @click.prevent="removeRoute(route.routeName)"
+                                    <td>{{route.title}}</td>
+                                    <td>{{route.stations[0].title}}</td>
+                                    <td>{{route.stations[route.stations.length-1].title}}</td>
+                                    <td><a href="" @click.prevent="removeRoute(route.routeId)"
                                            class="templatemo-del-btn">Remove</a></td>
                                 </tr>
                                 </tbody>
@@ -69,13 +62,14 @@
             }
         },
         methods: {
-            getRoutes() {
+            getRoutes(){
+                this.routes = [];
                 axiosInstance.get(
-                    '/api/public/route', {}
+                    'api/public/getRoutes'
                 ).then(res => {
                     if (res.status === 200) {
                         // eslint-disable-next-line no-console
-                        console.log("OK: " + res.status);
+                        console.log("OK: " + res.data);
                         this.routes = res.data; //stations is array
                     } else {
                         // eslint-disable-next-line no-console
@@ -86,30 +80,35 @@
                     this.toggleNotify(error.name, error.message, 'bad');
                 });
             },
-            getTrains() {
-                axiosInstance.get(
-                    '/api/public/train', {}
+            toggleNotify(title, text, group) {
+                this.$notify({
+                    group: group,
+                    title: title,
+                    text: text
+                });
+            },
+            removeRoute(id){
+                axiosInstance.post(
+                    'api/manager/deleteRoute', {
+                        routeId: parseInt(id)
+                    },
+                    {
+                        headers: {
+                            'Authorization': "Bearer " + localStorage.getItem("token")
+                        }
+                    }
                 ).then(res => {
                     if (res.status === 200) {
                         // eslint-disable-next-line no-console
                         console.log("OK: " + res.data);
-                        this.trains = res.data; //stations is array
+                        this.toggleNotify("Success!", "Route removed", 'ok');
                     } else {
                         // eslint-disable-next-line no-console
                         console.log("BAD: " + res.status);
                         this.toggleNotify("Error!", res.status, 'bad');
                     }
                 }).catch(error => {
-                    // eslint-disable-next-line no-console
-                    console.log(error)
                     this.toggleNotify(error.name, error.message, 'bad');
-                });
-            },
-            toggleNotify(title, text, group) {
-                this.$notify({
-                    group: group,
-                    title: title,
-                    text: text
                 });
             }
         },
