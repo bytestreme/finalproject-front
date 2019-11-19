@@ -82,6 +82,22 @@
                     text: text
                 });
             },
+            removeWagon(id) {
+                axiosInstance.post(
+                    'api/manager/deleteWagon', {
+                        wagonId: id
+                    }
+                ).then(res=>{
+                    if (res.status === 200) {
+                        this.toggleNotify('Success!', 'Train succesfully removed!', 'ok');
+                        this.getWagons();
+                    } else {
+                        this.toggleNotify('Error!', res.data.message, 'bad');
+                    }
+                }).catch(error => {
+                    this.toggleNotify(error.name, error.message, 'bad');
+                });
+            },
         },
         created() {
             this.getWagons();

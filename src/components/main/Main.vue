@@ -75,9 +75,9 @@
                                 <td>{{route.route.title}}</td>
                                 <td>{{route.route.train.title}}</td>
                                 <td>{{route.dep.title}}</td>
-                                <td>{{route.dep.date}}</td>
+                                <td>{{route.dep.date[2]}}/{{route.dep.date[1]}}/{{route.dep.date[0]}} {{route.dep.date[3]}}:{{route.dep.date[4]}}</td>
                                 <td>{{route.arr.title}}</td>
-                                <td>{{route.arr.date}}</td>
+                                <td>{{route.arr.date[2]}}/{{route.arr.date[1]}}/{{route.arr.date[0]}} {{route.arr.date[3]}}:{{route.arr.date[4]}}</td>
                                 <td><a @click.prevent="chooseTrain(route)" href="" class="templatemo-edit-btn">Choose</a></td>
                             </tr>
                             </tbody>

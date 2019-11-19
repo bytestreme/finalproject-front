@@ -32,20 +32,17 @@
                             </div>
                         </div>
                         <div class="row form-group">
-                            <div class="col-lg-12 form-group">
-                                <label class="control-label templatemo-block">Send Option</label>
-                                <div class="margin-right-15 templatemo-inline-block">
-                                    <input type="radio" name="radio" id="r4" value="">
-                                    <label for="r4" class="font-weight-400"><span></span>To all</label>
-                                </div>
-                                <div class="margin-right-15 templatemo-inline-block">
-                                    <input type="radio" name="radio" id="r5" value="" checked>
-                                    <label for="r5" class="font-weight-400"><span></span>To employees</label>
-                                </div>
+                            <div class="col-lg-12 col-md-6 form-group">
+                                <label for="routes">Choose route</label>
+                                <select class="form-control" id="routes" v-model="routeId">
+                                    <option :key="route.routeId"
+                                            v-for="route in routes" :value="route.routeId">{{route.title}}
+                                    </option>
+                                </select>
                             </div>
                         </div>
                         <div class="form-group text-right">
-                            <button @click.prevent="submit" type="submit" class="templatemo-blue-button">Send</button>
+                            <button :disabled="disabled" @click.prevent="submit" type="submit" class="templatemo-blue-button">Send</button>
                             <button @click.prevent="reset" type="reset" class="templatemo-white-button">Reset</button>
                         </div>
                     </form>
@@ -66,7 +63,12 @@
                 startDate:'',
                 endDate:"",
                 routeId: "",
-                routes: []
+                routes: [],
+            }
+        },
+        computed: {
+            disabled(){
+                return !this.startDate || !this.endDate || !this.routeId || !this.text
             }
         },
         methods: {
@@ -88,14 +90,21 @@
                 axiosInstance.post(
                     'api/manager/advisory/addAdvisory', {
                         start: sD,
-                        endDate: eD,
+                        end: eD,
                         text: this.text,
                         routeId: parseInt(this.routeId)
+                    },
+                    {
+                        headers: {
+                            'Authorization': "Bearer " + localStorage.getItem("token")
+                        }
                     }
                 ).then(res => {
                     if (res.status === 200) {
                         // eslint-disable-next-line no-console
                         console.log("OK: " + res.data);
+                        this.reset();
+                        this.toggleNotify("Success!", "Advisory created successfully", 'ok');
                     } else {
                         // eslint-disable-next-line no-console
                         console.log("BAD: " + res.status);
@@ -132,6 +141,9 @@
             },
             reset() {
                 this.text = '';
+                this.routeId = '';
+                this.startDate = '';
+                this.endDate = '';
             }
         },
         created() {

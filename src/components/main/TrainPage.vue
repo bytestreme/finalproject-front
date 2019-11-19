@@ -1,6 +1,17 @@
 <template>
     <div class="templatemo-content-container">
                 <div class="templatemo-content-widget white-bg">
+                    <div v-if="advisory" class="templatemo-content-widget orange-bg">
+                        <i class="fa fa-times"></i>
+                        <div class="media">
+                            <div class="media-body">
+                                <h2 class="media-heading text-uppercase">Advisory for the route {{advisory.data.route.title}}</h2>
+                                <p>{{advisory.data.text}}</p>
+                                <p>From {{advisory.data.start[2]}}/{{advisory.data.start[1]}}/{{advisory.data.start[0]}} </p>
+                                <p>To {{advisory.data.endDate[2]}}/{{advisory.data.endDate[1]}}/{{advisory.data.endDate[0]}} </p>
+                            </div>
+                        </div>
+                    </div>
                     <div class="panel panel-default table-responsive">
                         <table class="table table-striped table-bordered templatemo-user-table">
                             <thead>
@@ -156,7 +167,8 @@
                 chosenWagon: "",
                 wagons: "",
                 reservedSeats: [],
-                phone:""
+                phone:"",
+                advisory:""
             }
         },
         methods: {
@@ -166,18 +178,18 @@
                     return;
                 }
                 let arrD = {
-                    year: parseInt(this.arrDate.substr(0, 4)),
-                    month: parseInt(this.arrDate.substr(5, 2)),
-                    day: parseInt(this.arrDate.substr(8, 2)),
-                    hour: parseInt(this.arrDate.substr(11, 2)),
-                    minute: parseInt(this.arrDate.substr(14, 2))
+                    year: this.arrDate[0],
+                    month: this.arrDate[1],
+                    day: this.arrDate[2],
+                    hour: this.arrDate[3],
+                    minute: this.arrDate[4]
                 };
                 let depD = {
-                    year: parseInt(this.depDate.substr(0, 4)),
-                    month: parseInt(this.depDate.substr(5, 2)),
-                    day: parseInt(this.depDate.substr(8, 2)),
-                    hour: parseInt(this.depDate.substr(11, 2)),
-                    minute: parseInt(this.depDate.substr(14, 2))
+                    year: this.depDate[0],
+                    month: this.depDate[1],
+                    day: this.depDate[2],
+                    hour: this.depDate[3],
+                    minute: this.depDate[4]
                 };
                 axiosInstance.post('/api/user/order',
                     {
@@ -219,18 +231,18 @@
             getReservedSeats(){
                 this.reservedSeats = [];
                 let arrD = {
-                    year: parseInt(this.arrDate.substr(0, 4)),
-                    month: parseInt(this.arrDate.substr(5, 2)),
-                    day: parseInt(this.arrDate.substr(8, 2)),
-                    hour: parseInt(this.arrDate.substr(11, 2)),
-                    minute: parseInt(this.arrDate.substr(14, 2))
+                    year: this.arrDate[0],
+                    month: this.arrDate[1],
+                    day: this.arrDate[2],
+                    hour: this.arrDate[3],
+                    minute: this.arrDate[4]
                 };
                 let depD = {
-                    year: parseInt(this.depDate.substr(0, 4)),
-                    month: parseInt(this.depDate.substr(5, 2)),
-                    day: parseInt(this.depDate.substr(8, 2)),
-                    hour: parseInt(this.depDate.substr(11, 2)),
-                    minute: parseInt(this.depDate.substr(14, 2))
+                    year: this.depDate[0],
+                    month: this.depDate[1],
+                    day: this.depDate[2],
+                    hour: this.depDate[3],
+                    minute: this.depDate[4]
                 };
                 axiosInstance.post('/api/user/getReservedSeats',
                     {
@@ -253,6 +265,33 @@
                         console.log(error.data);
                     })
             },
+            getAdvisory(id){
+                let depD = {
+                    year: this.depDate[0],
+                    month: this.depDate[1],
+                    day: this.depDate[2],
+                    hour: this.depDate[3],
+                    minute: this.depDate[4]
+                };
+                this.advisory = "";
+                axiosInstance.post('api/public/advisory/getAdvisory',
+                    {
+                        date: depD,
+                        routeId: id
+                    }).then(res => {
+                    if (res.status === 200) {
+                        // eslint-disable-next-line no-console
+                        console.log("OK: " + res.data);
+                        this.advisory = res.data;
+                    } else {
+                        // eslint-disable-next-line no-console
+                        console.log("BAD: " + res.status);
+                        this.toggleNotify("Error!", res.status, 'bad');
+                    }
+                }).catch(error => {
+                    this.toggleNotify(error.name, error.message, 'bad');
+                });
+            },
             chooseWagon(id){
                 this.chosenWagon = id;
                 this.chosenSeat = '';
@@ -261,6 +300,7 @@
         },
         created() {
             this.getWagons();
+            this.getAdvisory(this.id);
         }
     }
 </script>

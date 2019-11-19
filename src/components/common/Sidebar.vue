@@ -26,7 +26,8 @@
                     <i class="fa fa-user fa-fw"></i>User Profile</router-link>
                 </li>
                 <li v-if="$store.getters.role === 'ADMIN' || $store.getters.role === 'MANAGER'">
-                    <router-link to="/manager-all-routes" :class="{'active': $route.path.includes('manager-all-routes')}">
+                    <router-link to="/manager-all-routes" :class="{'active': $route.path.includes('manager-all-routes')
+                     || $route.path.startsWith('/manage-route')}">
                     <i class="fa fa-desktop fa-fw"></i>Manage Routes</router-link>
                 </li>
                 <li v-if="$store.getters.role === 'ADMIN' || $store.getters.role === 'MANAGER'">

@@ -22,6 +22,7 @@ import TrainInfo from "./components/roles/manager/TrainInfo.vue";
 import Logs from "./components/logs/Logs.vue"
 import Notifications from 'vue-notification'
 import velocity from 'velocity-animate'
+import TrainSchedule from "./components/roles/manager/TrainSchedule.vue";
 
 Vue.config.productionTip = false;
 
@@ -123,6 +124,12 @@ const routes = [
         path: '/logs',
         component: Logs,
         name: 'Logs',
+        meta: {requiresLogin: true}
+    },
+    {
+        path: '/manage-route/:id',
+        component: TrainSchedule,
+        name: 'TrainSchedule',
         meta: {requiresLogin: true}
     },
 ];

@@ -8,7 +8,8 @@
         <div class="templatemo-content col-1 light-gray-bg">
             <div class="templatemo-content-container">
                 <div class="templatemo-content-widget white-bg">
-                    <div class="templatemo-content-widget green-bg no-padding">
+                    <h2>Trains</h2>
+                    <div style="margin: 10px 10px 10px 0px;" class="templatemo-content-widget green-bg no-padding">
                         <div class="panel panel-default table-responsive">
                             <table class="table table-striped table-bordered templatemo-user-table">
                                 <thead>
@@ -76,7 +77,7 @@
             },
             removeTrain(id) {
                 axiosInstance.post(
-                    'api/manager/train', {
+                    'api/manager/deleteTrain', {
                         trainId: id
                     }
                 ).then(res=>{
