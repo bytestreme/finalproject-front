@@ -24,8 +24,9 @@
                             </div>
                         </div>
                     </div>
-                    <h2 v-if="ticketDetails" class="margin-bottom-10">Ticket information</h2>
-                    <div v-if="ticketDetails" class="row form-group">
+                    <div v-if="ticketDetails">
+                    <h2 class="margin-bottom-10">Ticket information</h2>
+                    <div class="row form-group">
                         <div class="col-lg-6 col-md-6 form-group">
                             <label for="fname">First Name</label>
                             <input v-model="ticketDetails.fname" id="fname" type="text" class="form-control" placeholder="Mark">
@@ -80,7 +81,7 @@
                             <button @click.prevent="deleteT" class="templatemo-blue-button">Delete</button>
                         </div>
                     </div>
-
+                    </div>
 
                 </div>
             </div>
