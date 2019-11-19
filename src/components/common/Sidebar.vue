@@ -15,15 +15,15 @@
                 </li>
                 <li v-if="$store.getters.role === 'ADMIN' || $store.getters.role === 'MANAGER'">
                     <router-link to="/manager-profile" :class="{'active': $route.path.includes('manager-profile')}">
-                    <i class="fa fa-user fa-fw"></i>Manager Page</router-link>
+                    <i class="fa fa-subway fa-fw"></i>Create Routes</router-link>
                 </li>
                 <li v-if="$store.getters.role === 'AGENT'">
                     <router-link to="/agent-profile" :class="{'active': $route.path.includes('agent-profile')}">
-                    <i class="fa fa-user fa-fw"></i>Agent Page</router-link>
+                    <i class="fa fa-ticket fa-fw"></i>Manage ticket</router-link>
                 </li>
-                <li v-if="$store.getters.role === 'ADMIN' || $store.getters.role === 'USER'">
+                <li>
                     <router-link to="/passenger-profile" :class="{'active': $route.path.includes('passenger-profile')}">
-                    <i class="fa fa-user fa-fw"></i>Passenger Page</router-link>
+                    <i class="fa fa-user fa-fw"></i>User Profile</router-link>
                 </li>
                 <li v-if="$store.getters.role === 'ADMIN' || $store.getters.role === 'MANAGER'">
                     <router-link to="/manager-all-routes" :class="{'active': $route.path.includes('manager-all-routes')}">

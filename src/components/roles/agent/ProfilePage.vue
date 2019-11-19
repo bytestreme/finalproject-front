@@ -1,104 +1,153 @@
 <template>
-    <div class="templatemo-content-container">
+    <!-- Left column -->
+    <div class="templatemo-flex-row">
+        <notifications classes="ntf-success" animation-type="velocity" group="ok"/>
+        <notifications classes="ntf-reg-bad"  animation-type="velocity" group="bad"/>
+
+        <!-- Main content -->
+        <div class="templatemo-content col-1 light-gray-bg">
+            <div class="templatemo-content-container">
                 <div class="templatemo-content-widget white-bg">
-                    <h2 class="margin-bottom-10">Preferences</h2>
-                    <p>Here goes another form and form controls.</p>
-                    <form action="index.html" class="templatemo-login-form" method="post" enctype="multipart/form-data">
-                        <div class="row form-group">
-                            <div class="col-lg-6 col-md-6 form-group">
-                                <label for="inputFirstName">First Name</label>
-                                <input type="text" class="form-control" id="inputFirstName" placeholder="John">
-                            </div>
-                            <div class="col-lg-6 col-md-6 form-group">
-                                <label for="inputLastName">Last Name</label>
-                                <input type="text" class="form-control" id="inputLastName" placeholder="Smith">
+                    <h2 class="margin-bottom-10">Search Ticket</h2>
+                    <div class="row form-group">
+                        <div class="col-lg-6 col-md-6 form-group">
+                            <label for="selectedTrain">Ticket number</label>
+                            <input id="selectedTrain" v-model="ticketNumber" type="text" class="form-control" placeholder="000001">
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-lg-12 form-group">
+                            <div class="form-group text-right">
+                                <button :disabled="ticketNumber === ''" @click="search"
+                                        class="templatemo-blue-button">Search
+                                </button>
                             </div>
                         </div>
-                        <div class="row form-group">
-                            <div class="col-lg-6 col-md-6 form-group">
-                                <label for="inputId">National ID/Passport</label>
-                                <input type="text" class="form-control" id="inputId">
-                            </div>
-                            <div class="col-lg-6 col-md-6 form-group">
-                                <label for="inputEmail">Email</label>
-                                <input type="city" class="form-control" id="inputEmail" placeholder="admin@company.com">
-                            </div>
+                    </div>
+                    <h2 v-if="ticketDetails" class="margin-bottom-10">Ticket information</h2>
+                    <div v-if="ticketDetails" class="row form-group">
+                        <div class="col-lg-6 col-md-6 form-group">
+                            <label for="fname">First Name</label>
+                            <input v-model="ticketDetails.fname" id="fname" type="text" class="form-control" placeholder="Mark">
                         </div>
-                        <div class="row form-group">
-                            <div class="col-lg-6 col-md-6 form-group">
-                                <label for="inputDep">Departure City</label>
-                                <input type="city" class="form-control" id="inputDep" placeholder="Astana">
-                            </div>
-                            <div class="col-lg-6 col-md-6 form-group">
-                                <label for="inputAriv">Arival City</label>
-                                <input type="city" class="form-control" id="inputAriv" placeholder="Almaty">
-                            </div>
+                        <div class="col-lg-6 col-md-6 form-group">
+                            <label for="lname">Last Name</label>
+                            <input v-model="ticketDetails.lname" id="lname" type="text" class="form-control" placeholder="Sterling">
                         </div>
-                        <div class="row form-group">
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-lg-6 col-md-6 form-group">
+                            <label for="natID">National ID</label>
+                            <input v-model="ticketDetails.natId" id="natID" type="text" class="form-control" placeholder="0000001">
                         </div>
-                        <div class="row form-group">
-                            <div class="col-lg-6 col-md-6 form-group">
-                                <div>
-                                    <label class="control-label templatemo-block">Email Option</label>
-                                    <div class="templatemo-block margin-bottom-5">
-                                        <input type="radio" name="emailOptions" id="r1" value="html" checked>
-                                        <label for="r1" class="font-weight-400"><span></span>HTML Format</label>
-                                    </div>
-                                    <div class="templatemo-block margin-bottom-5">
-                                        <input type="radio" name="emailOptions" id="r2" value="plain">
-                                        <label for="r2" class="font-weight-400"><span></span>Plain Text</label>
-                                    </div>
-                                    <div class="templatemo-block margin-bottom-5">
-                                        <input type="radio" name="emailOptions" id="r3" value="rich">
-                                        <label for="r3" class="font-weight-400"><span></span>Rich Text</label>
-                                    </div>
-                                </div>
-                            </div>
+                        <div class="col-lg-6 col-md-6 form-group">
+                            <label for="phone">Phone</label>
+                            <input v-model="ticketDetails.phone" id="phone" v-mask="'#(###)-###-##-##'" type="text" class="form-control" placeholder="+7(777)777-77-77">
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-lg-6 col-md-6 form-group">
+                            <label for="email">E-mail</label>
+                            <input id="email" v-model="ticketDetails.email" type="text" class="form-control" placeholder="mark.sterling@nu.edu.kz">
+                        </div>
+                        <div class="col-lg-6 col-md-6 form-group">
+                            <label for="date">Date</label>
+                            <input id="date" disabled v-model="ticketDetails.date" type="text" class="form-control" placeholder="01/01/2020">
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-lg-6 col-md-6 form-group">
+                            <label for="dstation">Departure Station</label>
+                            <input id="dstation" disabled type="text" v-model="ticketDetails.depStation" class="form-control" placeholder="Almaty">
+                        </div>
+                        <div class="col-lg-6 col-md-6 form-group">
+                            <label for="astation">Arrival Station</label>
+                            <input id="astation" disabled type="text" v-model="ticketDetails.arrStation" class="form-control" placeholder="Astana">
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-lg-6 col-md-6 form-group">
+                            <label for="wNum">Wagon number</label>
+                            <input id="wNum" disabled type="text" v-model="ticketDetails.wagonNum" class="form-control" placeholder="4">
+                        </div>
+                        <div class="col-lg-6 col-md-6 form-group">
+                            <label for="sNum">Seat number</label>
+                            <input id="sNum" disabled type="text" v-model="ticketDetails.seatNum" class="form-control" placeholder="20">
                         </div>
 
-                        <div class="row form-group">
-                            <div class="col-lg-12 form-group">
-                                <div class="margin-right-15 templatemo-inline-block">
-                                    <input type="checkbox" name="server" id="c3" value="" checked>
-                                    <label for="c3" class="font-weight-400"><span></span></label>
-                                </div>
-                                <div class="margin-right-15 templatemo-inline-block">
-                                    <input type="checkbox" name="member" id="c4" value="">
-                                    <label for="c4" class="font-weight-400"><span></span>Member Status</label>
-                                </div>
-                                <div class="margin-right-15 templatemo-inline-block">
-                                    <input type="checkbox" name="expired" id="c5" value="">
-                                    <label for="c5" class="font-weight-400"><span></span>Expired Members</label>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row form-group">
-                            <div class="col-lg-12 form-group">
-                                <div class="margin-right-15 templatemo-inline-block">
-                                    <input type="radio" name="radio" id="r4" value="">
-                                    <label for="r4" class="font-weight-400"><span></span>Talgo</label>
-                                </div>
-                                <div class="margin-right-15 templatemo-inline-block">
-                                    <input type="radio" name="radio" id="r5" value="" checked>
-                                    <label for="r5" class="font-weight-400"><span></span>Couple</label>
-                                </div>
-                                <div class="margin-right-15 templatemo-inline-block">
-                                    <input type="radio" name="radio" id="r6" value="">
-                                    <label for="r6" class="font-weight-400"><span></span>XZ</label>
-                                </div>
-                            </div>
-                        </div>
                         <div class="form-group text-right">
-                            <button type="submit" class="templatemo-blue-button">Update</button>
-                            <button type="reset" class="templatemo-white-button">Reset</button>
+                            <button @click.prevent="edit" type="submit" class="templatemo-white-button">Edit</button>
+                            <button @click.prevent="deleteT" class="templatemo-blue-button">Delete</button>
                         </div>
-                    </form>
+                    </div>
+
+
                 </div>
             </div>
+        </div>
+
+    </div>
 </template>
 
 <script>
+    import axiosInstance from "../../../axiosInstance";
+
     export default {
+        data(){
+            return{
+                ticketNumber: '',
+                ticketDetails: ''
+                }
+            },
+        methods:{
+            search(){
+                this.ticketDetails = "";
+                axiosInstance.get('/api/agent/ticket/'+this.ticketNumber,
+                    {
+                        headers: {
+                            'Authorization': "Bearer " + localStorage.getItem("token")
+                        }
+                    }
+                    )
+                    .then(res => {
+                        this.ticketDetails = res.data;
+                    })
+                    .catch(error => {
+                        console.log(error);
+                        this.toggleNotify(error.name, error.message, 'bad');
+                    })
+            },
+            deleteT(){
+                axiosInstance.post('/api/agent/deleteTicket',
+                    {
+                        ticketNumber: parseInt(this.ticketNumber)
+                    },
+                    {
+                        headers: {
+                            'Authorization': "Bearer " + localStorage.getItem("token")
+                        }
+                    }).then(res => {
+                    console.log(res.data);
+                    this.toggleNotify('Success!', 'Deletion was successful', 'ok');
+                }).catch(error => {
+                    console.log(error.data);
+                    this.toggleNotify(error.name, error.message, 'bad');
+                })
+            },
+            edit(){
+                axiosInstance.post('/api/agent/editTicket',
+                    {
+                        ticket: this.ticketDetails
+                    }).then(res => {
+                    this.ticketDetails = res.data;
+                    this.toggleNotify('Success!', 'Edit was successful', 'ok');
+                    console.log(res.data);
+                }).catch(error => {
+                    console.log(error.data);
+                    this.toggleNotify(error.name, error.message, 'bad');
+                })
+            }
+        }
 
     }
 </script>
