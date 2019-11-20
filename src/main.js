@@ -70,7 +70,6 @@ const routes = [
         path: '/manager-all-routes',
         component: ManagerAllRoutes,
         name: 'manager-all-routes',
-        meta: {requiresLogin: true}
     },
     {
         path: '/manager-train',
@@ -127,10 +126,9 @@ const routes = [
         meta: {requiresLogin: true}
     },
     {
-        path: '/manage-route',
+        path: '/manage-route/:id',
         component: TrainSchedule,
         name: 'TrainSchedule',
-        meta: {requiresLogin: true},
         props: true
     },
 ];
@@ -138,7 +136,7 @@ const routes = [
 
 const router = new VueRouter({
     routes,
-    mode: 'history'
+    mode: 'hash'
 });
 
 router.beforeEach((to, from, next) => {

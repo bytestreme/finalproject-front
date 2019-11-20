@@ -1,9 +1,17 @@
 <template>
     <div class="templatemo-content-container">
-                <notifications classes="ntf-success" animation-type="velocity" group="ok"/>
-                <notifications classes="ntf-reg-bad"  animation-type="velocity" group="bad"/>
-            
+        <notifications classes="ntf-success" animation-type="velocity" group="ok"/>
+        <notifications classes="ntf-reg-bad"  animation-type="velocity" group="bad"/>
+
                 <div class="templatemo-content-widget white-bg">
+                    <div class="row form-group">
+                        <div class="col-lg-6 col-md-6 form-group">
+                            <button class="templatemo-blue-button">Create employee from users</button>
+                        </div>
+                        <div class="col-lg-6 col-md-6 form-group">
+                            <button class="templatemo-blue-button">Create new employee</button>
+                        </div>
+                    </div>
                     <h2 class="margin-bottom-10">Manage Employees</h2>
                     <div class="row form-group">
                         <div class="col-lg-6 col-md-6 form-group">
@@ -65,14 +73,18 @@
                             <ul class="list-inline mx-auto justify-content-center">
                                 <li class="list-inline-item" v-for="day in dayList">
                                     <div class="margin-right-15 templatemo-inline-block">
-                                        <input :disabled="FName === '' || LName === ''" 
-                                               type="checkbox" name="member" :id="day.id" :value="day.id"
+                                        <input type="checkbox" name="member" :id="day.id" :value="day.id"
                                                v-model="checkedDays">
                                         <label :for="day.id"
                                                class="font-weight-400"><span></span>{{day.title}}</label>
                                     </div>
                                 </li>
                             </ul>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-lg-6 col-md-6 form-group">
+                            <input v-model="startDate" type="date" name="Departure" class="form-control">
                         </div>
                     </div>
                     <div class="row form-group">
@@ -156,7 +168,10 @@
                 dayList: "",
                 roles: "",
                 startTime: "",
-                endTime: ""
+                endTime: "",
+                startDate:"",
+                users: [],
+                userRoles: []
             }
         },
         methods: {
@@ -202,13 +217,17 @@
                     }
                 }).catch(error => {
                     // eslint-disable-next-line no-console
-                    console.log(error)
+                    console.log(error);
                     this.toggleNotify(error.name, error.message, 'bad');
                 });
             },
             getEmployees() {
                 axiosInstance.get(
-                    '/api/public/employee', {}
+                    '/api/manager/employee/getEmployees', {
+                        headers: {
+                            'Authorization': "Bearer " + localStorage.getItem("token")
+                        }
+                    }
                 ).then(res => {
                     if (res.status === 200) {
                         // eslint-disable-next-line no-console
@@ -221,13 +240,39 @@
                     }
                 }).catch(error => {
                     // eslint-disable-next-line no-console
-                    console.log(error)
+                    console.log(error);
+                    this.toggleNotify(error.name, error.message, 'bad');
+                });
+            },
+            getUsers() {
+                axiosInstance.get(
+                    '/api/manager/employee/getNotEmployees', {
+                        headers: {
+                            'Authorization': "Bearer " + localStorage.getItem("token")
+                        }
+                    }
+                ).then(res => {
+                    if (res.status === 200) {
+                        // eslint-disable-next-line no-console
+                        console.log("OK: " + res.data);
+                        this.users = res.data;
+                    } else {
+                        // eslint-disable-next-line no-console
+                        console.log("BAD: " + res.status);
+                        this.toggleNotify("Error!", res.status, 'bad');
+                    }
+                }).catch(error => {
+                    // eslint-disable-next-line no-console
+                    console.log(error);
                     this.toggleNotify(error.name, error.message, 'bad');
                 });
             },
             getRoles() {
                 axiosInstance.get(
-                    '/api/public/role', {}
+                    '/api/manager/employee/getRoles', {
+                        headers: {
+                            'Authorization': "Bearer " + localStorage.getItem("token")
+                        }}
                 ).then(res => {
                     if (res.status === 200) {
                         // eslint-disable-next-line no-console
@@ -240,7 +285,29 @@
                     }
                 }).catch(error => {
                     // eslint-disable-next-line no-console
-                    console.log(error)
+                    console.log(error);
+                    this.toggleNotify(error.name, error.message, 'bad');
+                });
+            },
+            getUserRoles() {
+                axiosInstance.get(
+                    '/api/manager/employee/getRoles', {
+                        headers: {
+                            'Authorization': "Bearer " + localStorage.getItem("token")
+                        }}
+                ).then(res => {
+                    if (res.status === 200) {
+                        // eslint-disable-next-line no-console
+                        console.log("OK: " + res.data);
+                        this.userRoles = res.data;
+                    } else {
+                        // eslint-disable-next-line no-console
+                        console.log("BAD: " + res.status);
+                        this.toggleNotify("Error!", res.status, 'bad');
+                    }
+                }).catch(error => {
+                    // eslint-disable-next-line no-console
+                    console.log(error);
                     this.toggleNotify(error.name, error.message, 'bad');
                 });
             },
@@ -277,6 +344,13 @@
                     this.toggleNotify('Error!', 'Weekdays not selected!', 'bad');
                     return;
                 }
+                let started = {
+                    year: parseInt(this.startDate.substring(0,4)),
+                    month: parseInt(this.startDate.substring(5,7)),
+                    day: parseInt(this.startDate.substring(8,10)),
+                    hour: 0,
+                    minute: 0
+                };
                 let start = {hour: parseInt(this.startTime.substring(0,2)),
                             minute: parseInt(this.startTime.slice(-2))}
                 let end = {hour: parseInt(this.endTime.substring(0,2)),
@@ -285,14 +359,16 @@
                     fName: this.FName,
                     lName: this.LName,
                     dayIds: this.checkedDays,
-                    stationId: this.selectedStation,
-                    salary: this.salary,
-                    roleId: this.selectedRole,
+                    stationId: parseInt(this.selectedStation),
+                    salary: parseInt(this.salary),
+                    roleId: parseInt(this.selectedRole),
                     startTime: start,
-                    endTime: end
+                    endTime: end,
+                    userId: -1,
+                    started: started
                 };
                 axiosInstance.post(
-                    'api/manager/employee', data, {
+                    'api/manager/employee/createEmployee', data, {
                         headers: {
                             'Authorization': "Bearer " + localStorage.getItem("token")
                         }
@@ -349,7 +425,7 @@
                     }
                 }).catch(error => {
                     // eslint-disable-next-line no-console
-                    console.log(error)
+                    console.log(error);
                     this.toggleNotify(error.name, error.message, 'bad');
                 });
             },
@@ -359,6 +435,8 @@
             this.getStations();
             this.getEmployees();
             this.getRoles();
+            this.getUsers();
+            this.getUserRoles();
         }
     }
 </script>

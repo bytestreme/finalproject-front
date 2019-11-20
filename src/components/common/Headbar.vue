@@ -4,7 +4,7 @@
             <nav class="templatemo-top-nav col-lg-12 col-md-12">
                 <ul class="text-uppercase">
                     <li><router-link class="active" to="/">POVIDLO Railways</router-link></li>
-                    <li><router-link :to="{name: 'TrainSchedule'}">Route schedule</router-link></li>
+                    <li><router-link :to="{name: 'manager-all-routes'}">Route schedules</router-link></li>
                     <li v-if="$store.getters.isAuth" ><a href="" @click="signout">Sign out</a></li>
                     <li v-else ><router-link to="/login">Sign in</router-link></li>
                 </ul>
