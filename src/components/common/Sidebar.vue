@@ -40,11 +40,11 @@
                 </li>
                 <li v-if="$store.getters.role === 'ADMIN' || $store.getters.role === 'MANAGER'">
                     <router-link to="/manager-news" :class="{'active': $route.path.includes('manager-news')}">
-                    <i class="fa fa-envelope fa-fw"></i>Send news</router-link>
+                    <i class="fa fa-exclamation-circle fa-fw"></i>Create advisory</router-link>
                 </li>
                 <li v-if="$store.getters.role === 'ADMIN' || $store.getters.role === 'MANAGER'">
                     <router-link to="/logs" :class="{'active': $route.path.includes('logs')}">
-                    <i class="fa fa-exclamation-circle fa-fw"></i>Logs</router-link>
+                    <i class="fa fa-history fa-fw"></i>Logs</router-link>
                 </li>
                 <li>
                     <router-link to="/" :class="{'active': $route.path === '/'}">

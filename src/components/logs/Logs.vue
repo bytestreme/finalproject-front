@@ -1,7 +1,7 @@
 <template>
     <div class="templatemo-content-container">
         <div class="templatemo-content-widget  white-bg">
-            <h2 v-if="$store.getters.role === 'ADMIN'" class="margin-bottom-10">Logs</h2>
+            <h2 v-if="$store.getters.role === 'ADMIN'" class="margin-bottom-10">Logging</h2>
             <div v-if="$store.getters.role === 'ADMIN'" class="row form-group">
                 <br>
                 <br>

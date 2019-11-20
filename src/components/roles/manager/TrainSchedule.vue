@@ -30,7 +30,7 @@
                         <tbody>
                         <tr>
                             <td>{{this.route.trainTitle}}</td>
-                            <td>{{this.route.routeTotalTime}}</td>
+                            <td>{{getTimeFromMinutes(this.route.routeTotalTime)}}</td>
                             <td>{{this.route.start}}</td>
                         </tr>
                         </tbody>
@@ -58,7 +58,7 @@
                             <tr v-for="station in route.stations" :key="station.stationId">
                                 <td>{{station.title}}</td>
                                 <td>{{station.at}}</td>
-                                <td>{{station.stopDuration}}</td>
+                                <td>{{getTimeFromMinutes(station.stopDuration)}}</td>
                                 <td>{{station.dt}}</td>
                             </tr>
                             </tbody>
@@ -179,7 +179,7 @@
                             "featureType": "water",
                             "stylers": [
                                 {
-                                    "color": "#00ffff"
+                                    "color": "#000"
                                 }
                             ]
                         },
@@ -273,7 +273,6 @@
                     text: text
                 });
             },
-
             setPlace(place) {
                 this.currentPlace = place;
             },
@@ -297,9 +296,14 @@
                     };
                 });
             },
-            add(index) {
-                this.inputs.push({ name: '' });
-            },
+            getTimeFromMinutes(n) {
+                const num = n;
+                const hours = (num / 60);
+                const rhours = Math.floor(hours);
+                const minutes = (hours - rhours) * 60;
+                const rminutes = Math.round(minutes);
+                return rhours + "h, " + rminutes + "m";
+            }
 
         },
         created() {

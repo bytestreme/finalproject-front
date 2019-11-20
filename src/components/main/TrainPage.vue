@@ -1,8 +1,8 @@
 <template>
     <div class="templatemo-content-container">
                 <div class="templatemo-content-widget white-bg">
-                    <div v-if="advisory" class="templatemo-content-widget orange-bg">
-                        <i class="fa fa-times"></i>
+                    <div v-if="advisory.data" class="templatemo-content-widget orange-bg">
+                        <i class="fa fa-times" @click="hideAd()"></i>
                         <div class="media">
                             <div class="media-body">
                                 <h2 class="media-heading text-uppercase">Advisory for the route {{advisory.data.route.title}}</h2>
@@ -178,18 +178,18 @@
                     return;
                 }
                 let arrD = {
-                    year: this.arrDate[0],
-                    month: this.arrDate[1],
-                    day: this.arrDate[2],
-                    hour: this.arrDate[3],
-                    minute: this.arrDate[4]
+                    day: parseInt(this.arrDate.substr(8, 2)),
+                    month: parseInt(this.arrDate.substr(5, 2)),
+                    year: parseInt(this.arrDate.substr(0, 4)),
+                    hour: 0,
+                    minute: 0
                 };
                 let depD = {
-                    year: this.depDate[0],
-                    month: this.depDate[1],
-                    day: this.depDate[2],
-                    hour: this.depDate[3],
-                    minute: this.depDate[4]
+                    day: parseInt(this.arrDate.substr(8, 2)),
+                    month: parseInt(this.arrDate.substr(5, 2)),
+                    year: parseInt(this.arrDate.substr(0, 4)),
+                    hour: 0,
+                    minute: 0
                 };
                 axiosInstance.post('/api/user/order',
                     {
@@ -231,18 +231,18 @@
             getReservedSeats(){
                 this.reservedSeats = [];
                 let arrD = {
-                    year: this.arrDate[0],
-                    month: this.arrDate[1],
-                    day: this.arrDate[2],
-                    hour: this.arrDate[3],
-                    minute: this.arrDate[4]
+                    year: parseInt(this.arrDate.substring(0,4)),
+                    month: parseInt(this.arrDate.substring(5,7)),
+                    day: parseInt(this.arrDate.substring(8,10)),
+                    hour: 0,
+                    minute: 0
                 };
                 let depD = {
-                    year: this.depDate[0],
-                    month: this.depDate[1],
-                    day: this.depDate[2],
-                    hour: this.depDate[3],
-                    minute: this.depDate[4]
+                    year: parseInt(this.depDate.substring(0,4)),
+                    month: parseInt(this.depDate.substring(5,7)),
+                    day: parseInt(this.depDate.substring(8,10)),
+                    hour: 0,
+                    minute: 0
                 };
                 axiosInstance.post('/api/user/getReservedSeats',
                     {
@@ -267,11 +267,11 @@
             },
             getAdvisory(id){
                 let depD = {
-                    year: this.depDate[0],
-                    month: this.depDate[1],
-                    day: this.depDate[2],
-                    hour: this.depDate[3],
-                    minute: this.depDate[4]
+                    day: parseInt(this.depDate.substr(8, 2)),
+                    month: parseInt(this.depDate.substr(5, 2)),
+                    year: parseInt(this.depDate.substr(0, 4)),
+                    hour: 0,
+                    minute: 0
                 };
                 this.advisory = "";
                 axiosInstance.post('api/public/advisory/getAdvisory',
@@ -296,6 +296,9 @@
                 this.chosenWagon = id;
                 this.chosenSeat = '';
                 this.getReservedSeats();
+            },
+            hideAd() {
+                this.advisory.data = undefined;
             }
         },
         created() {
