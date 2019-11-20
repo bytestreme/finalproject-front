@@ -14,8 +14,8 @@ import ManagerTrain from "./components/roles/manager/CreateTrain.vue";
 import ManagerAllTrains from "./components/roles/manager/Trains.vue";
 import ManagerNews from "./components/roles/manager/Advisories.vue";
 import ManagerAllRoutes from "./components/roles/manager/AllRoutes.vue";
-import ManagerEmployees from "./components/roles/manager/Employers.vue";
-import ManagerEmployee from "./components/roles/manager/Employer.vue";
+import ManagerEmployees from "./components/roles/manager/Employees.vue";
+import ManagerEmployee from "./components/roles/manager/Employee.vue";
 import AgentPage from "./components/roles/agent/ProfilePage.vue";
 import TrainPage from "./components/main/TrainPage.vue"
 import TrainInfo from "./components/roles/manager/TrainInfo.vue";
