@@ -35,6 +35,10 @@
                     <i class="fa fa-train fa-fw"></i>Manage Trains</router-link>
                 </li>
                 <li v-if="$store.getters.role === 'ADMIN' || $store.getters.role === 'MANAGER'">
+                    <router-link to="/manager-employees" :class="{'active': $route.path.includes('manager-employees')}">
+                    <i class="fa fa-user fa-fw"></i>Manage Employees</router-link>
+                </li>
+                <li v-if="$store.getters.role === 'ADMIN' || $store.getters.role === 'MANAGER'">
                     <router-link to="/manager-news" :class="{'active': $route.path.includes('manager-news')}">
                     <i class="fa fa-envelope fa-fw"></i>Send news</router-link>
                 </li>
@@ -62,4 +66,7 @@
         }
     }
 </script>
+<<<<<<< HEAD
+=======
 
+>>>>>>> d7a0d6754800d3ba86fa796cb5e373b77648f4a6
