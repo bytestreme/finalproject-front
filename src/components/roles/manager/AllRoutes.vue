@@ -21,21 +21,21 @@
                                     </td>
                                     <td style="width:25%"><a class="white-text templatemo-sort-by">End Station</a>
                                     </td>
-                                    <td style="width:10%"><a class="white-text templatemo-sort-by">Action</a>
+                                    <td v-if="$store.getters.isAuth && ($store.getters.role === 'ADMIN' || $store.getters.role === 'MANAGER')" style="width:10%"><a class="white-text templatemo-sort-by">Action</a>
                                     </td>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr @click="$router.push({name: 'TrainSchedule', params:{id: route.routeId}})"
-                                    v-for="(route, route_index) in routes"
+                                <tr @click="$router.push('manage-route/'+route.routeId)"
+                                    v-for="route in routes"
                                     :key="route.routeId"
                                     class="route-link"
                                 >
-                                    <td>{{route_index + 1}}</td>
+                                    <td>{{route.routeId}}</td>
                                     <td>{{route.title}}</td>
                                     <td>{{route.stations[0].title}}</td>
                                     <td>{{route.stations[route.stations.length-1].title}}</td>
-                                    <td><a href="" @click.prevent="removeRoute(route.routeId)"
+                                    <td v-if="$store.getters.isAuth && ($store.getters.role === 'ADMIN' || $store.getters.role === 'MANAGER')"><a href="" @click.prevent="removeRoute(route.routeId)"
                                            class="templatemo-del-btn">Remove</a></td>
                                 </tr>
                                 </tbody>
@@ -63,7 +63,8 @@
     export default {
         data() {
             return {
-                routes: ""
+                routes: "",
+                t: true
             }
         },
         methods: {

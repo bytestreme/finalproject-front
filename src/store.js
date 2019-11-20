@@ -23,12 +23,6 @@ const store = new Vuex.Store({
         },
         role: state => {
             return state.role;
-        },
-        logStatus: state => {
-            return state.isLogsOn;
-        },
-        isLogsDetailed: state => {
-            return state.isLogsDetailed;
         }
     },
     mutations: {
@@ -41,12 +35,6 @@ const store = new Vuex.Store({
         deAuth(state) {
             state.isAuthorized = false;
         },
-        logStatusChange(state, s) {
-            state.isLogsOn = s;
-        },
-        logTypeChange(state, s) {
-            state.isLogsDetailed= s;
-        }
     },
     actions: {
         auth(context) {
@@ -58,12 +46,6 @@ const store = new Vuex.Store({
         role(context, r) {
             context.commit('role', r)
         },
-        logTypeChange(context, r) {
-            context.commit('logStatusChange', r)
-        },
-        logStatusChange(context, r) {
-            context.commit('logTypeChange', r)
-        }
     }
 });
 
