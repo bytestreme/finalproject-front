@@ -1,11 +1,5 @@
 /*
 
-Visual Admin Template
-
-https://templatemo.com/tm-455-visual-admin
-
-
-
 TABLE OF CONTENT
 	1. Universal Styles
 	2. Left Column
@@ -20,21 +14,43 @@ TABLE OF CONTENT
 ----------------------------------------------*/
 * {
     font-family: 'Open Sans', sans-serif;
+
 }
 
 html {
     scroll-behavior: smooth !important;
+    height: 100%;
 }
 body {
     font-size: 13px;
+    color: white;
 }
 
 body, .templatemo-left-nav {
     background: #1f2124;
 }
 
+body, .templatemo-content-widget.input-group .form-control {
+    background-color: #1f2124c2;
+    color: white;
+}
+
 h1, h2, h3 {
     margin: 0;
+}
+input.form-control[disabled]{
+    background-color: grey!important;
+}
+input{
+    background-color: transparent;
+}
+input.form-control{
+    background-color: transparent;
+}
+
+select{
+    background-color: transparent!important;
+    color: white;
 }
 
 h2 {
@@ -61,6 +77,15 @@ nav li {
     list-style: none;
     text-transform: uppercase;
 }
+
+
+
+.divider{
+    width:10px;
+    height:auto;
+    display:inline-block;
+}
+
 
 .templatemo-inline-block {
     display: inline-block;
@@ -92,7 +117,7 @@ nav li {
 }
 
 .white-bg {
-    background-color: white;
+    background-color: #1f2124c2;
 }
 
 .white-bg .fa-times {
@@ -143,7 +168,10 @@ nav li {
 }
 
 .light-gray-bg {
-    background-color: #efefef;
+    background: url(../images/train-rail-5k-gv.jpg) no-repeat;
+    background-size: cover;
+
+
 }
 
 .light-gray-bg2 {
@@ -262,15 +290,16 @@ footer {
 }
 
 .templatemo-search-form .input-group .form-control {
-    background-color: #18191b;
+    background-color: #1f2124c2;
     border: none;
     border-radius: 10px;
-    color: #DDD;
+    color: white;
     padding-left: 30px;
 }
 
 .form-control:focus {
-    border-color: #13895F;
+    background-color: white;
+    border-color: black;
     outline: 0;
     box-shadow: inset 0 1px 1px rgba(19, 137, 95, .075), 0 0 8px rgba(19, 137, 95, .6);
 }
@@ -344,7 +373,7 @@ footer {
 /* 3. Right Column
 ------------------------------*/
 .templatemo-top-nav-container {
-    background-color: white;
+    background-color: #1f2124c2;
     padding: 28px 50px;
     box-shadow: 0px 0px 2px 2px rgba(161, 159, 159, 0.18);
 }
@@ -380,6 +409,7 @@ footer {
 
 .templatemo-content-container {
     padding: 40px 50px;
+    height: 100vh;
 }
 
 .templatemo-flex-row {
@@ -444,25 +474,31 @@ footer {
     display: block;
 }
 
+
+.panel-default{
+    border-color: transparent;
+}
 .panel-default > .panel-heading {
     background-color: #39ADB4;
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
     color: white;
     padding: 15px;
+    border-color: transparent;
 }
 
 .panel-default .fa-times {
     top: 12px;
-    background-color: #67B5B9;
+    background-color: transparent;
 }
 
 .panel-default .fa-times:hover {
-    background-color: #297B7F;
+    background-color: transparent;
 }
 
 .panel {
     border-radius: 10px;
+    background-color: transparent;
 }
 
 .pagination-wrap {
@@ -492,14 +528,29 @@ footer {
 
 .table {
     margin-bottom: 0;
+    background-color: transparent;
+}
+.table-bordered>tbody>tr>td, .table-bordered>tbody>tr>th, .table-bordered>tfoot>tr>td, .table-bordered>tfoot>tr>th, .table-bordered>thead>tr>td, .table-bordered>thead>tr>th{
+  border-color: black;
 }
 
 .table > tbody > tr > td {
     padding: 10px 15px;
+    background-color: transparent;
+}
+.table > tbody > tr {
+    background-color: transparent;
+}
+.table > thead > tr {
+    background-color: transparent;
+}
+.table-striped>tbody>tr:nth-of-type(odd){
+    background-color: transparent;
 }
 
 .table > thead > tr > td {
     padding: 15px;
+    background-color: transparent;
 }
 
 .media {
@@ -647,16 +698,18 @@ input[type="checkbox"] {
 
 input[type="checkbox"] + label span {
     display: inline-block;
-    width: 26px;
-    height: 25px;
-    margin: -1px 4px 0 0;
+    width: 30px;
+    height: 30px;
+
     vertical-align: middle;
-    background: url(../images/checkbox-radio-sheet.png) left top no-repeat;
+    background: url(../images/checkbox1.png) center;
+    background-size: 100%;
     cursor: pointer;
 }
 
 input[type="checkbox"]:checked + label span {
-    background: url(../images/checkbox-radio-sheet.png) -26px top no-repeat;
+    background: url(../images/checkbox2.png) center;
+    background-size: 100%;
 }
 
 input[type="radio"] {
@@ -665,26 +718,31 @@ input[type="radio"] {
 
 input[type="radio"] + label span {
     display: inline-block;
-    width: 26px;
-    height: 25px;
-    margin: -1px 4px 0 0;
+    width: 30px;
+    height: 30px;
+
     vertical-align: middle;
-    background: url(../images/checkbox-radio-sheet.png) -52px top no-repeat;
+    background: url(../images/checkbox1.png)center;
+    background-size: 100%;
+    background-position: center;
     cursor: pointer;
 }
 
 input[type="radio"]:disabled + label span {
-    background: url(../images/disabled.png) -78px top no-repeat;
+    background: url(../images/checkbox1.png) center;
+    background-size: 100%;
 }
 
 input[type="radio"]:checked + label span {
-    background: url(../images/checkbox-radio-sheet.png) -78px top no-repeat;
+    background: url(../images/checkbox2.png)center;
+    background-size: 100%;
 }
 
 /* 6. Manage Users
 ------------------------------*/
 .templatemo-sort-by:hover {
     color: #ded9d9;
+
 }
 
 .templatemo-edit-btn {
@@ -704,7 +762,7 @@ input[type="radio"]:checked + label span {
 .templatemo-del-btn {
     border: 1px solid #ddd;
     border-radius: 3px;
-    color: black;
+    color: white;
     padding: 5px 15px;
     transition: all 0.3s ease;
 }
@@ -728,16 +786,18 @@ input[type="radio"]:checked + label span {
 }
 
 .templatemo-user-table thead {
-    background-color: #39ADB4;
+    background-color: #134a50bf;
     color: white;
 }
 
 .panel > .table-responsive:last-child > .table:last-child, .panel > .table:last-child {
     border-bottom-right-radius: 10px;
     border-bottom-left-radius: 10px;
+    background-color: transparent;
 }
 
 .panel > .table:first-child {
+    background-color: transparent;
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
 }
@@ -798,7 +858,6 @@ input[type="radio"]:checked + label span {
 
 .templatemo-content-img-bg {
     background-position: center;
-    background-attachment: stretch;
     min-height: 300px;
 }
 
@@ -839,7 +898,7 @@ input[type="radio"]:checked + label span {
 .has-success .checkbox, .has-success .checkbox-inline, .has-success .control-label, .has-success .help-block,
 .has-success .radio, .has-success .radio-inline, .has-success.checkbox label, .has-success.checkbox-inline label,
 .has-success.radio label, .has-success.radio-inline label {
-    color: #13895F;
+    color: transparent;
 }
 
 .has-success .form-control {
