@@ -26,7 +26,7 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr @click="$router.push('/manage-route/'+route.routeId)"
+                                <tr @click="$router.push({name: 'TrainSchedule', params:{id: route.routeId}})"
                                     v-for="(route, route_index) in routes"
                                     :key="route.routeId"
                                     class="route-link"

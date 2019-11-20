@@ -127,10 +127,11 @@ const routes = [
         meta: {requiresLogin: true}
     },
     {
-        path: '/manage-route/:id',
+        path: '/manage-route',
         component: TrainSchedule,
         name: 'TrainSchedule',
-        meta: {requiresLogin: true}
+        meta: {requiresLogin: true},
+        props: true
     },
 ];
 

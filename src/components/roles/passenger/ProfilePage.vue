@@ -3,7 +3,7 @@
                 <div class="templatemo-content-widget white-bg">
                     <h2 class="margin-bottom-10">Profile Information</h2>
 
-                    <form action="index.html" class="templatemo-login-form" method="post" enctype="multipart/form-data">
+                    <form class="templatemo-login-form" method="post" enctype="multipart/form-data">
                         <div class="row form-group">
                             <div class="col-lg-6 col-md-6 form-group">
                                 <label for="inputFirstName">First Name</label>
@@ -40,7 +40,6 @@
                             <button type="submit" class="templatemo-blue-button">Update</button>
                             <button type="reset" class="templatemo-white-button">Reset</button>
                         </div>
-
                     </form>
                 </div>
 
@@ -52,6 +51,7 @@
                                 <table class="table table-striped table-bordered templatemo-user-table">
                                     <thead>
                                     <tr>
+                                        <td>Ticket number</td>
                                         <td>Route title</td>
                                         <td>Train title</td>
                                         <td>Wagon number</td>
@@ -65,6 +65,7 @@
                                     </thead>
                                     <tbody>
                                     <tr :key="ticket.id" v-for="ticket in upcoming">
+                                        <td>{{ticket.id}}</td>
                                         <td>{{ticket.route.title}}</td>
                                         <td>{{ticket.route.train.title}}</td>
                                         <td>{{ticket.wagon.id}}</td>
@@ -89,6 +90,7 @@
                                 <table class="table table-striped table-bordered templatemo-user-table">
                                     <thead>
                                     <tr>
+                                        <td>Ticket number</td>
                                         <td>Route title</td>
                                         <td>Train title</td>
                                         <td>Wagon number</td>
@@ -102,6 +104,7 @@
                                     </thead>
                                     <tbody>
                                     <tr :key="ticket.id" v-for="ticket in history">
+                                        <td>{{ticket.id}}</td>
                                         <td>{{ticket.route.title}}</td>
                                         <td>{{ticket.route.train.title}}</td>
                                         <td>{{ticket.wagon.id}}</td>

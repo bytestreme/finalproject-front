@@ -2,7 +2,7 @@
     <div class="templatemo-content-container">
         <div class="templatemo-content-widget  white-bg">
             <h2 v-if="$store.getters.role === 'ADMIN'" class="margin-bottom-10">Logs management</h2>
-            <div  class="row form-group">
+            <div v-if="$store.getters.role === 'ADMIN'" class="row form-group">
                 <div class="col-lg-6 col-md-6 form-group text-right">
                     <button style="width: 100%" @click="logSwitch" class="templatemo-blue-button">{{logStatusAction}}</button>
                 </div>
@@ -88,7 +88,7 @@
                     }).then(res => {
                     // eslint-disable-next-line no-console
                     console.log("OK: " + res.data);
-                    // this.getType();
+                    this.getType();
                     this.getLogs();
                 }).catch(error => {
                     // eslint-disable-next-line no-console
