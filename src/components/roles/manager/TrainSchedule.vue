@@ -11,9 +11,7 @@
 <!--                    </form>-->
 <!--                </div>-->
 <!--        </div>-->
-        <div style="margin-right: 12px;" class="form-group text-right">
-            <button @click="$router.push('manager-all-routes')" class="templatemo-blue-button">To the routes list</button>
-        </div>
+
         <div class="templatemo-flex-row flex-content-row">
             <div class="col-1">
             <div class="panel panel-default templatemo-content-widget white-bg no-padding templatemo-overflow-hidden">
@@ -24,16 +22,16 @@
                     <table class="table table-striped table-bordered">
                         <thead>
                         <tr>
-                            <td>Train type</td>
-                            <td>Total path time</td>
-                            <td>Departure time</td>
+                            <td><b>Train</b></td>
+                            <td><b>Total path time</b></td>
+                            <td><b>Route start time</b></td>
                         </tr>
                         </thead>
                         <tbody>
                         <tr>
-                            <td>{{route.train.title}}</td>
-                            <td>{{route.routeTotalTime}}</td>
-                            <td>{{route.start}}</td>
+                            <td>{{this.route.trainTitle}}</td>
+                            <td>{{this.route.routeTotalTime}}</td>
+                            <td>{{this.route.start}}</td>
                         </tr>
                         </tbody>
                     </table>
@@ -50,18 +48,18 @@
                         <table class="table table-striped table-bordered">
                             <thead>
                                 <tr>
-                                    <td>Station</td>
-                                    <td>Arrival time</td>
-                                    <td>Stop duration (minutes)</td>
-                                    <td>Departure time</td>
+                                    <td><b>Station</b></td>
+                                    <td><b>Arrival time</b></td>
+                                    <td><b>Stop duration (minutes)</b></td>
+                                    <td><b>Departure time</b></td>
                                 </tr>
                             </thead>
                             <tbody style="overflow-y: auto; height: 100px;">
                             <tr v-for="station in route.stations" :key="station.stationId">
                                 <td>{{station.title}}</td>
                                 <td>{{station.at}}</td>
-                                <td>{{station.stopTime}}</td>
-                                <td>{{station.at}}</td>
+                                <td>{{station.stopDuration}}</td>
+                                <td>{{station.dt}}</td>
                             </tr>
                             </tbody>
                         </table>
@@ -70,12 +68,12 @@
             </div>
             <div class="col-1">
                 <div class="panel panel-default templatemo-content-widget white-bg no-padding">
-                    <div class="panel-heading templatemo-position-relative"><h2 class="text-uppercase">Goes on weekdays</h2></div>
+                    <div class="panel-heading templatemo-position-relative"><h2 class="text-uppercase">Weekdays</h2></div>
                     <div class="table-responsive">
                         <table class="table table-striped table-bordered">
                             <tbody>
-                            <tr v-for="day in dayList" :key="day.id">
-                                <td>{{day.title}}</td>
+                            <tr v-for="day in route.weekDays" :key="day.id">
+                                <td><b>{{day.title}}</b></td>
                             </tr>
                             </tbody>
                         </table>
@@ -94,22 +92,7 @@
             return {
                 dayList: [],
                 searchId: 12,
-                route: {
-                    title: "Kaspiy",
-                    train:{
-                        title: "Kitay",
-                    },
-                    totalTime: 2250,
-                    depTime:"8:50",
-                    stations: [
-                        {title: "Almaty", arrTime: "10:00", stopTime: "15", depTime: "12:00"},
-                        {title: "Almaty", arrTime: "10:00", stopTime: "15", depTime: "12:00"},
-                        {title: "Almaty", arrTime: "10:00", stopTime: "15", depTime: "12:00"},
-                        {title: "Almaty", arrTime: "10:00", stopTime: "15", depTime: "12:00"},
-                        {title: "Almaty", arrTime: "10:00", stopTime: "15", depTime: "12:00"},
-                        {title: "Almaty", arrTime: "10:00", stopTime: "15", depTime: "12:00"},
-                    ]
-                }
+                route: ""
             }
         },
         computed:{
