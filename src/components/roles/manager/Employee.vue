@@ -16,11 +16,10 @@
                         </div>
                         <div class="col-lg-6 col-md-6 form-group">
                             <label for="station">Station</label>
-                            <select disabled="disabled" class="form-control" id="station"
+                            <select class="form-control" id="station"
                                     v-model="selectedStation">
                                 <option :key="station.id"
                                         v-for="station in stations"
-                                        v-if="employee.stationId === station.id"
                                         :value="station.id">
                                     {{station.title}}
                                 </option>
@@ -130,20 +129,24 @@
             },
             getEmployee() {
                 axiosInstance.get(
-                    '/api/public/employee/' + this.$route.params.id
+                    '/api/manager/employee/getEmployee/?id='+this.$route.params.id,{
+                        headers: {
+                            'Authorization': "Bearer " + localStorage.getItem("token")
+                        }
+                    }
                 ).then(res => {
                     if (res.status === 200) {
                         // eslint-disable-next-line no-console
                         console.log("OK: " + res.data);
-                        this.employee = res.data;
-                        this.FName = this.employee.fName;
-                        this.LName = this.employee.lName;
-                        this.selectedStation = this.employee.stationId;
-                        this.selectedRole = this.employee.roleId;
-                        this.salary = this.employee.salary;
-                        this.startTime = ("0" + this.employee.startTime.hour).slice(-2) + ":" + ("0" + this.employee.startTime.minute).slice(-2);
-                        this.endTime = ("0" + this.employee.endTime.hour).slice(-2) + ":" + ("0" + this.employee.endTime.minute).slice(-2);
-                        this.checkedDays = this.employee.dayIds;
+                        this.employee = res.data.data;
+                        this.FName = res.data.data.employee.fName;
+                        this.LName = res.data.data.employee.lName;
+                        this.selectedStation = res.data.data.employee.stations.id;
+                        this.selectedRole = res.data.data.employee.role.id;
+                        this.salary = res.data.data.employee.salary;
+                        this.startTime = res.data.data.startTime.substring(0,5);
+                        this.endTime = res.data.data.endTime.substring(0,5);
+                        this.checkedDays = res.data.data.weekDays.map(x=>x.id);
                     } else {
                         // eslint-disable-next-line no-console
                         console.log("BAD: " + res.status);
@@ -157,7 +160,10 @@
             },
             getRoles() {
                 axiosInstance.get(
-                    '/api/public/role', {}
+                    '/api/manager/employee/getRoles', {
+                        headers: {
+                            'Authorization': "Bearer " + localStorage.getItem("token")
+                        }}
                 ).then(res => {
                     if (res.status === 200) {
                         // eslint-disable-next-line no-console
@@ -170,40 +176,53 @@
                     }
                 }).catch(error => {
                     // eslint-disable-next-line no-console
-                    console.log(error)
+                    console.log(error);
                     this.toggleNotify(error.name, error.message, 'bad');
                 });
             },
             editEmployee() {
-                let data = {};
-                if (this.checkedDays !== this.employee.dayIds) {
-                    data.dayIds = this.checkedDays;
-                }
-                if (this.FName !== this.employee.fName) {
-                    data.fName = this.FName;
-                }
-                if (this.LName !== this.employee.lName) {
-                    data.lName = this.LName;
-                }
-                if (this.salary !== this.employee.salary) {
-                    data.salary = this.salary;
-                }
-                if (this.startTime !== ("0" + this.employee.startTime.hour).slice(-2) + ":" + ("0" + this.employee.startTime.minute).slice(-2)) {
-                    let start = {hour: parseInt(this.startTime.substring(0,2)),
-                                minute: parseInt(this.startTime.substring(3))};
-                    data.startTime = start;
-                }
-                if (this.endTime !== ("0" + this.employee.endTime.hour).slice(-2) + ":" + ("0" + this.employee.endTime.minute).slice(-2)) {
-                    let end = {hour: parseInt(this.endTime.substring(0,2)),
-                                minute: parseInt(this.endTime.substring(3))};
-                    data.endTime = end;
-                }
-                if(Object.entries(data).length === 0 && data.constructor === Object) {
-                    this.toggleNotify('Error!', 'Nothing to change!', 'bad')
-                    return;
-                }
+                // let data = {};
+                // if (this.checkedDays !== this.employee.dayIds) {
+                //     data.dayIds = this.checkedDays;
+                // }
+                // if (this.FName !== this.employee.fName) {
+                //     data.fName = this.FName;
+                // }
+                // if (this.LName !== this.employee.lName) {
+                //     data.lName = this.LName;
+                // }
+                // if (this.salary !== this.employee.salary) {
+                //     data.salary = this.salary;
+                // }
+                // if (this.startTime !== ("0" + this.employee.startTime.hour).slice(-2) + ":" + ("0" + this.employee.startTime.minute).slice(-2)) {
+                //     let start = {hour: parseInt(this.startTime.substring(0,2)),
+                //                 minute: parseInt(this.startTime.substring(3))};
+                //     data.startTime = start;
+                // }
+                // if (this.endTime !== ("0" + this.employee.endTime.hour).slice(-2) + ":" + ("0" + this.employee.endTime.minute).slice(-2)) {
+                //     let end = {hour: parseInt(this.endTime.substring(0,2)),
+                //                 minute: parseInt(this.endTime.substring(3))};
+                //     data.endTime = end;
+                // }
+                // if(Object.entries(data).length === 0 && data.constructor === Object) {
+                //     this.toggleNotify('Error!', 'Nothing to change!', 'bad')
+                //     return;
+                // }
+                let start = {hour: parseInt(this.startTime.substring(0,2)),
+                    minute: parseInt(this.startTime.slice(-2))}
+                let end = {hour: parseInt(this.endTime.substring(0,2)),
+                    minute: parseInt(this.endTime.slice(-2))}
+                let data = {
+                    fName: this.FName,
+                    lName: this.LName,
+                    weekDays: this.checkedDays,
+                    salary: parseInt(this.salary),
+                    startTime: start,
+                    endTime: end,
+                    employeeId: this.$route.params.id
+                };
                 axiosInstance.post(
-                    'api/manager/employee', data, {
+                    '/api/manager/employee/changeEmployee', data, {
                         headers: {
                             'Authorization': "Bearer " + localStorage.getItem("token")
                         }
