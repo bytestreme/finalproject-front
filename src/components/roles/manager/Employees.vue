@@ -61,11 +61,12 @@
                     </div>
                     <div class="row form-group">
                         <div class="col-lg-12 col-md-6 form-group">
-                            <label for="train">Choose Weekdays</label>
+                            <label>Choose Weekdays</label>
                             <ul class="list-inline mx-auto justify-content-center">
                                 <li class="list-inline-item" v-for="day in dayList">
                                     <div class="margin-right-15 templatemo-inline-block">
-                                        <input type="checkbox" name="member" :id="day.id" :value="day.id"
+                                        <input :disabled="FName === '' || LName === ''" 
+                                               type="checkbox" name="member" :id="day.id" :value="day.id"
                                                v-model="checkedDays">
                                         <label :for="day.id"
                                                class="font-weight-400"><span></span>{{day.title}}</label>
@@ -119,7 +120,7 @@
                                             v-if="employee.roleId === role.id">
                                             {{role.title}}</td>
                                         <td>{{employee.salary}}</td>
-                                        <td>{{employee.dayIds}}</td>
+                                        <td>{{getDays(employee.dayIds)}}</td>
                                         <td>{{(("0" + employee.startTime.hour).slice(-2)) + ":" +
                                             (("0" + employee.startTime.minute).slice(-2)) + "-" +
                                             (("0" + employee.endTime.hour).slice(-2)) + ":" +
@@ -159,6 +160,17 @@
             }
         },
         methods: {
+            getDays(arr) {
+                let s = ""
+                for(let day in arr) {
+                    for(let weekday in this.dayList) {
+                        if(arr[day] === this.dayList[weekday].id) {
+                            s += this.dayList[weekday].title + ", ";
+                        }
+                    }
+                }
+                return s.slice(0,s.length-2);
+            },
             removeEmployee(id) {
                 axiosInstance.post(
                     'api/manager/employee', {
