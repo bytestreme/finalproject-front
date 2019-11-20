@@ -16,11 +16,11 @@
                         </div>
                         <div class="col-lg-6 col-md-6 form-group">
                             <label for="station">Station</label>
-                            <select :disabled="FName === '' || LName === ''" class="form-control" id="station"
+                            <select disabled="disabled" class="form-control" id="station"
                                     v-model="selectedStation">
-                                <option value="">Select</option>
                                 <option :key="station.id"
                                         v-for="station in stations"
+                                        v-if="employee.stationId === station.id"
                                         :value="station.id">
                                     {{station.title}}
                                 </option>
@@ -28,11 +28,17 @@
                         </div>
                         <div class="col-lg-6 col-md-6 form-group">
                             <label for="role">Choose Role</label>
-                            <select :disabled="FName === '' || LName === ''" class="form-control" id="role"
+                            <select class="form-control" id="role"
                                     v-model="selectedRole">
-                                <option value="">Select</option>
                                 <option :key="role.id"
                                         v-for="role in roles"
+                                        v-if="employee.roleId === role.id"
+                                        :value="role.id">
+                                    {{role.title}}
+                                </option>
+                                <option :key="role.id"
+                                        v-for="role in roles"
+                                        v-if="employee.roleId !== role.id"
                                         :value="role.id">
                                     {{role.title}}
                                 </option>
@@ -42,21 +48,15 @@
                     <div class="row form-group">
                         <div class="col-lg-6 col-md-6 form-group">
                             <label for="train">Salary per hour</label>
-                            <input :disabled="FName === '' || LName === ''" 
-                                    v-model="salary" type="number" class="form-control"
-                                    placeholder="0000">
+                            <input v-model="salary" type="number" class="form-control">
                         </div>
                         <div class="col-lg-3 col-md-6 form-group">
                             <label>Working hours</label>
-                            <input :disabled="FName === '' || LName === ''" 
-                                    v-model="startTime" type="time" class="form-control"
-                                    placeholder="000000">
+                            <input v-model="startTime" type="time" class="form-control">
                         </div>
                         <div class="col-lg-3 col-md-6 form-group">
                             <label><font color="white">End Time</font></label>
-                            <input :disabled="FName === '' || LName === ''" 
-                                    v-model="endTime" type="time" class="form-control"
-                                    placeholder="000000">
+                            <input v-model="endTime" type="time" class="form-control">
                         </div>
                     </div>
                     <div class="row form-group">
@@ -76,7 +76,7 @@
                     </div>
                     <div class="row form-group">
                             <div class="form-group text-right">
-                                <button :disabled="salary === ''" @click="addEmployee"
+                                <button :disabled="salary === ''" @click="editEmployee"
                                         class="templatemo-blue-button">Edit Employee
                                 </button>
                                 <div class="divider"/>
@@ -95,17 +95,17 @@
         data() {
             return {
                 FName: "",
-                LName:"",
+                LName: "",
                 selectedStation: "",
                 selectedRole: "",
                 salary: "",
                 checkedDays: [],
                 stations: "",
-                employees: [{id:0, FName: "A", LName: "B", salary: 50000, weekDayIds: [20], stationId: 5, roleId: 1}],
                 dayList: "",
                 roles: "",
-                weekDayIds: [],
-                employee: {id:0, FName: "A", LName: "B", salary: 50000, weekDayIds: [20], stationId: 5, roleId: 1}
+                startTime: "",
+                endTime: "",
+                employee: ""
             }
         },
         methods: {
@@ -116,7 +116,7 @@
                     if (res.status === 200) {
                         // eslint-disable-next-line no-console
                         console.log("OK: " + res.data);
-                        this.stations = res.data;
+                        this.stations = res.data; //stations is array
                     } else {
                         // eslint-disable-next-line no-console
                         console.log("BAD: " + res.status);
@@ -128,18 +128,22 @@
                     this.toggleNotify(error.name, error.message, 'bad');
                 });
             },
-            getEmployees() {
+            getEmployee() {
                 axiosInstance.get(
-                    '/api/public/train', {}
+                    '/api/public/employee/' + this.$route.params.id
                 ).then(res => {
                     if (res.status === 200) {
                         // eslint-disable-next-line no-console
                         console.log("OK: " + res.data);
-                        this.employees = res.data;
+                        this.employee = res.data;
                         this.FName = this.employee.fName;
                         this.LName = this.employee.lName;
-                        
-                        console.log(res.data);
+                        this.selectedStation = this.employee.stationId;
+                        this.selectedRole = this.employee.roleId;
+                        this.salary = this.employee.salary;
+                        this.startTime = ("0" + this.employee.startTime.hour).slice(-2) + ":" + ("0" + this.employee.startTime.minute).slice(-2);
+                        this.endTime = ("0" + this.employee.endTime.hour).slice(-2) + ":" + ("0" + this.employee.endTime.minute).slice(-2);
+                        this.checkedDays = this.employee.dayIds;
                     } else {
                         // eslint-disable-next-line no-console
                         console.log("BAD: " + res.status);
@@ -151,33 +155,55 @@
                     this.toggleNotify(error.name, error.message, 'bad');
                 });
             },
-            addEmployee() {
-                if (this.checkedDays.length === 0) {
-                    this.toggleNotify('Error!', 'Weekdays not selected!', 'bad');
+            getRoles() {
+                axiosInstance.get(
+                    '/api/public/role', {}
+                ).then(res => {
+                    if (res.status === 200) {
+                        // eslint-disable-next-line no-console
+                        console.log("OK: " + res.data);
+                        this.roles = res.data;
+                    } else {
+                        // eslint-disable-next-line no-console
+                        console.log("BAD: " + res.status);
+                        this.toggleNotify("Error!", res.status, 'bad');
+                    }
+                }).catch(error => {
+                    // eslint-disable-next-line no-console
+                    console.log(error)
+                    this.toggleNotify(error.name, error.message, 'bad');
+                });
+            },
+            editEmployee() {
+                let data = {};
+                if (this.checkedDays !== this.employee.dayIds) {
+                    data.dayIds = this.checkedDays;
+                }
+                if (this.FName !== this.employee.fName) {
+                    data.fName = this.FName;
+                }
+                if (this.LName !== this.employee.lName) {
+                    data.lName = this.LName;
+                }
+                if (this.salary !== this.employee.salary) {
+                    data.salary = this.salary;
+                }
+                if (this.startTime !== ("0" + this.employee.startTime.hour).slice(-2) + ":" + ("0" + this.employee.startTime.minute).slice(-2)) {
+                    let start = {hour: parseInt(this.startTime.substring(0,2)),
+                                minute: parseInt(this.startTime.substring(3))};
+                    data.startTime = start;
+                }
+                if (this.endTime !== ("0" + this.employee.endTime.hour).slice(-2) + ":" + ("0" + this.employee.endTime.minute).slice(-2)) {
+                    let end = {hour: parseInt(this.endTime.substring(0,2)),
+                                minute: parseInt(this.endTime.substring(3))};
+                    data.endTime = end;
+                }
+                if(Object.entries(data).length === 0 && data.constructor === Object) {
+                    this.toggleNotify('Error!', 'Nothing to change!', 'bad')
                     return;
                 }
-                if (this.FName.length === 0) {
-                    this.toggleNotify('Error!', 'First Name cannot be empty!', 'bad');
-                    return;
-                }
-                if (this.LName.length === 0) {
-                    this.toggleNotify('Error!', 'Last Name cannot be empty!', 'bad');
-                    return;
-                }
-                if (this.salary.length === 0) {
-                    this.toggleNotify('Error!', 'Salary not specified!', 'bad');
-                    return;
-                }
-                let data = {
-                    FName: this.FName,
-                    LName: this.LName,
-                    weekDayIds: this.checkedDays,
-                    stationId: this.selectedStation,
-                    salary: this.s,
-                    roleId: this.selectedRole
-                };
                 axiosInstance.post(
-                    'api/manager/employees', data, {
+                    'api/manager/employee', data, {
                         headers: {
                             'Authorization': "Bearer " + localStorage.getItem("token")
                         }
@@ -187,7 +213,7 @@
                     if (res.status === 200) {
                         // eslint-disable-next-line no-console
                         console.log("OK: " + res.data);
-                        this.toggleNotify('Success!', 'New employee successfully added!', 'ok');
+                        this.toggleNotify('Success!', 'Employee info successfully edited!', 'ok');
                     } else {
                         this.toggleNotify('Error!', +res.data.message, 'bad');
                         console.log("BAD: " + res.status);
@@ -196,13 +222,6 @@
                         top: 0,
                         behavior: 'smooth',
                     });
-                    this.selectedStation = "";
-                    this.checkedDays = [];
-                    this.FName = "";
-                    this.LName = "";
-                    this.salary = "";
-                    this.selectedRole = "";
-                    this.getEmployees();
                 }).catch(error => {
                     // eslint-disable-next-line no-console
                     console.log(error)
@@ -240,7 +259,8 @@
         created() {
             this.getWeekDays();
             this.getStations();
-            this.getEmployees();
+            this.getEmployee();
+            this.getRoles();
         }
     }
 </script>
