@@ -77,7 +77,7 @@
                     <div class="row form-group">
                         <div class="col-lg-12 form-group">
                             <div class="form-group text-right">
-                                <button :disabled="salary === ''" @click="addEmployee"
+                                <button @click="addEmployee"
                                         class="templatemo-blue-button">Add Employee
                                 </button>
                             </div>
@@ -111,13 +111,19 @@
                                     <tbody>
                                     <tr v-for="(employee, emp_index) in employees" :key="employee.id">
                                         <td>{{emp_index + 1}}</td>
-                                        <td>{{employee.FName + " " + employee.LName}}</td>
-                                        <td>{{employee.stationId}}</td>
-                                        <td>{{employee.roleId}}</td>
+                                        <td>{{employee.fName + " " + employee.lName}}</td>
+                                        <td v-for="station in stations"
+                                            v-if="employee.stationId === station.id">
+                                            {{station.title}}</td>
+                                        <td v-for="role in roles"
+                                            v-if="employee.roleId === role.id">
+                                            {{role.title}}</td>
                                         <td>{{employee.salary}}</td>
                                         <td>{{employee.dayIds}}</td>
-                                        <td>{{employee.startTime.hour + ":" + (("0" + employee.startTime.minute).slice(-2)) + "-"
-                                            + employee.endTime.hour + ":" + (("0" + employee.endTime.minute).slice(-2))}}</td>
+                                        <td>{{(("0" + employee.startTime.hour).slice(-2)) + ":" +
+                                            (("0" + employee.startTime.minute).slice(-2)) + "-" +
+                                            (("0" + employee.endTime.hour).slice(-2)) + ":" +
+                                            (("0" + employee.endTime.minute).slice(-2))}}</td>
                                         <td><router-link :to="{ name: 'manager-employee', params: { id: employee.id} }"
                                             class="templatemo-del-btn">Info</router-link></td>
                                         <td><a href="" @click.prevent="removeEmployee(employee.id)"
@@ -145,8 +151,7 @@
                 salary: "",
                 checkedDays: [],
                 stations: "",
-                employees: [{id:0, FName: "A", LName: "B", salary: 50000, dayIds: [20, 22], stationId: 5, roleId: 1,
-                            startTime: {hour: 8, minute: 0}, endTime: {hour: 18, minute: 0}}],
+                employees: "",
                 dayList: "",
                 roles: "",
                 startTime: "",
@@ -162,7 +167,7 @@
                 ).then(res=>{
                     if (res.status === 200) {
                         this.toggleNotify('Success!', 'Employee succesfully removed!', 'ok');
-                        this.getTrains();
+                        this.getEmployees();
                     } else {
                         this.toggleNotify('Error!', res.data.message, 'bad');
                     }
@@ -228,16 +233,20 @@
                 });
             },
             addEmployee() {
-                if (this.checkedDays.length === 0) {
-                    this.toggleNotify('Error!', 'Weekdays not selected!', 'bad');
-                    return;
-                }
                 if (this.FName.length === 0) {
                     this.toggleNotify('Error!', 'First Name cannot be empty!', 'bad');
                     return;
                 }
                 if (this.LName.length === 0) {
                     this.toggleNotify('Error!', 'Last Name cannot be empty!', 'bad');
+                    return;
+                }
+                if (this.selectedStation.length === 0) {
+                    this.toggleNotify('Error!', 'Station not selected!', 'bad');
+                    return;
+                }
+                if (this.selectedRole.length === 0) {
+                    this.toggleNotify('Error!', 'Role not specified!', 'bad');
                     return;
                 }
                 if (this.salary.length === 0) {
@@ -248,24 +257,24 @@
                     this.toggleNotify('Error!', 'Working hours not specified!', 'bad');
                     return;
                 }
-                if (this.selectedStation.length === 0) {
-                    this.toggleNotify('Error!', 'Station not specified!', 'bad');
+                if (this.startTime === this.endTime) {
+                    this.toggleNotify('Error!', 'Same start time and end time!', 'bad');
                     return;
                 }
-                if (this.selectedRole.length === 0) {
-                    this.toggleNotify('Error!', 'Role not specified!', 'bad');
+                if (this.checkedDays.length === 0) {
+                    this.toggleNotify('Error!', 'Weekdays not selected!', 'bad');
                     return;
                 }
                 let start = {hour: parseInt(this.startTime.substring(0,2)),
-                            minute: parseInt(this.startTime.substring(3))}
+                            minute: parseInt(this.startTime.slice(-2))}
                 let end = {hour: parseInt(this.endTime.substring(0,2)),
-                            minute: parseInt(this.endTime.substring(3))}
+                            minute: parseInt(this.endTime.slice(-2))}
                 let data = {
                     fName: this.FName,
                     lName: this.LName,
                     dayIds: this.checkedDays,
                     stationId: this.selectedStation,
-                    salary: this.s,
+                    salary: this.salary,
                     roleId: this.selectedRole,
                     startTime: start,
                     endTime: end
