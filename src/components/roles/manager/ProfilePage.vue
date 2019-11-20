@@ -112,9 +112,12 @@
                                     <thead>
                                     <tr>
                                         <td style="width:5%"><a class="white-text templatemo-sort-by">No</a></td>
-                                        <td style="width:50%"><a class="white-text templatemo-sort-by">Station</a>
+                                        <td style="width:30%"><a class="white-text templatemo-sort-by">Station</a>
                                         </td>
-                                        <td style="width:50%"><a class="white-text templatemo-sort-by">Path duration
+                                        <td style="width:40%"><a class="white-text templatemo-sort-by">Path duration
+                                            (minutes)</a>
+                                        </td>
+                                        <td style="width:40%"><a class="white-text templatemo-sort-by">Stop duration
                                             (minutes)</a>
                                         </td>
                                         <td style="width:10%"><a class="white-text templatemo-sort-by">Action</a>
@@ -126,6 +129,8 @@
                                         <td>{{station_index + 1}}</td>
                                         <td>{{station.title}}</td>
                                         <td><input v-model="station.duration" type="number" class="form-control">
+                                        </td>
+                                        <td><input v-model="station.stopDuration" type="number" class="form-control">
                                         </td>
                                         <td><a href="" @click.prevent="removeStation(station.id)"
                                                class="templatemo-del-btn">Remove</a></td>
@@ -233,7 +238,8 @@
                     s.push({
                         stationId: x.id,
                         stopOrder: this.selectedStations.indexOf(x) + 1,
-                        stopDuration: x.duration
+                        pathDuration: x.duration,
+                        stopDuration: x.stopDuration
                     });
                 });
                 let data = {
