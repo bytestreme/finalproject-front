@@ -4,7 +4,9 @@
         <sidebar v-if="$store.getters.isAuth"></sidebar>
         <div class="templatemo-content col-1 light-gray-bg">
         <headbar></headbar>
-        <router-view></router-view>
+            <transition name="fade" mode="out-in">
+            <router-view></router-view>
+        </transition>
         </div>
     </div>
 </template>

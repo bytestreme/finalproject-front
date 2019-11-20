@@ -1,36 +1,45 @@
 <template>
     <div class="templatemo-content-container">
         <div class="templatemo-content-widget  white-bg">
-            <h2 v-if="$store.getters.role === 'ADMIN'" class="margin-bottom-10">Logs management</h2>
+            <h2 v-if="$store.getters.role === 'ADMIN'" class="margin-bottom-10">Logs</h2>
             <div v-if="$store.getters.role === 'ADMIN'" class="row form-group">
-                <div class="col-lg-6 col-md-6 form-group text-right">
-                    <button style="width: 100%" @click="logSwitch" class="templatemo-blue-button">{{logStatusAction}}</button>
+                <br>
+                <br>
+                <div class="col-lg-6 col-md-6 form-group row">
+                    <div class="col-lg-6 col-md-3 form-group text-left">
+                        <h2 class="col-lg-1">{{status ? 'Enabled' : 'Disabled'}}</h2>
+                    </div>
+                    <div class="col-lg-6 col-md-3 form-group text-right">
+                        <label class="switch col-lg-1">
+                            <input v-model="status" type="checkbox" @change="logSwitch()">
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
                 </div>
                 <div class="col-lg-6 col-md-6 form-group text-right">
-                    <button style="width: 100%" @click="logType" class="templatemo-blue-button">{{logTypeAction}}</button>
+                    <button style="width: 100%" @click="logType" class="templatemo-blue-button">{{logTypeAction}}
+                    </button>
                 </div>
             </div>
-            <h2 class="margin-bottom-10">Logs</h2>
-            <div class="templatemo-content-container">
-                <div class="templatemo-content-widget no-padding">
-                    <div class="panel panel-default table-responsive">
-                        <table class="table table-striped table-bordered templatemo-user-table">
-                            <thead>
-                            <tr>
-                                <td>Description</td>
-                                <td>Event</td>
-                                <td>Date</td>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr :key="log.id" v-for="log in logs">
-                                <td>{{log.description}}</td>
-                                <td>{{log.event}}</td>
-                                <td>{{log.time[2]}}/{{log.time[1]}}/{{log.time[0]}} {{log.time[3]}}:{{log.time[4]}}</td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
+            <div class="templatemo-content-widget no-padding">
+                <div class="panel panel-default table-responsive">
+                    <table class="table table-striped table-bordered templatemo-user-table">
+                        <thead>
+                        <tr>
+                            <td>Description</td>
+                            <td>Event</td>
+                            <td>Date</td>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr :key="log.id" v-for="log in logs">
+                            <td width="30%">{{log.description}}</td>
+                            <td width="30%">{{log.event}}</td>
+                            <td width="10%">{{log.time}}
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
@@ -39,27 +48,29 @@
 
 <script>
     import axiosInstance from "../../axiosInstance";
+
     export default {
-        data(){
-            return{
+        data() {
+            return {
                 logs: [],
                 status: "",
                 type: ""
             }
         },
-        computed:{
-            logTypeAction(){
-                return this.type === "DETAILED" ? "Less Detailed List" : "More Detailed List"
+
+        computed: {
+            logTypeAction() {
+                return this.type === "DETAILED" ? "Basic Mode" : "Detailed Mode"
             },
-            logStatusAction(){
-                return this.status ? "Turn off logs" : "Turn on logs"
+            logStatusAction() {
+                return this.status ? "Turn off logging" : "Turn on logging"
             }
         },
-        methods:{
+        methods: {
             //Logs on or off
-            logSwitch(){
+            logSwitch() {
                 axiosInstance.post('/api/manager/logs/changeStatus', {
-                        status: !this.status
+                        status: this.status
                     },
                     {
                         headers: {
@@ -69,14 +80,13 @@
                     // eslint-disable-next-line no-console
                     console.log("OK: " + res.data);//true or false
                     this.getStatus();
-                    this.getLogs();
                 }).catch(error => {
                     // eslint-disable-next-line no-console
                     console.log(error)
                 });
             },
             //Logs detailed or not change
-            logType(){
+            logType() {
                 axiosInstance.post('/api/manager/logs/changeType',
                     {
                         type: this.type === "BASIC" ? "DETAILED" : "BASIC"
@@ -95,7 +105,7 @@
                     console.log(error)
                 });
             },
-            getLogs(){
+            getLogs() {
                 this.logs = [];
                 axiosInstance.get(
                     'api/manager/logs/getLogs',
@@ -118,7 +128,7 @@
                     this.toggleNotify(error.name, error.message, 'bad');
                 });
             },
-            getStatus(){
+            getStatus() {
                 axiosInstance.get(
                     'api/manager/logs/getStatus',
                     {
@@ -140,7 +150,7 @@
                     this.toggleNotify(error.name, error.message, 'bad');
                 });
             },
-            getType(){
+            getType() {
                 axiosInstance.get(
                     'api/manager/logs/getType',
                     {
