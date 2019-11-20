@@ -607,6 +607,12 @@ footer {
     color: white;
 }
 
+.divider{
+    width:15px;
+    height:auto;
+    display:inline-block;
+}
+
 .templatemo-blue-button:hover {
     background-color: #2A858B;
 }
