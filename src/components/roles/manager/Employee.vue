@@ -16,12 +16,9 @@
                         </div>
                         <div class="col-lg-6 col-md-6 form-group">
                             <label for="station">Station</label>
-                            <select class="form-control" id="station"
-                                    v-model="selectedStation">
-                                <option :key="station.id"
-                                        v-for="station in stations"
-                                        :value="station.id">
-                                    {{station.title}}
+                            <select disabled="disabled" class="form-control" id="station">
+                                <option>
+                                    {{employee.employee.stations.title}}
                                 </option>
                             </select>
                         </div>
@@ -31,13 +28,13 @@
                                     v-model="selectedRole">
                                 <option :key="role.id"
                                         v-for="role in roles"
-                                        v-if="employee.roleId === role.id"
+                                        v-if="employee.employee.role.id === role.id"
                                         :value="role.id">
                                     {{role.title}}
                                 </option>
                                 <option :key="role.id"
                                         v-for="role in roles"
-                                        v-if="employee.roleId !== role.id"
+                                        v-if="employee.employee.role.id !== role.id"
                                         :value="role.id">
                                     {{role.title}}
                                 </option>
@@ -84,6 +81,31 @@
                             </div>
                     </div>
                 </div>
+                <div class="templatemo-content-widget white-bg">
+                    <div class="row form-group">
+                        <div class="templatemo-content-widget green-bg no-padding">
+                            <div class="panel panel-default table-responsive">
+                                <table class="table table-striped table-bordered templatemo-user-table">
+                                    <thead>
+                                    <tr>
+                                        <td style="width:10%"><a class="white-text templatemo-sort-by">No</a></td>
+                                        <td style="width:45%"><a class="white-text templatemo-sort-by">Salary</a>
+                                        <td style="width:45%"><a class="white-text templatemo-sort-by">Payroll</a>
+                                        </td>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr v-for="(payroll, payroll_idx) in payrolls" :key="payroll.id">
+                                        <td>{{payroll_idx+1}}</td>
+                                        <td>{{payroll.salary}}</td>
+                                        <td>{{payroll.date}}</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
 </template>
 
@@ -95,27 +117,26 @@
             return {
                 FName: "",
                 LName: "",
-                selectedStation: "",
                 selectedRole: "",
                 salary: "",
                 checkedDays: [],
-                stations: "",
                 dayList: "",
                 roles: "",
                 startTime: "",
                 endTime: "",
-                employee: ""
+                employee: "",
+                payrolls: ""
             }
         },
         methods: {
-            getStations() {
+            getPayrolls() {
                 axiosInstance.get(
-                    '/api/public/station', {}
+                    '/api/manager/employee/getPayrolls', {}
                 ).then(res => {
                     if (res.status === 200) {
                         // eslint-disable-next-line no-console
                         console.log("OK: " + res.data);
-                        this.stations = res.data; //stations is array
+                        this.payrolls = res.data;
                     } else {
                         // eslint-disable-next-line no-console
                         console.log("BAD: " + res.status);
@@ -182,24 +203,30 @@
             },
             editEmployee() {
                 // let data = {};
-                // if (this.checkedDays !== this.employee.dayIds) {
-                //     data.dayIds = this.checkedDays;
+                // for(let x in this.checkedDays) {
+                //     if(this.checkedDays[x] !== this.employee.weekDays[x].id) {
+                //         data.dayIds = this.checkedDays;
+                //         break;
+                //     }
                 // }
-                // if (this.FName !== this.employee.fName) {
+                // if (this.FName !== this.employee.employee.fName) {
                 //     data.fName = this.FName;
                 // }
-                // if (this.LName !== this.employee.lName) {
+                // if (this.LName !== this.employee.employee.lName) {
                 //     data.lName = this.LName;
                 // }
-                // if (this.salary !== this.employee.salary) {
+                // if (this.salary !== this.employee.employee.salary) {
                 //     data.salary = this.salary;
                 // }
-                // if (this.startTime !== ("0" + this.employee.startTime.hour).slice(-2) + ":" + ("0" + this.employee.startTime.minute).slice(-2)) {
+                // if (this.selectedRole !== this.employee.employee.role.id) {
+                //     data.roleId = this.selectedRole;
+                // }
+                // if (this.startTime !== this.employee.startTime.slice(0,-3)) {
                 //     let start = {hour: parseInt(this.startTime.substring(0,2)),
                 //                 minute: parseInt(this.startTime.substring(3))};
                 //     data.startTime = start;
                 // }
-                // if (this.endTime !== ("0" + this.employee.endTime.hour).slice(-2) + ":" + ("0" + this.employee.endTime.minute).slice(-2)) {
+                // if (this.endTime !== this.employee.endTime.slice(0,-3)) {
                 //     let end = {hour: parseInt(this.endTime.substring(0,2)),
                 //                 minute: parseInt(this.endTime.substring(3))};
                 //     data.endTime = end;
@@ -208,6 +235,7 @@
                 //     this.toggleNotify('Error!', 'Nothing to change!', 'bad')
                 //     return;
                 // }
+                // data.employeeId = this.$route.params.id;
                 let start = {hour: parseInt(this.startTime.substring(0,2)),
                     minute: parseInt(this.startTime.slice(-2))}
                 let end = {hour: parseInt(this.endTime.substring(0,2)),
@@ -262,7 +290,7 @@
                         // eslint-disable-next-line no-console
                         console.log("OK: " + res.data);
                         console.log(res.data);
-                        this.dayList = res.data; //stations is array
+                        this.dayList = res.data;
                     } else {
                         // eslint-disable-next-line no-console
                         console.log("BAD: " + res.status);
@@ -277,7 +305,7 @@
         },
         created() {
             this.getWeekDays();
-            this.getStations();
+            this.getPayrolls();
             this.getEmployee();
             this.getRoles();
         }
