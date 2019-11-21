@@ -37,8 +37,7 @@
                         </div>
 
                         <div class="form-group text-left">
-                            <button type="submit" class="templatemo-blue-button">Update</button>
-                            <button type="reset" class="templatemo-white-button">Reset</button>
+                            <button @click="edit" class="templatemo-blue-button">Update</button>
                         </div>
                     </form>
                 </div>
@@ -145,6 +144,35 @@
             }
         },
         methods:{
+            edit(){
+                axiosInstance.post(
+                    '/api/user/editProfile',{
+                        fName: this.user.firstName,
+                        lName: this.user.lastName,
+                        phone: this.user.phone,
+                        natId: this.user.natId,
+                    },
+                    {
+                        headers: {
+                            'Authorization': "Bearer " + localStorage.getItem("token")
+                        }
+                    }
+                ).then(res => {
+                    console.log(res.data);
+                    if (res.status === 200) {
+                        // eslint-disable-next-line no-console
+                        console.log("OK: " + res.data);
+                        this.toggleNotify('Success!', 'User info successfully edited!', 'ok');
+                    } else {
+                        this.toggleNotify('Error!', +res.data.message, 'bad');
+                        console.log("BAD: " + res.status);
+                    }
+                }).catch(error => {
+                    // eslint-disable-next-line no-console
+                    console.log(error)
+                    this.toggleNotify(error.name, error.message, 'bad');
+                });
+            },
             getTickets() {
                 axiosInstance.get(
                     '/api/user/myTickets',
