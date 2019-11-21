@@ -127,7 +127,9 @@
         },
         methods: {
             chooseTrain(route){
-                console.log(route.arr.date + " xxx");
+                if (localStorage.getItem("token") === null){
+                    alert("Please log in as a user");
+                }
                 this.chosenRoute.id = route.route.id;
                 this.chosenRoute.arrStation = route.arr.id;
                 this.chosenRoute.depStation = route.dep.id;

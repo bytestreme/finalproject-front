@@ -231,19 +231,20 @@
             },
             getReservedSeats(){
                 this.reservedSeats = [];
-                let arrD = {
+
+                    let arrD = {
                     year: parseInt(this.arrDate.substring(0,4)),
                     month: parseInt(this.arrDate.substring(5,7)),
                     day: parseInt(this.arrDate.substring(8,10)),
-                    hour: 0,
-                    minute: 0
+                    hour: parseInt(this.arrDate.substring(11,13)),
+                    minute: parseInt(this.arrDate.substring(14,16)),
                 };
                 let depD = {
                     year: parseInt(this.depDate.substring(0,4)),
                     month: parseInt(this.depDate.substring(5,7)),
                     day: parseInt(this.depDate.substring(8,10)),
-                    hour: 0,
-                    minute: 0
+                    hour: parseInt(this.depDate.substring(11,13)),
+                    minute: parseInt(this.depDate.substring(14,16)),
                 };
                 axiosInstance.post('/api/user/getReservedSeats',
                     {
