@@ -94,6 +94,13 @@
                                         </td>
                                     </tr>
                                     </thead>
+                                    <tbody>
+                                    <tr v-for="(payroll, payroll_idx) in payrolls" :key="payroll.id">
+                                        <td>{{payroll_idx+1}}</td>
+                                        <td>{{payroll.salary}}</td>
+                                        <td>{{payroll.date}}</td>
+                                    </tr>
+                                    </tbody>
                                 </table>
                             </div>
                         </div>
@@ -113,23 +120,23 @@
                 selectedRole: "",
                 salary: "",
                 checkedDays: [],
-                stations: "",
                 dayList: "",
                 roles: "",
                 startTime: "",
                 endTime: "",
-                employee: ""
+                employee: "",
+                payrolls: ""
             }
         },
         methods: {
-            getStations() {
+            getPayrolls() {
                 axiosInstance.get(
-                    '/api/public/station', {}
+                    '/api/manager/employee/getPayrolls', {}
                 ).then(res => {
                     if (res.status === 200) {
                         // eslint-disable-next-line no-console
                         console.log("OK: " + res.data);
-                        this.stations = res.data; //stations is array
+                        this.payrolls = res.data;
                     } else {
                         // eslint-disable-next-line no-console
                         console.log("BAD: " + res.status);
@@ -275,7 +282,7 @@
                         // eslint-disable-next-line no-console
                         console.log("OK: " + res.data);
                         console.log(res.data);
-                        this.dayList = res.data; //stations is array
+                        this.dayList = res.data;
                     } else {
                         // eslint-disable-next-line no-console
                         console.log("BAD: " + res.status);
@@ -290,7 +297,7 @@
         },
         created() {
             this.getWeekDays();
-            this.getStations();
+            this.getPayrolls();
             this.getEmployee();
             this.getRoles();
         }
