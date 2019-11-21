@@ -7,8 +7,8 @@
                             <div class="media-body">
                                 <h2 class="media-heading text-uppercase">Advisory for the route {{advisory.data.route.title}}</h2>
                                 <p>{{advisory.data.text}}</p>
-                                <p>From {{advisory.data.start[2]}}/{{advisory.data.start[1]}}/{{advisory.data.start[0]}} </p>
-                                <p>To {{advisory.data.endDate[2]}}/{{advisory.data.endDate[1]}}/{{advisory.data.endDate[0]}} </p>
+                                <p>From {{advisory.data.start}} </p>
+                                <p>To {{advisory.data.endDate}} </p>
                             </div>
                         </div>
                     </div>
@@ -181,15 +181,16 @@
                     day: parseInt(this.arrDate.substr(8, 2)),
                     month: parseInt(this.arrDate.substr(5, 2)),
                     year: parseInt(this.arrDate.substr(0, 4)),
-                    hour: 0,
-                    minute: 0
+                    hour: parseInt(this.arrDate.substr(11,2)),
+                    minute: parseInt(this.arrDate.substr(14,2))
                 };
+
                 let depD = {
-                    day: parseInt(this.arrDate.substr(8, 2)),
-                    month: parseInt(this.arrDate.substr(5, 2)),
-                    year: parseInt(this.arrDate.substr(0, 4)),
-                    hour: 0,
-                    minute: 0
+                    day: parseInt(this.depDate.substr(8, 2)),
+                    month: parseInt(this.depDate.substr(5, 2)),
+                    year: parseInt(this.depDate.substr(0, 4)),
+                    hour: parseInt(this.depDate.substr(11,2)),
+                    minute: parseInt(this.depDate.substr(14,2)),
                 };
                 axiosInstance.post('/api/user/order',
                     {
@@ -270,8 +271,8 @@
                     day: parseInt(this.depDate.substr(8, 2)),
                     month: parseInt(this.depDate.substr(5, 2)),
                     year: parseInt(this.depDate.substr(0, 4)),
-                    hour: 0,
-                    minute: 0
+                    hour: parseInt(this.depDate.substring(11,2)),
+                    minute: parseInt(this.depDate.substring(14,2)),
                 };
                 this.advisory = "";
                 axiosInstance.post('api/public/advisory/getAdvisory',
