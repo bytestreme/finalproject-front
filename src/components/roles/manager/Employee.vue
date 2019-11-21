@@ -16,13 +16,9 @@
                         </div>
                         <div class="col-lg-6 col-md-6 form-group">
                             <label for="station">Station</label>
-                            <select disabled="disabled" class="form-control" id="station"
-                                    v-model="selectedStation">
-                                <option :key="station.id"
-                                        v-for="station in stations"
-                                        v-if="employee.stationId === station.id"
-                                        :value="station.id">
-                                    {{station.title}}
+                            <select disabled="disabled" class="form-control" id="station">
+                                <option>
+                                    {{employee.employee.stations.title}}
                                 </option>
                             </select>
                         </div>
@@ -32,13 +28,13 @@
                                     v-model="selectedRole">
                                 <option :key="role.id"
                                         v-for="role in roles"
-                                        v-if="employee.roleId === role.id"
+                                        v-if="employee.employee.role.id === role.id"
                                         :value="role.id">
                                     {{role.title}}
                                 </option>
                                 <option :key="role.id"
                                         v-for="role in roles"
-                                        v-if="employee.roleId !== role.id"
+                                        v-if="employee.employee.role.id !== role.id"
                                         :value="role.id">
                                     {{role.title}}
                                 </option>
@@ -85,6 +81,24 @@
                             </div>
                     </div>
                 </div>
+                <div class="templatemo-content-widget white-bg">
+                    <div class="row form-group">
+                        <div class="templatemo-content-widget green-bg no-padding">
+                            <div class="panel panel-default table-responsive">
+                                <table class="table table-striped table-bordered templatemo-user-table">
+                                    <thead>
+                                    <tr>
+                                        <td style="width:10%"><a class="white-text templatemo-sort-by">No</a></td>
+                                        <td style="width:45%"><a class="white-text templatemo-sort-by">Salary</a>
+                                        <td style="width:45%"><a class="white-text templatemo-sort-by">Payroll</a>
+                                        </td>
+                                    </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
 </template>
 
@@ -96,7 +110,6 @@
             return {
                 FName: "",
                 LName: "",
-                selectedStation: "",
                 selectedRole: "",
                 salary: "",
                 checkedDays: [],
@@ -130,20 +143,30 @@
             },
             getEmployee() {
                 axiosInstance.get(
-                    '/api/public/employee/' + this.$route.params.id
+                    '/api/manager/employee/getEmployees', {
+                        headers: {
+                            'Authorization': "Bearer " + localStorage.getItem("token")
+                        }
+                    }
                 ).then(res => {
                     if (res.status === 200) {
                         // eslint-disable-next-line no-console
                         console.log("OK: " + res.data);
-                        this.employee = res.data;
-                        this.FName = this.employee.fName;
-                        this.LName = this.employee.lName;
-                        this.selectedStation = this.employee.stationId;
-                        this.selectedRole = this.employee.roleId;
-                        this.salary = this.employee.salary;
-                        this.startTime = ("0" + this.employee.startTime.hour).slice(-2) + ":" + ("0" + this.employee.startTime.minute).slice(-2);
-                        this.endTime = ("0" + this.employee.endTime.hour).slice(-2) + ":" + ("0" + this.employee.endTime.minute).slice(-2);
-                        this.checkedDays = this.employee.dayIds;
+                        let employees = res.data;
+                        for(let x in employees) {
+                            if(this.$route.params.id === employees[x].employee.id) {
+                                this.employee = employees[x];
+                            }
+                        }
+                        this.FName = this.employee.employee.fName;
+                        this.LName = this.employee.employee.lName;
+                        this.selectedRole = this.employee.employee.role.id;
+                        this.salary = this.employee.employee.salary;
+                        this.startTime = this.employee.startTime.slice(0,-3);
+                        this.endTime = this.employee.endTime.slice(0,-3);
+                        for(let x in this.employee.weekDays) {
+                            this.checkedDays.push(this.employee.weekDays[x].id)
+                        }
                     } else {
                         // eslint-disable-next-line no-console
                         console.log("BAD: " + res.status);
@@ -157,7 +180,10 @@
             },
             getRoles() {
                 axiosInstance.get(
-                    '/api/public/role', {}
+                    '/api/manager/employee/getRoles', {
+                        headers: {
+                            'Authorization': "Bearer " + localStorage.getItem("token")
+                        }}
                 ).then(res => {
                     if (res.status === 200) {
                         // eslint-disable-next-line no-console
@@ -176,24 +202,30 @@
             },
             editEmployee() {
                 let data = {};
-                if (this.checkedDays !== this.employee.dayIds) {
-                    data.dayIds = this.checkedDays;
+                for(let x in this.checkedDays) {
+                    if(this.checkedDays[x] !== this.employee.weekDays[x].id) {
+                        data.dayIds = this.checkedDays;
+                        break;
+                    }
                 }
-                if (this.FName !== this.employee.fName) {
+                if (this.FName !== this.employee.employee.fName) {
                     data.fName = this.FName;
                 }
-                if (this.LName !== this.employee.lName) {
+                if (this.LName !== this.employee.employee.lName) {
                     data.lName = this.LName;
                 }
-                if (this.salary !== this.employee.salary) {
+                if (this.salary !== this.employee.employee.salary) {
                     data.salary = this.salary;
                 }
-                if (this.startTime !== ("0" + this.employee.startTime.hour).slice(-2) + ":" + ("0" + this.employee.startTime.minute).slice(-2)) {
+                if (this.selectedRole !== this.employee.employee.role.id) {
+                    data.roleId = this.selectedRole;
+                }
+                if (this.startTime !== this.employee.startTime.slice(0,-3)) {
                     let start = {hour: parseInt(this.startTime.substring(0,2)),
                                 minute: parseInt(this.startTime.substring(3))};
                     data.startTime = start;
                 }
-                if (this.endTime !== ("0" + this.employee.endTime.hour).slice(-2) + ":" + ("0" + this.employee.endTime.minute).slice(-2)) {
+                if (this.endTime !== this.employee.endTime.slice(0,-3)) {
                     let end = {hour: parseInt(this.endTime.substring(0,2)),
                                 minute: parseInt(this.endTime.substring(3))};
                     data.endTime = end;
@@ -203,7 +235,7 @@
                     return;
                 }
                 axiosInstance.post(
-                    'api/manager/employee', data, {
+                    'api/manager/employee/changeEmployee', data, {
                         headers: {
                             'Authorization': "Bearer " + localStorage.getItem("token")
                         }

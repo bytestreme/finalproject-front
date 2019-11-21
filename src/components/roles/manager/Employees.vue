@@ -124,22 +124,15 @@
                                     <tbody>
                                     <tr v-for="(employee, emp_index) in employees" :key="employee.id">
                                         <td>{{emp_index + 1}}</td>
-                                        <td>{{employee.fName + " " + employee.lName}}</td>
-                                        <td v-for="station in stations"
-                                            v-if="employee.stationId === station.id">
-                                            {{station.title}}</td>
-                                        <td v-for="role in roles"
-                                            v-if="employee.roleId === role.id">
-                                            {{role.title}}</td>
-                                        <td>{{employee.salary}}</td>
-                                        <td>{{getDays(employee.dayIds)}}</td>
-                                        <td>{{(("0" + employee.startTime.hour).slice(-2)) + ":" +
-                                            (("0" + employee.startTime.minute).slice(-2)) + "-" +
-                                            (("0" + employee.endTime.hour).slice(-2)) + ":" +
-                                            (("0" + employee.endTime.minute).slice(-2))}}</td>
-                                        <td><router-link :to="{ name: 'manager-employee', params: { id: employee.id} }"
+                                        <td>{{employee.employee.fName + " " + employee.employee.lName}}</td>
+                                        <td>{{employee.employee.stations.title}}</td>
+                                        <td>{{employee.employee.role.title}}</td>
+                                        <td>{{employee.employee.salary}}</td>
+                                        <td>{{getDays(employee.weekDays)}}</td>
+                                        <td>{{employee.startTime.slice(0,-3) + "-" + employee.endTime.slice(0,-3)}}</td>
+                                        <td><router-link :to="{ name: 'manager-employee', params: { id: employee.employee.id} }"
                                             class="templatemo-del-btn">Info</router-link></td>
-                                        <td><a href="" @click.prevent="removeEmployee(employee.id)"
+                                        <td><a href="" @click.prevent="removeEmployee(employee.employee.id)"
                                                class="templatemo-del-btn">Remove</a></td>
                                     </tr>
                                     </tbody>
@@ -178,18 +171,16 @@
             getDays(arr) {
                 let s = ""
                 for(let day in arr) {
-                    for(let weekday in this.dayList) {
-                        if(arr[day] === this.dayList[weekday].id) {
-                            s += this.dayList[weekday].title + ", ";
-                        }
-                    }
+                    s += arr[day].title + ", ";
                 }
                 return s.slice(0,s.length-2);
             },
             removeEmployee(id) {
                 axiosInstance.post(
-                    'api/manager/employee', {
-                        employeeId: id
+                    'api/manager/employee/delete/' + id, {
+                        headers: {
+                            'Authorization': "Bearer " + localStorage.getItem("token")
+                        }
                     }
                 ).then(res=>{
                     if (res.status === 200) {
