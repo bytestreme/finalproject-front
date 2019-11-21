@@ -71,9 +71,9 @@
                                         <td>{{ticket.wagon.id}}</td>
                                         <td>{{ticket.seatNum}}</td>
                                         <td>{{ticket.lname + " " + ticket.fname}}</td>
-                                        <td>{{ticket.depDate[2]}}/{{ticket.depDate[1]}}/{{ticket.depDate[0]}} {{ticket.depDate[3]}}:{{ticket.depDate[4]}}</td>
+                                        <td>{{ticket.depDate}}</td>
                                         <td>{{ticket.depStation.title}}</td>
-                                        <td>{{ticket.arrDate[2]}}/{{ticket.arrDate[1]}}/{{ticket.arrDate[0]}} {{ticket.arrDate[3]}}:{{ticket.arrDate[4]}}</td>
+                                        <td>{{ticket.arrDate}}</td>
                                         <td>{{ticket.arrStation.title}}</td>
                                     </tr>
                                     </tbody>
@@ -110,9 +110,9 @@
                                         <td>{{ticket.wagon.id}}</td>
                                         <td>{{ticket.seatNum}}</td>
                                         <td>{{ticket.lname + " " + ticket.fname}}</td>
-                                        <td>{{ticket.depDate[2]}}/{{ticket.depDate[1]}}/{{ticket.depDate[0]}} {{ticket.depDate[3]}}:{{ticket.depDate[4]}}</td>
+                                        <td>{{ticket.depDate}}</td>
                                         <td>{{ticket.depStation.title}}</td>
-                                        <td>{{ticket.arrDate[2]}}/{{ticket.arrDate[1]}}/{{ticket.arrDate[0]}} {{ticket.arrDate[3]}}:{{ticket.arrDate[4]}}</td>
+                                        <td>{{ticket.arrDate}}</td>
                                         <td>{{ticket.arrStation.title}}</td>
                                     </tr>
                                     </tbody>
@@ -135,13 +135,14 @@
             }
         },
         computed:{
-            upcoming(){
+           upcoming(){
                 let d = new Date().getTime();
-                return this.tickets.filter(x=>new Date(x.depDate[0],x.depDate[1],x.depDate[2],x.depDate[3], x.depDate[4]).getTime() >= d);
-            },
+
+                return this.tickets.filter(x=>new Date(x.depDate).getTime() >= d);
+                },
             history(){
                 let d = new Date().getTime();
-                return this.tickets.filter(x=>new Date(x.depDate[0],x.depDate[1],x.depDate[2],x.depDate[3], x.depDate[4]).getTime() < d);
+                return this.tickets.filter(x=>new Date(x.depDate).getTime() < d);
             }
         },
         methods:{
