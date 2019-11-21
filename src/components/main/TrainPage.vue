@@ -1,14 +1,14 @@
 <template>
     <div class="templatemo-content-container">
                 <div class="templatemo-content-widget white-bg">
-                    <div v-if="advisory" class="templatemo-content-widget orange-bg">
-                        <i class="fa fa-times"></i>
+                    <div v-if="advisory.data" class="templatemo-content-widget orange-bg">
+                        <i class="fa fa-times" @click="hideAd()"></i>
                         <div class="media">
                             <div class="media-body">
                                 <h2 class="media-heading text-uppercase">Advisory for the route {{advisory.data.route.title}}</h2>
                                 <p>{{advisory.data.text}}</p>
-                                <p>From {{advisory.data.start[2]}}/{{advisory.data.start[1]}}/{{advisory.data.start[0]}} </p>
-                                <p>To {{advisory.data.endDate[2]}}/{{advisory.data.endDate[1]}}/{{advisory.data.endDate[0]}} </p>
+                                <p>From {{advisory.data.start}} </p>
+                                <p>To {{advisory.data.endDate}} </p>
                             </div>
                         </div>
                     </div>
@@ -178,18 +178,19 @@
                     return;
                 }
                 let arrD = {
-                    year: this.arrDate[0],
-                    month: this.arrDate[1],
-                    day: this.arrDate[2],
-                    hour: this.arrDate[3],
-                    minute: this.arrDate[4]
+                    day: parseInt(this.arrDate.substr(8, 2)),
+                    month: parseInt(this.arrDate.substr(5, 2)),
+                    year: parseInt(this.arrDate.substr(0, 4)),
+                    hour: parseInt(this.arrDate.substr(11,2)),
+                    minute: parseInt(this.arrDate.substr(14,2))
                 };
+
                 let depD = {
-                    year: this.depDate[0],
-                    month: this.depDate[1],
-                    day: this.depDate[2],
-                    hour: this.depDate[3],
-                    minute: this.depDate[4]
+                    day: parseInt(this.depDate.substr(8, 2)),
+                    month: parseInt(this.depDate.substr(5, 2)),
+                    year: parseInt(this.depDate.substr(0, 4)),
+                    hour: parseInt(this.depDate.substr(11,2)),
+                    minute: parseInt(this.depDate.substr(14,2)),
                 };
                 axiosInstance.post('/api/user/order',
                     {
@@ -231,18 +232,18 @@
             getReservedSeats(){
                 this.reservedSeats = [];
                 let arrD = {
-                    year: this.arrDate[0],
-                    month: this.arrDate[1],
-                    day: this.arrDate[2],
-                    hour: this.arrDate[3],
-                    minute: this.arrDate[4]
+                    year: parseInt(this.arrDate.substring(0,4)),
+                    month: parseInt(this.arrDate.substring(5,7)),
+                    day: parseInt(this.arrDate.substring(8,10)),
+                    hour: 0,
+                    minute: 0
                 };
                 let depD = {
-                    year: this.depDate[0],
-                    month: this.depDate[1],
-                    day: this.depDate[2],
-                    hour: this.depDate[3],
-                    minute: this.depDate[4]
+                    year: parseInt(this.depDate.substring(0,4)),
+                    month: parseInt(this.depDate.substring(5,7)),
+                    day: parseInt(this.depDate.substring(8,10)),
+                    hour: 0,
+                    minute: 0
                 };
                 axiosInstance.post('/api/user/getReservedSeats',
                     {
@@ -267,11 +268,11 @@
             },
             getAdvisory(id){
                 let depD = {
-                    year: this.depDate[0],
-                    month: this.depDate[1],
-                    day: this.depDate[2],
-                    hour: this.depDate[3],
-                    minute: this.depDate[4]
+                    day: parseInt(this.depDate.substr(8, 2)),
+                    month: parseInt(this.depDate.substr(5, 2)),
+                    year: parseInt(this.depDate.substr(0, 4)),
+                    hour: parseInt(this.depDate.substring(11,2)),
+                    minute: parseInt(this.depDate.substring(14,2)),
                 };
                 this.advisory = "";
                 axiosInstance.post('api/public/advisory/getAdvisory',
@@ -296,6 +297,9 @@
                 this.chosenWagon = id;
                 this.chosenSeat = '';
                 this.getReservedSeats();
+            },
+            hideAd() {
+                this.advisory.data = undefined;
             }
         },
         created() {

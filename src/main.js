@@ -3,7 +3,7 @@ import App from './App.vue'
 import store from "./store";
 import VueRouter from 'vue-router'
 import VueMask from 'v-mask'
-
+import * as VueGoogleMaps from "vue2-google-maps";
 import DashboardPage from "./components/dashboard/DashboardPage";
 import LoginPage from "./components/login/LoginPage";
 import RegisterPage from "./components/register/RegisterPage";
@@ -29,6 +29,14 @@ Vue.config.productionTip = false;
 Vue.use(Notifications, {velocity})
 Vue.use(VueRouter);
 Vue.use(VueMask);
+
+
+Vue.use(VueGoogleMaps, {
+    load: {
+        key: "AIzaSyD8zIuo7-zcpOs6EaQmhlu58y8qT9_qp9Y",
+        libraries: "places" // necessary for places input
+    }
+});
 
 const routes = [
     {

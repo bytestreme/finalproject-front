@@ -30,7 +30,7 @@
                         <tbody>
                         <tr>
                             <td>{{this.route.trainTitle}}</td>
-                            <td>{{this.route.routeTotalTime}}</td>
+                            <td>{{getTimeFromMinutes(this.route.routeTotalTime)}}</td>
                             <td>{{this.route.start}}</td>
                         </tr>
                         </tbody>
@@ -58,7 +58,7 @@
                             <tr v-for="station in route.stations" :key="station.stationId">
                                 <td>{{station.title}}</td>
                                 <td>{{station.at}}</td>
-                                <td>{{station.stopDuration}}</td>
+                                <td>{{getTimeFromMinutes(station.stopDuration)}}</td>
                                 <td>{{station.dt}}</td>
                             </tr>
                             </tbody>
@@ -80,6 +80,25 @@
                     </div>
                 </div>
             </div>
+
+        </div>
+        <div class="templatemo-content-widget no-padding">
+        <gmap-map
+                :center="center"
+                :zoom="4.5"
+                v-bind:options="mapStyle"
+                style="width:100%;  height: 50vh;"
+        >
+            <gmap-polyline v-bind:path.sync="path" v-bind:options="{ strokeColor:'#000000'}">
+            </gmap-polyline>
+
+            <gmap-marker
+                    :key="index"
+                    v-for="(m, index) in markers"
+                    :position="m.position"
+                    @click="center=m.position"
+            ></gmap-marker>
+        </gmap-map>
         </div>
     </div>
 </template>
@@ -92,7 +111,93 @@
             return {
                 dayList: [],
                 searchId: 12,
-                route: ""
+                route: "",
+                road : {},
+                path : [],
+                center: {lat: 47.7964, lng: 67.7020},
+                markers: [],
+                places: [],
+                currentPlace: null,
+                mapStyle: {styles:[
+                        {
+                            "elementType": "geometry.stroke",
+                            "stylers": [
+                                {
+                                    "color": "#000000"
+                                },
+                                {
+                                    "saturation": 100
+                                },
+                                {
+                                    "lightness": -100
+                                },
+                                {
+                                    "visibility": "on"
+                                }
+                            ]
+                        },
+                        {
+                            "featureType": "landscape",
+                            "elementType": "geometry.stroke",
+                            "stylers": [
+                                {
+                                    "color": "#ffffff"
+                                }
+                            ]
+                        },
+                        {
+                            "featureType": "landscape.natural.landcover",
+                            "elementType": "geometry",
+                            "stylers": [
+                                {
+                                    "color": "#ffffff"
+                                }
+                            ]
+                        },
+                        {
+                            "featureType": "landscape.natural.terrain",
+                            "elementType": "geometry.fill",
+                            "stylers": [
+                                {
+                                    "visibility": "on"
+                                }
+                            ]
+                        },
+                        {
+                            "featureType": "landscape.natural.terrain",
+                            "elementType": "geometry.stroke",
+                            "stylers": [
+                                {
+                                    "color": "#000000"
+                                },
+                                {
+                                    "visibility": "on"
+                                }
+                            ]
+                        },
+                        {
+                            "featureType": "water",
+                            "stylers": [
+                                {
+                                    "color": "#000"
+                                }
+                            ]
+                        },
+                        {
+                            "featureType": "water",
+                            "elementType": "geometry.stroke",
+                            "stylers": [
+                                {
+                                    "color": "#000000"
+                                },
+                                {
+                                    "visibility": "on"
+                                }
+                            ]
+                        }
+                    ]
+            },
+
             }
         },
         computed:{
@@ -134,11 +239,77 @@
                     // eslint-disable-next-line no-console
                     console.log(e)
                 });
+            },
+            getRoute(id){
+                this.road = {};
+                axiosInstance.get(
+                    'api/public/getRoute', {params: {routeId: parseInt(id)}}
+                ).then(res => {
+                    if (res.status === 200) {
+                        // eslint-disable-next-line no-console
+                        console.log("OK: " + res.data);
+                        this.road = res.data; //stations is array
+
+                        //this.path.add({lat: this.route.lat,lng: this.route.lng});
+                        //this.path.add({lat:station.lat, lng: station.lon}
+                        //console.log(this.route.stations);
+
+                        this.road.stations.forEach(station => this.path.push({lat:station.lat,lng:station.lon}));
+
+
+                    } else {
+                        // eslint-disable-next-line no-console
+                        console.log("BAD: " + res.status);
+                        this.toggleNotify("Error!", res.status, 'bad');
+                    }
+                }).catch(error => {
+                    this.toggleNotify(error.name, error.message, 'bad');
+                });
+            },
+            toggleNotify(title, text, group) {
+                this.$notify({
+                    group: group,
+                    title: title,
+                    text: text
+                });
+            },
+            setPlace(place) {
+                this.currentPlace = place;
+            },
+            addMarker() {
+                if (this.currentPlace) {
+                    const marker = {
+                        lat: this.currentPlace.geometry.location.lat(),
+                        lng: this.currentPlace.geometry.location.lng()
+                    };
+                    this.markers.push({ position: marker });
+                    this.places.push(this.currentPlace);
+                    this.center = marker;
+                    this.currentPlace = null;
+                }
+            },
+            geolocate: function() {
+                navigator.geolocation.getCurrentPosition(position => {
+                    this.center = {
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude
+                    };
+                });
+            },
+            getTimeFromMinutes(n) {
+                const num = n;
+                const hours = (num / 60);
+                const rhours = Math.floor(hours);
+                const minutes = (hours - rhours) * 60;
+                const rminutes = Math.round(minutes);
+                return rhours + "h, " + rminutes + "m";
             }
+
         },
         created() {
             this.getWeekDays();
-            if(this.id) this.search()
+            if(this.id) this.search();
+            this.getRoute(this.id);
         }
     }
 </script>
