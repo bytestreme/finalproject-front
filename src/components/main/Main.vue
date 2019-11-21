@@ -127,6 +127,7 @@
         },
         methods: {
             chooseTrain(route){
+                console.log(route.arr.date + " xxx");
                 this.chosenRoute.id = route.route.id;
                 this.chosenRoute.arrStation = route.arr.id;
                 this.chosenRoute.depStation = route.dep.id;
@@ -157,7 +158,7 @@
                 this.no_route = false;
                 this.loading = true;
                 this.routes = [];
-
+                console.log();
                 axiosInstance.post('/api/public/findTicket',
                     {
                         depStationId: this.selectedDep,
