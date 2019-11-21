@@ -163,6 +163,7 @@
                         for(let x in employees) {
                             if(this.$route.params.id === employees[x].employee.id) {
                                 this.employee = employees[x];
+                                break;
                             }
                         }
                         this.FName = this.employee.employee.fName;
