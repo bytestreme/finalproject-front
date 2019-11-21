@@ -150,7 +150,7 @@
             },
             getEmployee() {
                 axiosInstance.get(
-                    '/api/manager/employee/getEmployees', {
+                    '/api/manager/employee/getEmployee/?id='+this.$route.params.id,{
                         headers: {
                             'Authorization': "Bearer " + localStorage.getItem("token")
                         }
@@ -159,22 +159,14 @@
                     if (res.status === 200) {
                         // eslint-disable-next-line no-console
                         console.log("OK: " + res.data);
-                        let employees = res.data;
-                        for(let x in employees) {
-                            if(this.$route.params.id === employees[x].employee.id) {
-                                this.employee = employees[x];
-                                break;
-                            }
-                        }
+                        this.employee = res.data.data;
                         this.FName = this.employee.employee.fName;
                         this.LName = this.employee.employee.lName;
                         this.selectedRole = this.employee.employee.role.id;
                         this.salary = this.employee.employee.salary;
                         this.startTime = this.employee.startTime.slice(0,-3);
                         this.endTime = this.employee.endTime.slice(0,-3);
-                        for(let x in this.employee.weekDays) {
-                            this.checkedDays.push(this.employee.weekDays[x].id)
-                        }
+                        this.checkedDays = this.employee.weekDays.map(x=>x.id);
                     } else {
                         // eslint-disable-next-line no-console
                         console.log("BAD: " + res.status);
@@ -204,46 +196,60 @@
                     }
                 }).catch(error => {
                     // eslint-disable-next-line no-console
-                    console.log(error)
+                    console.log(error);
                     this.toggleNotify(error.name, error.message, 'bad');
                 });
             },
             editEmployee() {
-                let data = {};
-                for(let x in this.checkedDays) {
-                    if(this.checkedDays[x] !== this.employee.weekDays[x].id) {
-                        data.dayIds = this.checkedDays;
-                        break;
-                    }
-                }
-                if (this.FName !== this.employee.employee.fName) {
-                    data.fName = this.FName;
-                }
-                if (this.LName !== this.employee.employee.lName) {
-                    data.lName = this.LName;
-                }
-                if (this.salary !== this.employee.employee.salary) {
-                    data.salary = this.salary;
-                }
-                if (this.selectedRole !== this.employee.employee.role.id) {
-                    data.roleId = this.selectedRole;
-                }
-                if (this.startTime !== this.employee.startTime.slice(0,-3)) {
-                    let start = {hour: parseInt(this.startTime.substring(0,2)),
-                                minute: parseInt(this.startTime.substring(3))};
-                    data.startTime = start;
-                }
-                if (this.endTime !== this.employee.endTime.slice(0,-3)) {
-                    let end = {hour: parseInt(this.endTime.substring(0,2)),
-                                minute: parseInt(this.endTime.substring(3))};
-                    data.endTime = end;
-                }
-                if(Object.entries(data).length === 0 && data.constructor === Object) {
-                    this.toggleNotify('Error!', 'Nothing to change!', 'bad')
-                    return;
-                }
+                // let data = {};
+                // for(let x in this.checkedDays) {
+                //     if(this.checkedDays[x] !== this.employee.weekDays[x].id) {
+                //         data.dayIds = this.checkedDays;
+                //         break;
+                //     }
+                // }
+                // if (this.FName !== this.employee.employee.fName) {
+                //     data.fName = this.FName;
+                // }
+                // if (this.LName !== this.employee.employee.lName) {
+                //     data.lName = this.LName;
+                // }
+                // if (this.salary !== this.employee.employee.salary) {
+                //     data.salary = this.salary;
+                // }
+                // if (this.selectedRole !== this.employee.employee.role.id) {
+                //     data.roleId = this.selectedRole;
+                // }
+                // if (this.startTime !== this.employee.startTime.slice(0,-3)) {
+                //     let start = {hour: parseInt(this.startTime.substring(0,2)),
+                //                 minute: parseInt(this.startTime.substring(3))};
+                //     data.startTime = start;
+                // }
+                // if (this.endTime !== this.employee.endTime.slice(0,-3)) {
+                //     let end = {hour: parseInt(this.endTime.substring(0,2)),
+                //                 minute: parseInt(this.endTime.substring(3))};
+                //     data.endTime = end;
+                // }
+                // if(Object.entries(data).length === 0 && data.constructor === Object) {
+                //     this.toggleNotify('Error!', 'Nothing to change!', 'bad')
+                //     return;
+                // }
+                // data.employeeId = this.$route.params.id;
+                let start = {hour: parseInt(this.startTime.substring(0,2)),
+                    minute: parseInt(this.startTime.slice(-2))}
+                let end = {hour: parseInt(this.endTime.substring(0,2)),
+                    minute: parseInt(this.endTime.slice(-2))}
+                let data = {
+                    fName: this.FName,
+                    lName: this.LName,
+                    weekDays: this.checkedDays,
+                    salary: parseInt(this.salary),
+                    startTime: start,
+                    endTime: end,
+                    employeeId: this.$route.params.id
+                };
                 axiosInstance.post(
-                    'api/manager/employee/changeEmployee', data, {
+                    '/api/manager/employee/changeEmployee', data, {
                         headers: {
                             'Authorization': "Bearer " + localStorage.getItem("token")
                         }

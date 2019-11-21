@@ -5,13 +5,42 @@
 
                 <div class="templatemo-content-widget white-bg">
                     <div class="row form-group">
-                        <div class="col-lg-6 col-md-6 form-group">
-                            <button class="templatemo-blue-button">Create employee from users</button>
+                        <div class="col-lg-6 col-md-6 form-group text-right">
+                            <button @click="createNew = true" style="width: 100%"
+                                    :class="createNew ? 'templatemo-white-button' : 'templatemo-blue-button'">Create new employee</button>
                         </div>
-                        <div class="col-lg-6 col-md-6 form-group">
-                            <button class="templatemo-blue-button">Create new employee</button>
+                        <div class="col-lg-6 col-md-6 form-group text-right">
+                            <button @click="createNew = false; getUsers();" style="width: 100%"
+                                    :class="!createNew ? 'templatemo-white-button' : 'templatemo-blue-button'">Create employee from users</button>
                         </div>
                     </div>
+
+                    <div v-if="!createNew && users.length>0" class="panel panel-default templatemo-content-widget white-bg no-padding templatemo-overflow-hidden">
+                        <div class="panel-heading templatemo-position-relative">
+                            <h2 class="text-uppercase">Choose user</h2>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered">
+                                <thead>
+                                <tr>
+                                    <td><b>First name</b></td>
+                                    <td><b>Last Name</b></td>
+                                    <td><b>Username</b></td>
+                                    <td><b>Phone</b></td>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr class="route-link" :key="user.id" v-for="user in users" @click="chooseUser(user)">
+                                    <td>{{user.firstName}}</td>
+                                    <td>{{user.lastName}}</td>
+                                    <td>{{user.username}}</td>
+                                    <td>{{user.phone}}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
                     <h2 class="margin-bottom-10">Manage Employees</h2>
                     <div class="row form-group">
                         <div class="col-lg-6 col-md-6 form-group">
@@ -39,10 +68,14 @@
                             <select :disabled="FName === '' || LName === ''" class="form-control" id="role"
                                     v-model="selectedRole">
                                 <option value="">Select</option>
-                                <option :key="role.id"
+                                <option v-if="createNew" :key="role.id"
                                         v-for="role in roles"
                                         :value="role.id">
                                     {{role.title}}
+                                </option>
+                                <option v-if="!createNew"
+                                        :value="4">
+                                    {{roles.find(x=>x.id === 4).title}}
                                 </option>
                             </select>
                         </div>
@@ -76,7 +109,9 @@
                                         <input type="checkbox" name="member" :id="day.id" :value="day.id"
                                                v-model="checkedDays">
                                         <label :for="day.id"
-                                               class="font-weight-400"><span></span>{{day.title}}</label>
+                                               class="font-weight-400"><span></span>
+                                            {{day.title}}
+                                        </label>
                                     </div>
                                 </li>
                             </ul>
@@ -115,7 +150,7 @@
                                         </td>
                                         <td style="width:10%"><a class="white-text templatemo-sort-by">Work hours</a>
                                         </td>
-                                        <td style="width:10%"><a class="white-text templatemo-sort-by">Info</a>
+                                        <td style="width:10%"><a class="white-text templatemo-sort-by">Edit</a>
                                         </td>
                                         <td style="width:10%"><a class="white-text templatemo-sort-by">Remove</a>
                                         </td>
@@ -128,10 +163,11 @@
                                         <td>{{employee.employee.stations.title}}</td>
                                         <td>{{employee.employee.role.title}}</td>
                                         <td>{{employee.employee.salary}}</td>
-                                        <td>{{getDays(employee.weekDays)}}</td>
-                                        <td>{{employee.startTime.slice(0,-3) + "-" + employee.endTime.slice(0,-3)}}</td>
-                                        <td><router-link :to="{ name: 'manager-employee', params: { id: employee.employee.id} }"
-                                            class="templatemo-del-btn">Info</router-link></td>
+                                        <td>{{getDays(employee.weekDays.map(x=>x.title))}}</td>
+                                        <td>{{employee.startTime}} - {{employee.endTime}}</td>
+                                        <td><a href=""
+                                               @click.prevent="$router.push({name: 'manager-employee', params: {id: employee.employee.id}})"
+                                               class="templatemo-del-btn">Edit</a></td>
                                         <td><a href="" @click.prevent="removeEmployee(employee.employee.id)"
                                                class="templatemo-del-btn">Remove</a></td>
                                     </tr>
@@ -144,12 +180,18 @@
             </div>
 </template>
 
+<style scoped>
+    .route-link:hover{
+        cursor: pointer;
+    }
+</style>
 
 <script>
     import axiosInstance from "../../../axiosInstance";
     export default {
         data() {
             return {
+                chosenUser:"",
                 FName: "",
                 LName:"",
                 selectedStation: "",
@@ -164,32 +206,40 @@
                 endTime: "",
                 startDate:"",
                 users: [],
-                userRoles: []
+                userRoles: [],
+                createNew: true
             }
         },
         methods: {
+            chooseUser(user){
+                this.FName = user.firstName;
+                this.LName = user.lastName;
+                this.chosenUser = user.id;
+            },
             getDays(arr) {
-                let s = ""
-                for(let day in arr) {
-                    s += arr[day].title + ", ";
-                }
+                let s = "";
+                arr.forEach(x=>s=s+x+", ");
                 return s.slice(0,s.length-2);
             },
             removeEmployee(id) {
-                axiosInstance.post(
-                    'api/manager/employee/delete/' + id, {
-                        headers: {
-                            'Authorization': "Bearer " + localStorage.getItem("token")
-                        }
+                axiosInstance.delete('/api/manager/employee/delete/'+id,{
+                    headers: {
+                        'Authorization': "Bearer " + localStorage.getItem("token")
                     }
-                ).then(res=>{
+                }).then(res => {
                     if (res.status === 200) {
-                        this.toggleNotify('Success!', 'Employee succesfully removed!', 'ok');
+                        // eslint-disable-next-line no-console
+                        console.log("OK: " + res.data);
                         this.getEmployees();
+                        this.getUsers();
                     } else {
-                        this.toggleNotify('Error!', res.data.message, 'bad');
+                        // eslint-disable-next-line no-console
+                        console.log("BAD: " + res.status);
+                        this.toggleNotify("Error!", res.status, 'bad');
                     }
                 }).catch(error => {
+                    // eslint-disable-next-line no-console
+                    console.log(error);
                     this.toggleNotify(error.name, error.message, 'bad');
                 });
             },
@@ -355,7 +405,7 @@
                     roleId: parseInt(this.selectedRole),
                     startTime: start,
                     endTime: end,
-                    userId: -1,
+                    userId: this.createNew ? -1 : parseInt(this.chosenUser),
                     started: started
                 };
                 axiosInstance.post(
@@ -387,6 +437,7 @@
                     this.startTime = "";
                     this.endTime = "";
                     this.getEmployees();
+                    this.getUsers();
                 }).catch(error => {
                     // eslint-disable-next-line no-console
                     console.log(error)
@@ -426,7 +477,6 @@
             this.getStations();
             this.getEmployees();
             this.getRoles();
-            this.getUsers();
             this.getUserRoles();
         }
     }
