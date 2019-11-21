@@ -52,24 +52,34 @@
                             <input id="email" v-model="ticketDetails.email" type="text" class="form-control" placeholder="mark.sterling@nu.edu.kz">
                         </div>
                         <div class="col-lg-6 col-md-6 form-group">
-                            <label for="date">Date</label>
-                            <input id="date" disabled v-model="ticketDetails.date" type="text" class="form-control" placeholder="01/01/2020">
+                            <label for="wclass">Wagon class</label>
+                            <input id="wclass" disabled type="text" v-model="ticketDetails.wagon.wagonClass.title" class="form-control" placeholder="Almaty">
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-lg-6 col-md-6 form-group">
+                            <label for="date">Departure date</label>
+                            <input id="date" disabled v-model="ticketDetails.depDate" type="text" class="form-control" placeholder="01/01/2020">
+                        </div>
+                        <div class="col-lg-6 col-md-6 form-group">
+                            <label for="arrdate">Arrival date</label>
+                            <input id="arrdate" disabled v-model="ticketDetails.arrDate" type="text" class="form-control" placeholder="01/01/2020">
                         </div>
                     </div>
                     <div class="row form-group">
                         <div class="col-lg-6 col-md-6 form-group">
                             <label for="dstation">Departure Station</label>
-                            <input id="dstation" disabled type="text" v-model="ticketDetails.depStation" class="form-control" placeholder="Almaty">
+                            <input id="dstation" disabled type="text" v-model="ticketDetails.depStation.title" class="form-control" placeholder="Almaty">
                         </div>
                         <div class="col-lg-6 col-md-6 form-group">
                             <label for="astation">Arrival Station</label>
-                            <input id="astation" disabled type="text" v-model="ticketDetails.arrStation" class="form-control" placeholder="Astana">
+                            <input id="astation" disabled type="text" v-model="ticketDetails.arrStation.title" class="form-control" placeholder="Astana">
                         </div>
                     </div>
                     <div class="row form-group">
                         <div class="col-lg-6 col-md-6 form-group">
-                            <label for="wNum">Wagon number</label>
-                            <input id="wNum" disabled type="text" v-model="ticketDetails.wagonNum" class="form-control" placeholder="4">
+                            <label for="wNum">Wagon ID</label>
+                            <input id="wNum" disabled type="text" v-model="ticketDetails.wagon.id" class="form-control" placeholder="4">
                         </div>
                         <div class="col-lg-6 col-md-6 form-group">
                             <label for="sNum">Seat number</label>
@@ -101,17 +111,24 @@
                 }
             },
         methods:{
+            toggleNotify(title, text, gr) {
+                this.$notify({
+                    group: gr,
+                    title: title,
+                    text: text
+                });
+            },
             search(){
                 this.ticketDetails = "";
-                axiosInstance.get('/api/agent/ticket/'+this.ticketNumber,
-                    {
-                        headers: {
-                            'Authorization': "Bearer " + localStorage.getItem("token")
-                        }
+                axiosInstance.get('/api/agent/ticket/findTicketById',{
+                    params: {
+                        id: this.ticketNumber
+                    },
+                    headers: {
+                        'Authorization': "Bearer " + localStorage.getItem("token")
                     }
-                    )
-                    .then(res => {
-                        this.ticketDetails = res.data;
+                }).then(res => {
+                        this.ticketDetails = res.data.data;
                     })
                     .catch(error => {
                         console.log(error);
@@ -119,16 +136,17 @@
                     })
             },
             deleteT(){
-                axiosInstance.post('/api/agent/deleteTicket',
+                axiosInstance.delete('/api/agent/ticket/deleteTicket',
                     {
-                        ticketNumber: parseInt(this.ticketNumber)
-                    },
-                    {
+                        data: {
+                            ticketNumber: parseInt(this.ticketNumber)
+                        },
                         headers: {
                             'Authorization': "Bearer " + localStorage.getItem("token")
                         }
                     }).then(res => {
                     console.log(res.data);
+                    this.ticketDetails = "";
                     this.toggleNotify('Success!', 'Deletion was successful', 'ok');
                 }).catch(error => {
                     console.log(error.data);
@@ -136,10 +154,21 @@
                 })
             },
             edit(){
-                axiosInstance.post('/api/agent/editTicket',
+                axiosInstance.post('/api/agent/ticket/alterTicket',
                     {
-                        ticket: this.ticketDetails
-                    }).then(res => {
+                        id: parseInt(this.ticketDetails.id),
+                        fName: this.ticketDetails.fname,
+                        lName: this.ticketDetails.lname,
+                        natId: this.ticketDetails.natId,
+                        email: this.ticketDetails.email,
+                        phone: this.ticketDetails.phone
+                    },
+                    {
+                        headers: {
+                            'Authorization': "Bearer " + localStorage.getItem("token")
+                        }
+                    }
+                ).then(res => {
                     this.ticketDetails = res.data;
                     this.toggleNotify('Success!', 'Edit was successful', 'ok');
                     console.log(res.data);
