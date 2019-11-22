@@ -31,12 +31,12 @@
                             <div class="col-lg-6 col-md-6 form-group">
                                 <label for="fname">First Name</label>
                                 <input v-model="ticketDetails.fname" id="fname" type="text" class="form-control"
-                                       placeholder="Mark">
+                                       placeholder="John">
                             </div>
                             <div class="col-lg-6 col-md-6 form-group">
                                 <label for="lname">Last Name</label>
                                 <input v-model="ticketDetails.lname" id="lname" type="text" class="form-control"
-                                       placeholder="Sterling">
+                                       placeholder="Doe">
                             </div>
                         </div>
                         <div class="row form-group">
@@ -55,7 +55,7 @@
                             <div class="col-lg-6 col-md-6 form-group">
                                 <label for="email">E-mail</label>
                                 <input id="email" v-model="ticketDetails.email" type="text" class="form-control"
-                                       placeholder="mark.sterling@nu.edu.kz">
+                                       placeholder="aaaaa@nu.edu.kz">
                             </div>
                             <div class="col-lg-6 col-md-6 form-group">
                                 <label for="wclass">Wagon class</label>

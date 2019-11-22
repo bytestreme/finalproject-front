@@ -7,11 +7,11 @@
                         <div class="row form-group">
                             <div class="col-lg-6 col-md-6 form-group">
                                 <label for="inputFirstName">First Name</label>
-                                <input disabled v-model="user.firstName" type="text" class="form-control" id="inputFirstName" placeholder="Mark">
+                                <input disabled v-model="user.firstName" type="text" class="form-control" id="inputFirstName" placeholder="John">
                             </div>
                             <div class="col-lg-6 col-md-6 form-group">
                                 <label for="inputLastName">Last Name</label>
-                                <input disabled v-model="user.lastName" type="text" class="form-control" id="inputLastName" placeholder="Sterling">
+                                <input disabled v-model="user.lastName" type="text" class="form-control" id="inputLastName" placeholder="Doe">
                             </div>
                         </div>
                         <div class="row form-group">
