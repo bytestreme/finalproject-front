@@ -2,7 +2,7 @@
     <div class="templatemo-sidebar">
         <header class="templatemo-site-header">
             <div class="square"></div>
-            <h1>User Control</h1>
+            <h1>Ticket Service</h1>
         </header>
         <div class="mobile-menu-icon">
             <i class="fa fa-bars"></i>
@@ -37,6 +37,10 @@
                 <li v-if="$store.getters.role === 'ADMIN' || $store.getters.role === 'MANAGER'">
                     <router-link to="/manager-employees" :class="{'active': $route.path.includes('manager-employees')}">
                     <i class="fa fa-users fa-fw"></i>Manage Employees</router-link>
+                </li>
+                <li v-if="$store.getters.role === 'ADMIN' || $store.getters.role === 'MANAGER'">
+                    <router-link to="/manager-payment" :class="{'active': isClassTrains}">
+                        <i class="fa fa-dollar fa-fw"></i>Manage Payment</router-link>
                 </li>
                 <li v-if="$store.getters.role === 'ADMIN' || $store.getters.role === 'MANAGER'">
                     <router-link to="/manager-news" :class="{'active': $route.path.includes('manager-news')}">

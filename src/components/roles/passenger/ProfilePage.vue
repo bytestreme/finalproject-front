@@ -44,7 +44,7 @@
 
                 <div class="templatemo-content-widget  white-bg">
                     <h2 class="margin-bottom-10">Upcoming Trips</h2>
-                    <div class="templatemo-content-container">
+                    <div v-if="upcoming.length > 0" class="templatemo-content-container">
                         <div class="templatemo-content-widget no-padding">
                             <div class="panel panel-default table-responsive">
                                 <table class="table table-striped table-bordered templatemo-user-table">
@@ -80,10 +80,11 @@
                             </div>
                         </div>
                     </div>
+                    <div v-else><br /><label class="control-label">No upcoming trips</label></div>
                 </div>
                 <div class="templatemo-content-widget  white-bg">
                     <h2 class="margin-bottom-10">History</h2>
-                    <div class="templatemo-content-container">
+                    <div v-if="history.length > 0" class="templatemo-content-container">
                         <div class="templatemo-content-widget no-padding">
                             <div class="panel panel-default table-responsive">
                                 <table class="table table-striped table-bordered templatemo-user-table">
@@ -119,6 +120,7 @@
                             </div>
                         </div>
                     </div>
+                    <div v-else><br /><label class="control-label">Your travel history is empty</label></div>
                 </div>
             </div>
 </template>

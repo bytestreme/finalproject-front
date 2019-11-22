@@ -4,6 +4,9 @@
                     <div v-if="advisory.data" class="templatemo-content-widget orange-bg">
                         <i class="fa fa-times" @click="hideAd()"></i>
                         <div class="media">
+                            <div class="media-left">
+                                <a><img width="48" height="48" src="../../../public/images/alert.png" class="media-object img-circle"></a>
+                            </div>
                             <div class="media-body">
                                 <h2 class="media-heading text-uppercase">Advisory for the route {{advisory.data.route.title}}</h2>
                                 <p>{{advisory.data.text}}</p>
@@ -228,6 +231,9 @@
                     .catch(error => {
                         console.log(error.data)
                     })
+            },
+            delay(ms) {
+                return new Promise(res => setTimeout(res, ms))
             },
             getReservedSeats(){
                 this.reservedSeats = [];

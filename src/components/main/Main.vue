@@ -1,95 +1,117 @@
 <template>
     <div v-if="!isChosenRoute" class="templatemo-content-container"><!--CHOOSE TRAVEL-->
-                <div class="templatemo-content-widget white-bg">
-                    <h2 class="margin-bottom-10">Preferences</h2>
-                    <p>Choose your destination:</p>
+        <div class="templatemo-content-widget white-bg">
+            <h2 class="margin-bottom-10">Preferences</h2>
+            <p>Choose your destination:</p>
 
 
-                    <div class="row form-group">
-                        <div class="col-lg-6 col-md-6 form-group">
-                            <label for="inputDep">Departure City</label>
-                            <select class="form-control" id="inputDep" v-model="selectedDep">
-                                <option value="">Select from</option>
-                                <option v-if="selectedArr !== station.id" :key="station.id"
-                                        v-for="station in stations" :value="station.id">{{station.title}}
-                                </option>
-                            </select>
-                        </div>
-                        <div class="col-lg-6 col-md-6 form-group">
-                            <label for="inputArriv">Arrival City</label>
-                            <select class="form-control" id="inputArriv" v-model="selectedArr">
-                                <option value="">Select to</option>
-                                <option v-if="selectedDep !== station.id" :key="station.id"
-                                        v-for="station in stations" :value="station.id">{{station.title}}
-                                </option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="row form-group">
-                        <div class="col-lg-6 col-md-6 form-group">
-                            <input v-model="departureDate" type="date" name="Departure" class="form-control">
-                        </div>
-                        <div class="col-lg-6 col-md-6 form-group text-right">
-                            <button style="width: 100%" @click="findRoute" class="templatemo-blue-button">Search</button>
-                        </div>
-                    </div>
-
-
-                    <div class="row form-group">
-
-                        <div class="col-lg-6 form-group" style="width: 100%;">
-
-                        </div>
-                    </div>
-                </div><!--CHOOSE TRAVEL ENDS-->
-                <div v-if="no_route" class="col-lg-12 has-error form-group">
-                    <label class="control-label">No routes found</label>
+            <div class="row form-group">
+                <div class="col-lg-6 col-md-6 form-group">
+                    <label for="inputDep">Departure City</label>
+                    <select class="form-control" id="inputDep" v-model="selectedDep">
+                        <option value="">Select from</option>
+                        <option v-if="selectedArr !== station.id" :key="station.id"
+                                v-for="station in stations" :value="station.id">{{station.title}}
+                        </option>
+                    </select>
                 </div>
-                <div v-if="routes.length!=0" class="templatemo-content-widget green-bg no-padding">
-                    <div class="panel panel-default table-responsive">
-                        <table class="table table-striped table-bordered templatemo-user-table">
-                            <thead>
-                            <tr>
-                                <td><a class="white-text templatemo-sort-by">Route title<span
-                                        class="caret"></span></a></td>
-                                <td><a class="white-text templatemo-sort-by">Train Title<span
-                                        class="caret"></span></a></td>
-                                <td><a class="white-text templatemo-sort-by">Departure<span
-                                        class="caret"></span></a></td>
-                                <td><a class="white-text templatemo-sort-by">Date<span class="caret"></span></a>
-                                </td>
-                                <td><a class="white-text templatemo-sort-by">Arrival<span
-                                        class="caret"></span></a></td>
-                                <td><a class="white-text templatemo-sort-by">Date<span
-                                        class="caret"></span></a></td>
-                                <!--                                <td><a href="" class="white-text templatemo-sort-by">Date<span class="caret"></span></a></td>-->
-                                <!--                                <td><a href="" class="white-text templatemo-sort-by">Time<span class="caret"></span></a></td>-->
-                                <td><a href="" class="white-text templatemo-sort-by">Choose<span
-                                        class="caret"></span></a></td>
-                            </tr>
-                            </thead>
-                            <tbody>
-
-                            <tr :key="route.id" v-for="route in routes">
-                                <td>{{route.route.title}}</td>
-                                <td>{{route.route.train.title}}</td>
-                                <td>{{route.dep.title}}</td>
-                                <td>{{route.dep.date}}</td>
-                                <td>{{route.arr.title}}</td>
-                                <td>{{route.arr.date}}</td>
-                                <td><a @click.prevent="chooseTrain(route)" href="" class="templatemo-edit-btn">Choose</a></td>
-                            </tr>
-                            </tbody>
-                        </table>
-
-                    </div>
-
-                </div>
-                <div v-if="loading" style="height: 250px" class="col-lg-12">
-                    <div style="justify-content: center" class="loader">Loading...</div>
+                <div class="col-lg-6 col-md-6 form-group">
+                    <label for="inputArriv">Arrival City</label>
+                    <select class="form-control" id="inputArriv" v-model="selectedArr">
+                        <option value="">Select to</option>
+                        <option v-if="selectedDep !== station.id" :key="station.id"
+                                v-for="station in stations" :value="station.id">{{station.title}}
+                        </option>
+                    </select>
                 </div>
             </div>
+
+            <div class="row form-group">
+                <div class="col-lg-6 col-md-6 form-group">
+                    <input v-model="departureDate" type="date" name="Departure" class="form-control">
+                </div>
+                <div class="col-lg-6 col-md-6 form-group text-right">
+                    <button style="width: 100%" @click="findRoute" class="templatemo-blue-button">Search</button>
+                </div>
+            </div>
+
+
+            <div class="row form-group">
+
+                <div class="col-lg-6 form-group" style="width: 100%;">
+
+                </div>
+            </div>
+        </div><!--CHOOSE TRAVEL ENDS-->
+        <div v-if="no_route" class="col-lg-12 has-error form-group">
+            <label class="control-label">No routes found</label>
+        </div>
+        <div v-if="routes.length!=0" class="templatemo-content-widget green-bg no-padding">
+            <div class="panel panel-default table-responsive">
+                <table class="table table-striped table-bordered templatemo-user-table">
+                    <thead>
+                    <tr>
+                        <td><a class="white-text templatemo-sort-by">Route title<span
+                                class="caret"></span></a></td>
+                        <td><a class="white-text templatemo-sort-by">Train Title<span
+                                class="caret"></span></a></td>
+                        <td><a class="white-text templatemo-sort-by">Departure<span
+                                class="caret"></span></a></td>
+                        <td><a class="white-text templatemo-sort-by">Date<span class="caret"></span></a>
+                        </td>
+                        <td><a class="white-text templatemo-sort-by">Arrival<span
+                                class="caret"></span></a></td>
+                        <td><a class="white-text templatemo-sort-by">Date<span
+                                class="caret"></span></a></td>
+                        <!--                                <td><a href="" class="white-text templatemo-sort-by">Date<span class="caret"></span></a></td>-->
+                        <!--                                <td><a href="" class="white-text templatemo-sort-by">Time<span class="caret"></span></a></td>-->
+                        <td><a href="" class="white-text templatemo-sort-by">Choose<span
+                                class="caret"></span></a></td>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    <tr :key="route.id" v-for="route in routes">
+                        <td>{{route.route.title}}</td>
+                        <td>{{route.route.train.title}}</td>
+                        <td>{{route.dep.title}}</td>
+                        <td>{{route.dep.date}}</td>
+                        <td>{{route.arr.title}}</td>
+                        <td>{{route.arr.date}}</td>
+                        <td><a @click.prevent="chooseTrain(route)" href="" class="templatemo-edit-btn">Choose</a></td>
+                    </tr>
+                    </tbody>
+                </table>
+
+            </div>
+
+        </div>
+        <div v-if="loading" style="height: 250px" class="col-lg-12">
+            <div style="justify-content: center" class="loader">Loading...</div>
+        </div>
+
+        <div v-if="!loading &&  !no_route &&routes.length == 0">
+            <vue-flux
+                    :options="vfOptions"
+                    :images="vfImages"
+                    :transitions="vfTransitions"
+                    ref="slider">
+
+                <template v-slot:preloader>
+                    <flux-preloader/>
+                </template>
+
+                <template v-slot:pagination>
+                    <flux-pagination/>
+                </template>
+
+            </vue-flux>
+        </div>
+
+
+    </div>
+
+
     <TrainPage v-else-if="isChosenRoute"
                :arrStation="chosenRoute.arrStation"
                :depStation="chosenRoute.depStation"
@@ -103,9 +125,18 @@
 <script>
     import TrainPage from "./TrainPage.vue"
     import axiosInstance from "../../axiosInstance";
+    import {
+        VueFlux,
+        FluxPagination,
+        FluxPreloader,
+    } from 'vue-flux';
+
     export default {
         components: {
-            TrainPage
+            TrainPage,
+            VueFlux,
+            FluxPagination,
+            FluxPreloader,
         },
         name: "main",
         data() {
@@ -121,13 +152,20 @@
                 ],
                 routes: [],
                 loading: false,
-                chosenRoute:{
-                }
+                chosenRoute: {},
+                vfOptions: {
+                    autoplay: true,
+                    enableGestures: true
+                },
+                vfImages: ['/images/slide1.jpg',
+                    '/images/slide2.jpg',
+                    '/images/slide3.jpg'],
+                vfTransitions: ['blinds2d'],
             }
         },
         methods: {
-            chooseTrain(route){
-                if (localStorage.getItem("token") === null){
+            chooseTrain(route) {
+                if (localStorage.getItem("token") === null) {
                     alert("Please log in as a user");
                 }
                 this.chosenRoute.id = route.route.id;

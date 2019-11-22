@@ -1,8 +1,8 @@
 <template>
 
     <div id="login" class="light-gray-bg2">
-        <notifications classes="ntf-reg-bad" position="bottom center" animation-type="velocity" group="bad"/>
-        <notifications classes="ntf-reg-ok" position="bottom center" animation-type="velocity" group="ok"/>
+        <notifications classes="ntf-reg-bad" position="top right" animation-type="velocity" group="bad"/>
+        <notifications classes="ntf-reg-ok" position="top right" animation-type="velocity" group="ok"/>
 
         <div class="templatemo-content-widget templatemo-login-widget white-bg">
             <header class="text-center">

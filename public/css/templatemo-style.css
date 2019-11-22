@@ -1160,3 +1160,9 @@ input:checked + .slider:before {
 .slide-leave-to {
     transform: translateX(30%);
 }
+
+.vue-flux {
+    margin: 10px;
+    height: 250px;
+    border-radius: 10px;
+}

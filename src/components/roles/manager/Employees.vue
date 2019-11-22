@@ -44,12 +44,12 @@
                     <h2 class="margin-bottom-10">Manage Employees</h2>
                     <div class="row form-group">
                         <div class="col-lg-6 col-md-6 form-group">
-                            <label for="train">First Name</label>
-                            <input v-model="FName" type="text" class="form-control" placeholder="Bill">
+                            <label for="fn">First Name</label>
+                            <input id="fn" v-model="FName" type="text" class="form-control" placeholder="Bill">
                         </div>
                         <div class="col-lg-6 col-md-6 form-group">
-                            <label for="train">Last Name</label>
-                            <input v-model="LName" type="text" class="form-control" placeholder="Gates">
+                            <label for="ln">Last Name</label>
+                            <input id="ln" v-model="LName" type="text" class="form-control" placeholder="Gates">
                         </div>
                         <div class="col-lg-6 col-md-6 form-group">
                             <label for="station">Choose Station</label>
@@ -117,8 +117,10 @@
                             </ul>
                         </div>
                     </div>
+
                     <div class="row form-group">
                         <div class="col-lg-6 col-md-6 form-group">
+                            <label>Starting day</label>
                             <input v-model="startDate" type="date" name="Departure" class="form-control">
                         </div>
                     </div>

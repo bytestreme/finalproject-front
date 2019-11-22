@@ -26,22 +26,8 @@
                             </select>
                         </div>
                         <div class="col-lg-6 col-md-6 form-group">
-                            <label for="role">Choose Role</label>
-                            <select class="form-control" id="role"
-                                    v-model="selectedRole">
-                                <option :key="role.id"
-                                        v-for="role in roles"
-                                        v-if="employee.roleId === role.id"
-                                        :value="role.id">
-                                    {{role.title}}
-                                </option>
-                                <option :key="role.id"
-                                        v-for="role in roles"
-                                        v-if="employee.roleId !== role.id"
-                                        :value="role.id">
-                                    {{role.title}}
-                                </option>
-                            </select>
+                            <label for="role">Role</label>
+                            <input v-model="role" id="role" class="form-control" type="text" disabled>
                         </div>
                     </div>
                     <div class="row form-group">
@@ -104,7 +90,8 @@
                 roles: "",
                 startTime: "",
                 endTime: "",
-                employee: ""
+                employee: "",
+                role: ""
             }
         },
         methods: {
@@ -138,6 +125,7 @@
                     if (res.status === 200) {
                         // eslint-disable-next-line no-console
                         console.log("OK: " + res.data);
+                        this.role = res.data.data.employee.role.title;
                         this.employee = res.data.data;
                         this.FName = res.data.data.employee.fName;
                         this.LName = res.data.data.employee.lName;

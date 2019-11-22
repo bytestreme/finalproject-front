@@ -23,6 +23,7 @@ import Logs from "./components/logs/Logs.vue"
 import Notifications from 'vue-notification'
 import velocity from 'velocity-animate'
 import TrainSchedule from "./components/roles/manager/TrainSchedule.vue";
+import Payment from "./components/roles/manager/Payment";
 
 Vue.config.productionTip = false;
 
@@ -101,6 +102,12 @@ const routes = [
         path: '/manager-employees',
         component: ManagerEmployees,
         name: 'manager-employees',
+        meta: {requiresLogin: true}
+    },
+    {
+        path: '/manager-payment',
+        component: Payment,
+        name: 'manager-payment',
         meta: {requiresLogin: true}
     },
     {
