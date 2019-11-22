@@ -35,11 +35,11 @@
                     <i class="fa fa-train fa-fw"></i>Manage Trains</router-link>
                 </li>
                 <li v-if="$store.getters.role === 'ADMIN' || $store.getters.role === 'MANAGER'">
-                    <router-link to="/manager-employees" :class="{'active': $route.path.includes('manager-employees')}">
+                    <router-link to="/manager-employees" :class="{'active': $route.path.includes('manager-employee')}">
                     <i class="fa fa-users fa-fw"></i>Manage Employees</router-link>
                 </li>
                 <li v-if="$store.getters.role === 'ADMIN' || $store.getters.role === 'MANAGER'">
-                    <router-link to="/manager-payment" :class="{'active': isClassTrains}">
+                    <router-link to="/manager-payment" :class="{'active': $route.path === '/manager-payment'}">
                         <i class="fa fa-dollar fa-fw"></i>Manage Payment</router-link>
                 </li>
                 <li v-if="$store.getters.role === 'ADMIN' || $store.getters.role === 'MANAGER'">
