@@ -155,7 +155,8 @@
                 chosenRoute: {},
                 vfOptions: {
                     autoplay: true,
-                    enableGestures: true
+                    enableGestures: true,
+                    lazyLoad: false
                 },
                 vfImages: ['/images/slide1.jpg',
                     '/images/slide2.jpg',
