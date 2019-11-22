@@ -10,8 +10,8 @@
         <nav class="templatemo-left-nav">
             <ul>
                 <li>
-                    <router-link to="/dashboard" :class="{'active': $route.path.includes('dashboard')}">
-                    <i class="fa fa-home fa-fw"></i>Dashboard</router-link>
+                    <router-link to="/" :class="{'active': $route.path === '/'}">
+                        <i class="fa fa-map-marker fa-fw"></i>Search tickets</router-link>
                 </li>
                 <li v-if="$store.getters.role === 'ADMIN' || $store.getters.role === 'MANAGER'">
                     <router-link to="/manager-profile" :class="{'active': $route.path.includes('manager-profile')}">
@@ -49,10 +49,6 @@
                 <li v-if="$store.getters.role === 'ADMIN' || $store.getters.role === 'MANAGER'">
                     <router-link to="/logs" :class="{'active': $route.path.includes('logs')}">
                     <i class="fa fa-history fa-fw"></i>Logs</router-link>
-                </li>
-                <li>
-                    <router-link to="/" :class="{'active': $route.path === '/'}">
-                    <i class="fa fa-map-marker fa-fw"></i>Search tickets</router-link>
                 </li>
             </ul>
         </nav>

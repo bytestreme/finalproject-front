@@ -68,7 +68,7 @@
                         localStorage.setItem('token', res.data.token);
                         this.$store.dispatch('role', res.data.role).then();
                         this.$store.dispatch('auth').then(() => {
-                            this.$router.push({name: 'home'})
+                            this.$router.push({name: 'main'})
                         });
                     }).catch(error => {
                         this.toggleNotify("Error!", "Login failed!", 'bad');

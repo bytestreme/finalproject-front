@@ -7,11 +7,11 @@
                         <div class="row form-group">
                             <div class="col-lg-6 col-md-6 form-group">
                                 <label for="inputFirstName">First Name</label>
-                                <input v-model="user.firstName" type="text" class="form-control" id="inputFirstName" placeholder="Mark">
+                                <input disabled v-model="user.firstName" type="text" class="form-control" id="inputFirstName" placeholder="Mark">
                             </div>
                             <div class="col-lg-6 col-md-6 form-group">
                                 <label for="inputLastName">Last Name</label>
-                                <input v-model="user.lastName" type="text" class="form-control" id="inputLastName" placeholder="Sterling">
+                                <input disabled v-model="user.lastName" type="text" class="form-control" id="inputLastName" placeholder="Sterling">
                             </div>
                         </div>
                         <div class="row form-group">
@@ -27,18 +27,18 @@
                         <div class="row form-group">
                             <div class="col-lg-6 col-md-6 form-group">
                                 <label for="inputPhone">Phone</label>
-                                <input v-model="user.phone" id="inputPhone" v-mask="'#(###)-###-##-##'" type="text" class="form-control"
+                                <input disabled v-model="user.phone" id="inputPhone" v-mask="'#(###)-###-##-##'" type="text" class="form-control"
                                        placeholder="8(777)-777-77-77">
                             </div>
                             <div class="col-lg-6 col-md-6 form-group">
                                 <label for="inputNatId">National ID</label>
-                                <input v-model="user.natId" type="text" class="form-control" id="inputNatId" placeholder="010000">
+                                <input disabled v-model="user.natId" type="text" class="form-control" id="inputNatId" placeholder="010000">
                             </div>
                         </div>
 
-                        <div class="form-group text-left">
-                            <button @click="edit" class="templatemo-blue-button">Update</button>
-                        </div>
+<!--                        <div class="form-group text-left">-->
+<!--                            <button @click="edit" class="templatemo-blue-button">Update</button>-->
+<!--                        </div>-->
                     </form>
                 </div>
 
